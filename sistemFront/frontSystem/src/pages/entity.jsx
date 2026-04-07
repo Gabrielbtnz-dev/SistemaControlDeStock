@@ -40,7 +40,7 @@ function Entity(){
             <tr key={p.documento} className="hover:bg-gray-50">
               <td className="px-6 py-3">{p.nombre}</td>
               <td className="px-6 py-3">{p.documento}</td>
-              <td className="px-6 py-3">{p.digito_verificador}</td>
+              <td className="px-6 py-3">{p.digitoVerificador}</td>
               <td className="px-6 py-3">{p.funcionario ? "Si" : "No"}</td>
               <td className="px-6 py-3">{p.cliente ? "Si" : "No"}</td>
               <td className="px-6 py-3">{p.contribuyente ? "Si" : "No"}</td>
