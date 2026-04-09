@@ -8,7 +8,10 @@ import com.sistema.sistema.Model.PersonRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class PersonService {
 
@@ -34,16 +37,20 @@ public class PersonService {
     }
 
 
-    public ResponseEntity<String> postPerson(PersonDtoPost dto){
-            Person person = new Person();
-            person.setNombre(dto.getNombre());
-            person.setDocumento(dto.getDocumento());
-            person.setDigitoVerificador(dto.getDigitoVerificador());
-            person.setFuncionario(dto.getFuncionario());
-            person.setCliente(dto.getCliente());
-            person.setContribuyente(dto.getContribuyente());
-            personReposi.save(person);
-        return ResponseEntity.ok("Cliente agregado con exito");
+    public ResponseEntity<Map<String, Object>> postPerson(PersonDtoPost dto) {
+        Person person = new Person();
+        person.setNombre(dto.getNombre());
+        person.setDocumento(dto.getDocumento());
+        person.setDigitoVerificador(dto.getDigitoVerificador());
+        person.setFuncionario(dto.getFuncionario());
+        person.setCliente(dto.getCliente());
+        person.setContribuyente(dto.getContribuyente());
+        personReposi.save(person);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", "Persona agregada correctamente");
+        return ResponseEntity.ok(response);
+
 
         /*
         {

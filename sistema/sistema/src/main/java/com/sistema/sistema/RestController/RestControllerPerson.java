@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RestControllerPerson {
@@ -26,7 +27,7 @@ public class RestControllerPerson {
     }
 
     @PostMapping("/addPerson")
-    public ResponseEntity<String> postPerson(@RequestBody PersonDtoPost persondto){
+    public ResponseEntity<Map<String, Object>> postPerson(@RequestBody PersonDtoPost persondto){
         return personService.postPerson(persondto);
     }
 }
