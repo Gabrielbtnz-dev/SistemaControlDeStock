@@ -5,6 +5,7 @@ import com.sistema.sistema.Domain.Person;
 import com.sistema.sistema.Dto.PersonDtoGet;
 import com.sistema.sistema.Dto.PersonDtoPost;
 import com.sistema.sistema.Model.PersonRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +48,13 @@ public class PersonService {
         person.setContribuyente(dto.getContribuyente());
         personReposi.save(person);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Persona agregada correctamente");
-        return ResponseEntity.ok(response);
-
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Persona agregada correctamente",
+                        "data", person.getId()
+                ));
 
         /*
         {

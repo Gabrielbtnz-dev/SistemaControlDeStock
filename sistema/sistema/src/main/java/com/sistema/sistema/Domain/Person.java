@@ -10,6 +10,7 @@ public class Person {
     private long id;
     private String nombre;
     private String documento;
+    @Column(name="digitoverificador")
     private String digitoVerificador;
     private Boolean funcionario;
     private Boolean cliente;
