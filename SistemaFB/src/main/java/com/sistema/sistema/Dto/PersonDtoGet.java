@@ -7,12 +7,13 @@ public class PersonDtoGet {
     private Boolean funcionario;
     private Boolean cliente;
     private Boolean contribuyente;
+    private Boolean activo;
 
     public PersonDtoGet(){
     };
 
 
-    public PersonDtoGet( Long id,String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente){
+    public PersonDtoGet( Long id,String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
         this.id = id;
         this.nombre = nombre;
         this.documento = documento;
@@ -20,6 +21,15 @@ public class PersonDtoGet {
         this.funcionario = funcionario;
         this.cliente = cliente;
         this.contribuyente = contribuyente;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public long getId() {

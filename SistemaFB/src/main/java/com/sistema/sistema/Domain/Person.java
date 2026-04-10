@@ -15,11 +15,12 @@ public class Person {
     private Boolean funcionario;
     private Boolean cliente;
     private Boolean contribuyente;
+    private Boolean activo;
 
     public Person(){
     }
 
-    public Person(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente){
+    public Person(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
 
         this.nombre = nombre;
         this.documento = documento;
@@ -27,6 +28,15 @@ public class Person {
         this.funcionario = funcionario;
         this.cliente = cliente;
         this.contribuyente = contribuyente;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public long getId() {

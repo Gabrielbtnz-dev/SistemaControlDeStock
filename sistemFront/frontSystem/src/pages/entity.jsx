@@ -5,6 +5,7 @@ import Input from "../assets/components/Input";
 import Toggle from "../assets/components/Toggle";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import { UserRoundPlus } from "lucide-react";
+import { Trash } from 'lucide-react';
 function Entity(){
 
     const[persona,setPersona]=useState([])
@@ -16,6 +17,8 @@ function Entity(){
     const [esCliente,setEsCliente] = useState(false)
     const [esContribuyente,setEsContribuyente] = useState(false)
     const [showCheck, setShowCheck] = useState(false);
+    const [mensajeRespuesta, setMensajeRespuesta] = useState("");
+    
 
     
 
@@ -54,7 +57,11 @@ const guardarEntidad = async () => {
     });
     const result = await response.json();
     if(result.succes = true){
+      setMensajeRespuesta("Cliente agregado con exito!");
       setShowCheck(true);
+      setTimeout(() => {
+        setShowCheck(false);
+      }, 1000);
     }
     console.log("post exitoso:", result);
   } catch (err) {
@@ -70,6 +77,28 @@ const guardarEntidad = async () => {
   setDocumento("");
 };
 
+const removePerson= async (id)=>{
+  const data={
+    activo:false
+  }
+  const response = await fetch(`http://192.168.0.174:8085/updatePerson/${id}`,{
+    method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if(result.succes = true){
+      setMensajeRespuesta("Cliente desactivado !");
+      setShowCheck(true);
+      setTimeout(() => {
+          setShowCheck(false);
+        }, 1000);
+    }
+
+    await cargarPersonas();
+  
+}
+
   return (
   <div className="h-full flex flex-col p-6">
 
@@ -80,7 +109,7 @@ const guardarEntidad = async () => {
   <span> Agregar nueva entidad</span>
   </Button>
 </div>
- <AnimatedCheck show={showCheck} message="Cliente registrado con exito"/>
+ <AnimatedCheck show={showCheck} message={mensajeRespuesta}/>
 { openPopUp &&
       <Modal onClose={() => setOpenPopUp(false)}>
 
@@ -137,9 +166,9 @@ const guardarEntidad = async () => {
       }
     <div className="flex-1 overflow-y-auto bg-white shadow-md rounded-2xl">
 
-      <table className="min-w-full text-sm text-left text-gray-600">
+      <table className="min-w-full text-sm text-left">
 
-        <thead className="bg-gray-100 sticky top-0 z-10">
+        <thead className=" bg-gray-100 sticky top-0 z-10 ">
           <tr>
             <th className="px-6 py-3">Nombre</th>
             <th className="px-6 py-3">Documento</th>
@@ -152,13 +181,16 @@ const guardarEntidad = async () => {
 
         <tbody className="divide-y">
           {persona.map((p) => (
-            <tr key={p.id} className="hover:bg-gray-50">
+            <tr key={p.id} className={`items-center hover:bg-gray-50  ${!p.activo ? "bg-red-100":"" }`}>
               <td className="px-6 py-3">{p.nombre}</td>
               <td className="px-6 py-3">{p.documento}</td>
               <td className="px-6 py-3">{p.digitoVerificador}</td>
               <td className="px-6 py-3">{p.funcionario ? "Si" : "No"}</td>
               <td className="px-6 py-3">{p.cliente ? "Si" : "No"}</td>
               <td className="px-6 py-3">{p.contribuyente ? "Si" : "No"}</td>
+              
+              <td>{p.activo && <Trash className="hover:text-red-500 transition-colors duration-200" onClick={ () => removePerson(p.id) }/>}</td>
+              
             </tr>
           ))}
         </tbody>

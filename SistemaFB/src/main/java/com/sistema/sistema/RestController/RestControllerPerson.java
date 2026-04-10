@@ -2,12 +2,10 @@ package com.sistema.sistema.RestController;
 
 import com.sistema.sistema.Dto.PersonDtoGet;
 import com.sistema.sistema.Dto.PersonDtoPost;
+import com.sistema.sistema.Dto.PersonDtoUpdate;
 import com.sistema.sistema.Service.PersonService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -29,5 +27,10 @@ public class RestControllerPerson {
     @PostMapping("/addPerson")
     public ResponseEntity<Map<String, Object>> postPerson(@RequestBody PersonDtoPost persondto){
         return personService.postPerson(persondto);
+    }
+
+    @PatchMapping("/updatePerson/{id}")
+    public ResponseEntity<?> updatePerson(@PathVariable Long id, @RequestBody PersonDtoUpdate persondto){
+        return personService.updatePerson(id,persondto);
     }
 }

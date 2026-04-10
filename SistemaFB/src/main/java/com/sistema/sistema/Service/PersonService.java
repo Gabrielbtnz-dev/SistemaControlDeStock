@@ -4,6 +4,7 @@ package com.sistema.sistema.Service;
 import com.sistema.sistema.Domain.Person;
 import com.sistema.sistema.Dto.PersonDtoGet;
 import com.sistema.sistema.Dto.PersonDtoPost;
+import com.sistema.sistema.Dto.PersonDtoUpdate;
 import com.sistema.sistema.Model.PersonRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,8 @@ public class PersonService {
                         p.getDigitoVerificador(),
                         p.getFuncionario(),
                         p.getCliente(),
-                        p.getContribuyente()
+                        p.getContribuyente(),
+                        p.getActivo()
         ))
                 .toList();
     }
@@ -65,6 +67,24 @@ public class PersonService {
           "cliente": true,
           "contribuyente": true
         }*/
+    }
+
+    public ResponseEntity<Map<String , Object>> updatePerson(Long id, PersonDtoUpdate dto){
+      Person person =   personReposi.findById(id)
+              .orElseThrow(()-> new RuntimeException("Persona no encontrada"));
+      if(dto.getActivo() != null){
+          person.setActivo(dto.getActivo());
+      }
+      personReposi.save(person);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Persona desactivada correctamente",
+                        "data", person.getId()
+                ));
+
     }
 
 
