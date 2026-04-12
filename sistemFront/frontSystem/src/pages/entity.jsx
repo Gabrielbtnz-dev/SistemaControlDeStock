@@ -5,10 +5,12 @@ import Input from "../assets/components/Input";
 import Toggle from "../assets/components/Toggle";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import { UserRoundPlus } from "lucide-react";
+import { Pencil } from 'lucide-react';
 import { Trash } from 'lucide-react';
 function Entity(){
 
     const[persona,setPersona]=useState([])
+    const[id,setId] = useState();
     const [nombre, setNombre] = useState("");
     const [documento, setDocumento] = useState("");
     const [digitoVerificador, setDigitoVerificador] = useState("");
@@ -18,17 +20,19 @@ function Entity(){
     const [esContribuyente,setEsContribuyente] = useState(false)
     const [showCheck, setShowCheck] = useState(false);
     const [mensajeRespuesta, setMensajeRespuesta] = useState("");
+     const [butonEdit, setButonEdit] = useState("");
     
 
     
 
     const abrirPopUp=()=>{
-
+      setButonEdit(false)
       setOpenPopUp(!openPopUp)
+      
     }
 
     const cargarPersonas = async () => {
-    const response = await fetch("http://192.168.0.174:8085/personas");
+    const response = await fetch("http://localhost:8085/personas");
     const data = await response.json();
     setPersona(data);
   };
@@ -38,7 +42,6 @@ function Entity(){
   },[])
 
 const guardarEntidad = async () => {
-
     
       const data ={
         nombre,
@@ -46,11 +49,12 @@ const guardarEntidad = async () => {
         cliente: esCliente,
         contribuyente: esContribuyente,
         funcionario: esFuncionario,
-        digitoVerificador: digitoVerificador
+        digitoVerificador: digitoVerificador,
+        activo:true
         }
 
   try {
-    const response = await fetch("http://192.168.0.174:8085/addPerson", {
+    const response = await fetch("http://localhost:8085/addPerson", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -77,11 +81,11 @@ const guardarEntidad = async () => {
   setDocumento("");
 };
 
-const removePerson= async (id)=>{
+const removePerson = async (id)=>{
   const data={
     activo:false
   }
-  const response = await fetch(`http://192.168.0.174:8085/updatePerson/${id}`,{
+  const response = await fetch(`http://localhost:8085/updatePerson/${id}`,{
     method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -98,6 +102,59 @@ const removePerson= async (id)=>{
     await cargarPersonas();
   
 }
+const editEntidad=(p)=>{
+  setId(p.id)
+  setDigitoVerificador(p.digitoVerificador)
+  setDocumento(p.documento)
+  setEsCliente(p.cliente)
+  setEsContribuyente(p.contribuyente)
+  setNombre(p.nombre)
+  SetEsFuncionario(p.funcionario)
+  setOpenPopUp(true)
+  setButonEdit(true)
+}
+
+  const updateEntidad = async ()=>{
+    const data = {
+        nombre,
+        documento,
+        cliente: esCliente,
+        contribuyente: esContribuyente,
+        funcionario: esFuncionario,
+        digitoVerificador: digitoVerificador,
+        activo:true
+    }
+
+    const idEdit = id;
+
+    const response = await fetch(`http://localhost:8085/updatePerson/${idEdit}`,{
+    method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if(result.succes = true){
+      setMensajeRespuesta("Cliente editado con exito !");
+      setShowCheck(true);
+      setTimeout(() => {
+          setShowCheck(false);
+        }, 1000);
+    }
+
+    await cargarPersonas();
+
+    await cargarPersonas();
+
+    setOpenPopUp(false);
+    setNombre("");
+    setDocumento("");
+    setDigitoVerificador("");
+    setEsCliente(false);
+    setEsContribuyente(false);
+    SetEsFuncionario(false);
+
+  }
+
 
   return (
   <div className="h-full flex flex-col p-6">
@@ -156,9 +213,9 @@ const removePerson= async (id)=>{
 
       <div>  
         <div className="flex justify-end p-3 w-50">
-        <Button color="green" onClick={guardarEntidad}>
+        <Button color={butonEdit ? "blue": "green"} onClick={butonEdit ? updateEntidad : guardarEntidad}>
           <UserRoundPlus size={16} className="inline-block" /> 
-          <span> Agregar</span>
+          <span>{butonEdit ? "Editar":"Agregar"}</span>
           </Button>
         </div>
       </div>
@@ -189,8 +246,8 @@ const removePerson= async (id)=>{
               <td className="px-6 py-3">{p.cliente ? "Si" : "No"}</td>
               <td className="px-6 py-3">{p.contribuyente ? "Si" : "No"}</td>
               
-              <td>{p.activo && <Trash className="hover:text-red-500 transition-colors duration-200" onClick={ () => removePerson(p.id) }/>}</td>
-              
+              <td>{p.activo && <Trash className="cursor-pointer hover:text-red-500 transition-colors duration-200" onClick={ () => removePerson(p.id) }/>}</td>
+              <td>{p.activo &&<Pencil className="cursor-pointer hover:text-blue-500" onClick={()=>editEntidad(p)}/>}</td>
             </tr>
           ))}
         </tbody>

@@ -3,7 +3,7 @@ export default function Button({ children, onClick, color = "gray" }) {
     gray: "border-gray-300 hover:bg-gray-100",
     red: "border-red-400 hover:bg-red-50",
     green: "border-green-500 bg-green-400 text-white hover:bg-green-600",
-    blue: "border-blue-400 hover:bg-blue-50",
+    blue: "border-blue-500 bg-blue-400 text-white hover:bg-blue-600",
   };
 
   return (

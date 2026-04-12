@@ -25,7 +25,7 @@ public class PersonService {
 
 
     public List<PersonDtoGet> getPerson(){
-        return personReposi.findAll().stream().map(
+        return personReposi.findAllByOrderByIdDesc().stream().map(
                 p-> new PersonDtoGet(
                         p.getId(),
                         p.getNombre(),
@@ -70,18 +70,32 @@ public class PersonService {
     }
 
     public ResponseEntity<Map<String , Object>> updatePerson(Long id, PersonDtoUpdate dto){
-      Person person =   personReposi.findById(id)
+      Person person =  personReposi.findById(id)
               .orElseThrow(()-> new RuntimeException("Persona no encontrada"));
-      if(dto.getActivo() != null){
+
+      if (dto.getCliente() != null && !dto.getCliente().equals(person.getCliente())){
+          person.setCliente(dto.getCliente());
+      }
+
+      if(dto.getActivo() != null && !dto.getActivo().equals(person.getActivo())){
           person.setActivo(dto.getActivo());
       }
+
+      if(dto.getDocumento() != null && !dto.getDocumento().equalsIgnoreCase(person.getDocumento())){
+          person.setDocumento(dto.getDocumento());
+      }
+
+      if(dto.getNombre() != null && !dto.getNombre().equals(person.getNombre())){
+          person.setNombre(dto.getNombre());
+      }
+
       personReposi.save(person);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(Map.of(
                         "success", true,
-                        "message", "Persona desactivada correctamente",
+                        "message", "Persona editado correctamente",
                         "data", person.getId()
                 ));
 
