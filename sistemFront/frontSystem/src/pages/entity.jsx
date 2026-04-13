@@ -7,6 +7,7 @@ import AnimatedCheck from "../assets/components/AnimatedCheck";
 import { UserRoundPlus } from "lucide-react";
 import { Pencil } from 'lucide-react';
 import { Trash } from 'lucide-react';
+import DataTable from "../assets/components/DataTable";
 function Entity(){
 
     const[persona,setPersona]=useState([])
@@ -221,40 +222,52 @@ const editEntidad=(p)=>{
       </div>
       </Modal>
       }
-    <div className="flex-1 overflow-y-auto bg-white shadow-md rounded-2xl">
+      <DataTable
+        data={persona}
+        rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
+        columns={[
+          { key: "nombre", label: "Nombre" },
+          { key: "documento", label: "Documento" },
+          { key: "digitoVerificador", label: "DV" },
 
-      <table className="min-w-full text-sm text-left">
+          {
+            key: "funcionario",
+            label: "Funcionario",
+            render: (p) => (p.funcionario ? "Si" : "No"),
+          },
+          {
+            key: "cliente",
+            label: "Cliente",
+            render: (p) => (p.cliente ? "Si" : "No"),
+          },
+          {
+            key: "contribuyente",
+            label: "Contribuyente",
+            render: (p) => (p.contribuyente ? "Si" : "No"),
+          },
+          {
+            render: (p) => (
+              <div className="flex justify-end gap-3 items-center">
+                
+                {p.activo && (
+                  <Trash
+                    className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                    onClick={() => removePerson(p.id)}
+                  />
+                )}
 
-        <thead className=" bg-gray-100 sticky top-0 z-10 ">
-          <tr>
-            <th className="px-6 py-3">Nombre</th>
-            <th className="px-6 py-3">Documento</th>
-            <th className="px-6 py-3">DV</th>
-            <th className="px-6 py-3">Funcionario</th>
-            <th className="px-6 py-3">Cliente</th>
-            <th className="px-6 py-3">Contribuyente</th>
-          </tr>
-        </thead>
+                {p.activo && (
+                  <Pencil
+                    className="cursor-pointer hover:text-blue-500"
+                    onClick={() => editEntidad(p)}
+                  />
+                )}
 
-        <tbody className="divide-y">
-          {persona.map((p) => (
-            <tr key={p.id} className={`items-center hover:bg-gray-50  ${!p.activo ? "bg-red-100":"" }`}>
-              <td className="px-6 py-3">{p.nombre}</td>
-              <td className="px-6 py-3">{p.documento}</td>
-              <td className="px-6 py-3">{p.digitoVerificador}</td>
-              <td className="px-6 py-3">{p.funcionario ? "Si" : "No"}</td>
-              <td className="px-6 py-3">{p.cliente ? "Si" : "No"}</td>
-              <td className="px-6 py-3">{p.contribuyente ? "Si" : "No"}</td>
-              
-              <td>{p.activo && <Trash className="cursor-pointer hover:text-red-500 transition-colors duration-200" onClick={ () => removePerson(p.id) }/>}</td>
-              <td>{p.activo &&<Pencil className="cursor-pointer hover:text-blue-500" onClick={()=>editEntidad(p)}/>}</td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
-
-    </div>
+              </div>
+            ),
+          },
+        ]}
+      />
   </div>
 );
 }
