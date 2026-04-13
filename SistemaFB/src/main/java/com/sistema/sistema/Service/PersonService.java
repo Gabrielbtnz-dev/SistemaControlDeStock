@@ -89,6 +89,18 @@ public class PersonService {
           person.setNombre(dto.getNombre());
       }
 
+      if (dto.getDigitoVerificador() != null && !dto.getDigitoVerificador().equals(person.getDigitoVerificador())){
+          person.setDigitoVerificador(dto.getDigitoVerificador());
+      }
+
+      if (dto.getFuncionario() != null && !dto.getFuncionario().equals(person.getFuncionario())){
+          person.setFuncionario(dto.getFuncionario());
+      }
+
+      if (dto.getContribuyente() != null && !dto.getContribuyente().equals(person.getContribuyente())){
+          person.setContribuyente(dto.getContribuyente());
+      }
+
       personReposi.save(person);
 
         return ResponseEntity
