@@ -33,7 +33,7 @@ function Entity(){
     }
 
     const cargarPersonas = async () => {
-    const response = await fetch("http://192.168.0.174:8085/personas");
+    const response = await fetch("/personas");
     const data = await response.json();
     setPersona(data);
   };
