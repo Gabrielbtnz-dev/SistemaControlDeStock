@@ -55,7 +55,7 @@ const guardarEntidad = async () => {
         }
 
   try {
-    const response = await fetch("http://192.168.0.174:8085/addPerson", {
+    const response = await fetch("/addPerson", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -86,7 +86,7 @@ const removePerson = async (id)=>{
   const data={
     activo:false
   }
-  const response = await fetch(`http://192.168.0.174:8085/updatePerson/${id}`,{
+  const response = await fetch(`/updatePerson/${id}`,{
     method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -128,7 +128,7 @@ const editEntidad=(p)=>{
 
     const idEdit = id;
 
-    const response = await fetch(`http://192.168.0.174:8085/updatePerson/${idEdit}`,{
+    const response = await fetch(`/updatePerson/${idEdit}`,{
     method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -271,6 +271,4 @@ const editEntidad=(p)=>{
   </div>
 );
 }
-
-
 export default Entity
