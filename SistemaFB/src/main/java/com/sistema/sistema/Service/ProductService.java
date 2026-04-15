@@ -1,12 +1,15 @@
 package com.sistema.sistema.Service;
 
+import com.sistema.sistema.Domain.Product;
 import com.sistema.sistema.Dto.ProductDtoGet;
+import com.sistema.sistema.Dto.ProductDtoPost;
 import com.sistema.sistema.Model.ProductRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ProductService {
@@ -27,6 +30,20 @@ public class ProductService {
                         p.getActivo()
                 ))
         .toList();
+    }
+
+
+    public ResponseEntity<?> postProduct( ProductDtoPost dto){
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setMoneda(dto.getMoneda());
+        product.setControlaStock(dto.getControlaStock());
+        product.setActivo(true);
+
+        productReposi.save(product);
+
+        return ResponseEntity.ok("Producto Agregado con exito");
     }
 
 

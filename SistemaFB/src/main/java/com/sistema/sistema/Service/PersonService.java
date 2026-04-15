@@ -48,6 +48,7 @@ public class PersonService {
         person.setFuncionario(dto.getFuncionario());
         person.setCliente(dto.getCliente());
         person.setContribuyente(dto.getContribuyente());
+        person.setActivo(true);
         personReposi.save(person);
 
         return ResponseEntity

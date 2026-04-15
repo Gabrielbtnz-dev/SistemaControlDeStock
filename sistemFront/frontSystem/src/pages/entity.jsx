@@ -8,6 +8,7 @@ import { UserRoundPlus } from "lucide-react";
 import { Pencil } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import DataTable from "../assets/components/DataTable";
+import InputFilterText from "../assets/components/InputFilterText"
 function Entity(){
 
     const[persona,setPersona]=useState([])
@@ -22,6 +23,7 @@ function Entity(){
     const [showCheck, setShowCheck] = useState(false);
     const [mensajeRespuesta, setMensajeRespuesta] = useState("");
      const [butonEdit, setButonEdit] = useState("");
+    const[personFilterName,setPersonFilterName]=useState("");
     
 
     
@@ -156,20 +158,15 @@ const editEntidad=(p)=>{
 
   }
 
+  const personFilterNombre = persona.filter((p)=>
+    p.nombre.toLowerCase().includes(personFilterName.toLowerCase())
+  )
 
   return (
   <div className="h-full flex flex-col p-6">
-
-    <div className="flex justify-end p-3">
-      
-<Button color="green" onClick={abrirPopUp}>
-   <UserRoundPlus size={16} className="inline-block" /> 
-  <span> Agregar nueva entidad</span>
-  </Button>
-</div>
  <AnimatedCheck show={showCheck} message={mensajeRespuesta}/>
 { openPopUp &&
-      <Modal onClose={() => setOpenPopUp(false)}>
+      <Modal onClose={() => setOpenPopUp(false)} title={"Agregar nuevo cliente"}>
 
         <div className="flex gap-3">
             <div className="w-1/2">
@@ -222,8 +219,21 @@ const editEntidad=(p)=>{
       </div>
       </Modal>
       }
+    <div className="flex justify-between items-center p-3">
+      <div>
+        <InputFilterText
+          label="Buscar por nombre"
+          value={personFilterName}
+          onChange={setPersonFilterName}
+          placeholder="Buscar por nombre..."/>
+      </div>
+      <Button color="green" onClick={abrirPopUp}>
+          <UserRoundPlus size={16} className="inline-block" /> 
+          <span> Agregar nueva entidad</span>
+          </Button>
+    </div>
       <DataTable
-        data={persona}
+        data={personFilterNombre}
         rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
         columns={[
           { key: "nombre", label: "Nombre" },

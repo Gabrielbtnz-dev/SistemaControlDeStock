@@ -21,6 +21,7 @@ public class PersonDtoPost {
         this.contribuyente = contribuyente;
     }
 
+
     public String getNombre() {
         return nombre;
     }
