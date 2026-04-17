@@ -15,6 +15,7 @@ public class Product {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Moneda moneda;
+    @Column(name = "controla_stock")
     private Boolean controlaStock;
     private Boolean activo;
 

@@ -4,12 +4,14 @@ import com.sistema.sistema.Domain.Product;
 import com.sistema.sistema.Dto.ProductDtoGet;
 import com.sistema.sistema.Dto.ProductDtoPost;
 import com.sistema.sistema.Model.ProductRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductService {
@@ -43,7 +45,13 @@ public class ProductService {
 
         productReposi.save(product);
 
-        return ResponseEntity.ok("Producto Agregado con exito");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Producto agregado correctamente",
+                        "data", product.getId()
+                ));
     }
 
 
