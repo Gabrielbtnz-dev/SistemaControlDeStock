@@ -23,7 +23,7 @@ function Product(){
 
  const cargarProduct = async () => {
 
-    const response = await fetch("http://localhost:8085/product");
+    const response = await fetch("/product");
     const data = await response.json();
     setProduct(data);
     console.log(data)
@@ -49,7 +49,7 @@ function Product(){
     }
     console.log("se ejecuto el post")
     try{
-    const response = await fetch("http://localhost:8085/addProduct",{
+    const response = await fetch("/addProduct",{
       method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
