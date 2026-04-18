@@ -3,7 +3,7 @@ import DataTable from "../assets/components/DataTable";
 import Button from "../assets/components/button";
 import Modal from "../assets/components/Modal"
 import Input from "../assets/components/Input"
-import {Package} from"lucide-react"
+import {Package, Trash, Pencil} from"lucide-react"
 import Toggle from "../assets/components/Toggle"
 import InputFilterText from "../assets/components/InputFilterText";
 import DropDown from "../assets/components/DropDown";
@@ -23,7 +23,7 @@ function Product(){
 
  const cargarProduct = async () => {
 
-    const response = await fetch("/product");
+    const response = await fetch("http://localhost:8085/product");
     const data = await response.json();
     setProduct(data);
     console.log(data)
@@ -49,7 +49,7 @@ function Product(){
     }
     console.log("se ejecuto el post")
     try{
-    const response = await fetch("/addProduct",{
+    const response = await fetch("http://localhost:8085/addProduct",{
       method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -173,6 +173,27 @@ function Product(){
             key: "activo", 
             label: "Activo", 
             render: (p) => (p.activo ? "Si" : "Desactivado")
+          },
+          {
+            render: (p) => (
+              <div className="flex justify-end gap-3 items-center">
+                
+                {p.activo && (
+                  <Trash
+                    className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                    onClick={() => removeProduct(p.id)}
+                  />
+                )}
+
+                {p.activo && (
+                  <Pencil
+                    className="cursor-pointer hover:text-blue-500"
+                    onClick={() => editProduct(p)}
+                  />
+                )}
+
+              </div>
+            ),
           },
 
         ]}

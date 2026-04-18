@@ -3,6 +3,7 @@ package com.sistema.sistema.Service;
 import com.sistema.sistema.Domain.Product;
 import com.sistema.sistema.Dto.ProductDtoGet;
 import com.sistema.sistema.Dto.ProductDtoPost;
+import com.sistema.sistema.Dto.ProductDtoUpdate;
 import com.sistema.sistema.Model.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,25 @@ public class ProductService {
                         "success", true,
                         "message", "Producto agregado correctamente",
                         "data", product.getId()
+                ));
+    }
+
+
+    public ResponseEntity<?> deleteProduct(Long id){
+       Product product = productReposi.findById(id)
+               .orElseThrow(()-> new RuntimeException("No se encontro el producto"));
+
+       if ( product.getActivo() ){
+           product.setActivo(false);
+       }
+
+       productReposi.save(product);
+
+       return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Producto Desactivado !"
                 ));
     }
 

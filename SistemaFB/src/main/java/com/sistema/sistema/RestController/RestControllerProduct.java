@@ -5,10 +5,7 @@ import com.sistema.sistema.Dto.ProductDtoGet;
 import com.sistema.sistema.Dto.ProductDtoPost;
 import com.sistema.sistema.Service.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,11 @@ public class RestControllerProduct {
     @PostMapping("/addProduct")
     public ResponseEntity<?> postProduct(@RequestBody ProductDtoPost dto){
         return productService.postProduct(dto);
+    }
+
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+        return productService.deleteProduct(id);
     }
 
 
