@@ -80,6 +80,27 @@ function Product(){
     await cargarProduct();
 
     }
+
+    const removeProduct = async(id) => {
+
+      const response = await fetch(`http://localhost:8085/deleteProduct/${id}`,{
+      method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const result = await response.json();
+
+      if(result.succes = true){
+          setMensajeRespuesta(result.message);
+          setShowCheck(true);
+          setTimeout(() => {
+              setShowCheck(false);
+            }, 1000);
+
+      await cargarProduct();
+
+    }
+  }
     
 
   return (
