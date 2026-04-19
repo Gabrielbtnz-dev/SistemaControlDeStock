@@ -74,5 +74,27 @@ public class ProductService {
                 ));
     }
 
+    public ResponseEntity<?> updateProduct(Long id, ProductDtoUpdate dto){
+        Product product = productReposi.findById(id)
+                .orElseThrow(()-> new RuntimeException("No se encontro el producto"));
+
+        if ( dto.getName() != null && !dto.getName().equals(product.getName()) ){
+            product.setName(dto.getName());
+        }
+
+        if ( dto.getControlaStock() != null && !dto.getControlaStock().equals(product.getControlaStock()) ){
+            product.setControlaStock(dto.getControlaStock());
+        }
+
+        productReposi.save(product);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Producto Desactivado !"
+                ));
+    }
+
 
 }

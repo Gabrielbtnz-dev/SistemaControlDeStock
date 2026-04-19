@@ -17,6 +17,8 @@ function Product(){
   const[moneda,setMoneda]=useState("");
   const[nombre,setNombre]=useState("");
   const[precio,setPrecio]=useState("");
+  const[modoEdit,setModoEdit]=useState(false);
+  const[idProduct,setIdProduct]=useState();
   const[controlaStock,setControlaStock]=useState(false);
   const[showCheck,setShowCheck]=useState(false);
   const[mensajeRespuesta,setMensajeRespuesta]=useState("");
@@ -40,7 +42,7 @@ function Product(){
   );
 
   const addProduct = async () => {
-    
+
     const data = {
       name:nombre,
       price:precio,
@@ -101,7 +103,72 @@ function Product(){
 
     }
   }
+
+  const editProduct = (p) => {
+
+    setModoEdit(true)
+    setIdProduct(p.id)
+    setNombre(p.name)
+    setPrecio(p.price)
+    setMoneda(p.moneda)
+    setControlaStock(p.controlaStock)
     
+    setOpenPopup(true)
+
+  }
+
+  const abrirPopUp = () =>{
+    setModoEdit(false)
+    setNombre("")
+    setPrecio("")
+    setMoneda("")
+    setControlaStock(false)
+    setOpenPopup(true)
+  }    
+
+
+   const updateProduct = async () => {
+
+    const data = {
+      name:nombre,
+      price:precio,
+      moneda:moneda,
+      controlaStock:controlaStock
+    }
+    console.log("se ejecuto el post")
+    try{
+    const response = await fetch(`http://localhost:8085/updateProduct/${idProduct}`,{
+      method: "UPDATE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+
+      if(result.succes === true){
+          setMensajeRespuesta(result.message);
+          setShowCheck(true);
+          setTimeout(() => {
+              setShowCheck(false);
+            }, 1000);
+        
+        setIdProduct(0);
+        setOpenPopup(false)
+        setPrecio("")
+        setNombre("")
+        setMoneda("")
+        setControlaStock(false)
+
+      }else{
+        alert("Por algun motivo no se pudo editar el producto");
+      }
+
+    }catch(err){
+        alert("Por algun motivo el servidor del sistema no respondio, contacte con Gabriel")
+    }
+
+    await cargarProduct();
+
+    }
 
   return (
     
@@ -145,10 +212,10 @@ function Product(){
           />
         </div>
         <div className="flex justify-end">
-        <Button color="green" onClick={addProduct}>
+        <Button color={modoEdit ? "blue" : "green"} onClick={modoEdit ? updateProduct : addProduct}>
           <div className="flex items-center">
               <Plus size={16}/>
-            <span>Agregar</span>
+            <span>{modoEdit ? "Editar" : "Agregar"}</span>
           </div>
         </Button>
         </div>
@@ -165,7 +232,7 @@ function Product(){
           placeholder="Buscar por nombre..."/>
       </div>
 
-      <Button color="green" onClick={()=>setOpenPopup(true)}>
+      <Button color="green" onClick={abrirPopUp}>
         <div className="flex items-center gap-1">
           <Package size={16}/>
           <Plus size={16}/>
