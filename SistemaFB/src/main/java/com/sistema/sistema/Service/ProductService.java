@@ -86,13 +86,22 @@ public class ProductService {
             product.setControlaStock(dto.getControlaStock());
         }
 
+        if (dto.getMoneda() != null && !dto.getMoneda().equals(product.getMoneda())){
+            product.setMoneda(dto.getMoneda());
+        }
+
+        if (dto.getPrice() != null && !dto.getPrice().equals(product.getPrice())){
+            product.setPrice(dto.getPrice());
+        }
+
+
         productReposi.save(product);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(Map.of(
                         "success", true,
-                        "message", "Producto Desactivado !"
+                        "message", "Producto editado !"
                 ));
     }
 

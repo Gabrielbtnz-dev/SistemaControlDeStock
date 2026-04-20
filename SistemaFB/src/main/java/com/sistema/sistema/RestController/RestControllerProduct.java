@@ -3,6 +3,7 @@ package com.sistema.sistema.RestController;
 import com.sistema.sistema.Dto.PersonDtoGet;
 import com.sistema.sistema.Dto.ProductDtoGet;
 import com.sistema.sistema.Dto.ProductDtoPost;
+import com.sistema.sistema.Dto.ProductDtoUpdate;
 import com.sistema.sistema.Service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,11 @@ public class RestControllerProduct {
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         return productService.deleteProduct(id);
+    }
+
+    @PatchMapping("/updateProduct/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDtoUpdate dto){
+       return productService.updateProduct(id,dto);
     }
 
 

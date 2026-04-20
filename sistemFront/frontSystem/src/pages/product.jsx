@@ -138,13 +138,13 @@ function Product(){
     console.log("se ejecuto el post")
     try{
     const response = await fetch(`http://localhost:8085/updateProduct/${idProduct}`,{
-      method: "UPDATE",
+      method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
       const result = await response.json();
 
-      if(result.succes === true){
+      if(result.success){
           setMensajeRespuesta(result.message);
           setShowCheck(true);
           setTimeout(() => {
