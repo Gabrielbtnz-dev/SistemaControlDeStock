@@ -4,7 +4,7 @@ export default function DataTable({ columns, data, rowClassName }) {
       <table className="min-w-full text-sm text-left">
 
         {/* HEADER */}
-        <thead className="bg-gray-100 sticky top-0 z-10">
+        <thead className="bg-blue-300 sticky top-0 z-10">
           <tr>
             {columns.map((col) => (
               <th key={col.key} className="px-6 py-3">
@@ -19,7 +19,7 @@ export default function DataTable({ columns, data, rowClassName }) {
           {data.map((row) => (
             <tr
               key={row.id}
-              className={`hover:bg-gray-50 ${rowClassName ? rowClassName(row) : ""}`}
+              className={`hover:bg-blue-50 ${rowClassName ? rowClassName(row) : ""}`}
             >
               {columns.map((col) => (
                 <td key={col.key} className="px-6 py-3">
