@@ -15,18 +15,28 @@ public class ProductDtoGet {
     private Moneda moneda;
     private Boolean controlaStock;
     private Boolean activo;
+    private String codigoDeBarras;
 
     public ProductDtoGet(){
 
     }
 
-    public ProductDtoGet(Long id, String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo){
+    public ProductDtoGet(Long id, String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo, String codigoDeBarras){
         this.id = id;
         this.name = name;
         this.price = price;
         this.moneda = moneda;
         this.controlaStock = controlaStock;
         this.activo = activo;
+        this.codigoDeBarras = codigoDeBarras;
+    }
+
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
+    }
+
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public Moneda getMoneda() {

@@ -17,12 +17,14 @@ export default function DropdownSearch({
 
   // Filtrar opciones
   const filteredOptions = useMemo(() => {
-    if (!search) return options;
+  if (!search) return options;
 
-    return options.filter((opt) =>
-      opt[displayKey].toLowerCase().includes(search.toLowerCase())
-    );
-  }, [search, options]);
+  return options.filter((opt) =>
+    String(opt[displayKey] || "")
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+}, [search, options]);
 
   // Cerrar al hacer click afuera
   useEffect(() => {

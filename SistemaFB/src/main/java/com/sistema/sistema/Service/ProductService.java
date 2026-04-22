@@ -30,7 +30,8 @@ public class ProductService {
                         p.getPrice(),
                         p.getMoneda(),
                         p.getControlaStock(),
-                        p.getActivo()
+                        p.getActivo(),
+                        p.getCodigoDeBarras()
                 ))
         .toList();
     }

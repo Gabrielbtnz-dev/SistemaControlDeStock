@@ -18,17 +18,28 @@ public class Product {
     @Column(name = "controla_stock")
     private Boolean controlaStock;
     private Boolean activo;
+    @Column(name = "codigo_de_barras")
+    private String codigoDeBarras;
 
     public Product(){
 
     }
 
-    public Product(String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo){
+    public Product(String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo,String codigoDeBarras){
         this.name = name;
         this.price = price;
         this.moneda = moneda;
         this.controlaStock = controlaStock;
         this.activo = activo;
+        this.codigoDeBarras = codigoDeBarras;
+    }
+
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
+    }
+
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public long getId() {

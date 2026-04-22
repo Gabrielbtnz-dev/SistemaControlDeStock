@@ -5,14 +5,16 @@ import Input from "../assets/components/Input";
 import Button from "../assets/components/button";
 import { Banknote, Trash } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
+import  Modal  from "../assets/components/Modal";
+import BarcodeSearch from "../assets/components/BarcodeSearch"
 
 function Pdv(){
 const[product,setProduct]=useState([]);
 const [selectedProducts, setSelectedProducts] = useState([]);
 const [search, setSearch] = useState("");
-const[totalVenta,setTotalVenta]=useState(0);
 const [flash, setFlash] = useState(false);
 const[cantidadProduct,setCantidadProduct]=useState(1);
+const [f3Pressed, setF3Pressed] = useState(false);
 
     const cargarProduct = async () => {
         const response = await fetch("http://localhost:8085/product");
@@ -20,6 +22,11 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
         setProduct(data);
         console.log(data)
   };
+
+  const totalVenta = selectedProducts.reduce(
+  (acc, p) => acc + (p.price * p.cantidad),
+  0
+);
 
   useEffect(()=>{
   
@@ -30,7 +37,8 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
     const productOptions = product.map(p => ({
         value: p.id,
         label: p.name,
-        price: p.price
+        price: p.price,
+        codbarras: p.codigoDeBarras
     }));
 
 
@@ -42,7 +50,7 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
     if (existe) {
       return prev.map(p =>
         p.id === item.value
-          ? { ...p, cantidad: p.cantidad + cantidadProduct, price: p.price *(p.cantidad + cantidadProduct) }
+          ? { ...p, cantidad: p.cantidad + Number(cantidadProduct) }
           : p
       );
     }
@@ -53,14 +61,10 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
         id: item.value,
         name: item.label,
         price: item.price,
-        cantidad: cantidadProduct
+        cantidad: Number(cantidadProduct)
       }
     ];
   });
-
-  setTotalVenta(prev =>
-    prev + (item.price * cantidadProduct)
-  );
 
   setSearch("");
   setCantidadProduct(1);
@@ -72,7 +76,7 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
 
             const timer = setTimeout(() => {
             setFlash(false);
-            }, 700); // milisegundos
+            }, 700); 
 
             return () => clearTimeout(timer);
         }
@@ -80,33 +84,59 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
 
     const vaciarCarrito = () =>{
         setSelectedProducts([]);
-        setTotalVenta(0);
     }
 
     const removeProduct = (id) => {
-        const productoAEliminar = selectedProducts.find(p => p.id === id);
-        
+        const productoAEliminar = selectedProducts.find(p => p.id === id);  
 
         if (!productoAEliminar) return;
 
         setSelectedProducts(prev => prev.filter(p => p.id !== id));
-
-        setTotalVenta(prev => prev - (productoAEliminar.price));
     };
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "F3") {
+            e.preventDefault();
+            setF3Pressed(!f3Pressed);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+        }, []);
 
 return(
     <div className="flex w-full gap-4 items-start">
-        
-        <div className="flex flex-col flex-1 gap-4 w-full">
-            
-            <div className="flex">
-                <div className="w-96">
+
+        {f3Pressed && 
+            <Modal onClose={() => setF3Pressed(false)} title={"Buscar Producto"}>
+               <div className="w-96">
                     <DropdownSearch
                     label="Productos"
                     options={productOptions}
                     value={search}
                     setValue={setSearch}
                     onSelect={addProduct}
+                    />
+                </div>
+            </Modal>
+        }
+        <div className="flex flex-col flex-1 gap-4 w-full">
+            
+            <div className="flex">
+                <div className="w-96">
+                   < BarcodeSearch
+                    options={productOptions}
+                    searchKey="codbarras"
+                    value={search}
+                    setValue={setSearch}
+                    onSelect={addProduct}
+                    placeholder="Codigo de barras"
+                    label="Codigo de barras"
                     />
                 </div>
                 <div className="w-14">
@@ -124,7 +154,7 @@ return(
                     flash ? "text-green-500" : "text-gray-900"
                 }`}
                 >
-                Total: {totalVenta}
+                Total: {totalVenta.toFixed(2)}
                 </span>
 
             <DataTable
@@ -133,6 +163,10 @@ return(
                 { key: "id", label: "Codigo" },
                 { key: "name", label: "Nombre" },
                 { key: "price", label: "Precio" },
+                {
+                  label: "Total",
+                  render: (p) => (p.price * p.cantidad).toFixed(2)
+                },
                 { key: "cantidad", label: "Cantidad" },
                 {
                 render: (p) => (
