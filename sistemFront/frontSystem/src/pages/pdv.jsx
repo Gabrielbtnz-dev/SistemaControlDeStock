@@ -3,7 +3,7 @@ import DropdownSearch from "../assets/components/DropdownSearch"
 import DataTable from "../assets/components/DataTable";
 import Input from "../assets/components/Input";
 import Button from "../assets/components/button";
-import { Banknote } from 'lucide-react';
+import { Banknote, Trash } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
 
 function Pdv(){
@@ -35,34 +35,64 @@ const[cantidadProduct,setCantidadProduct]=useState(1);
 
 
     const addProduct = (item) => {
-    setTotalVenta(totalVenta + item.price);
-    setSelectedProducts(prev => [
-    ...prev,
-    {
-      id: item.value,
-      name: item.label,
-      price: item.price,
-      cantidad: cantidadProduct
+
+    setSelectedProducts(prev => {
+    const existe = prev.find(p => p.id === item.value);
+
+    if (existe) {
+      return prev.map(p =>
+        p.id === item.value
+          ? { ...p, cantidad: p.cantidad + cantidadProduct, price: p.price *(p.cantidad + cantidadProduct) }
+          : p
+      );
     }
-  ]);
+
+    return [
+      ...prev,
+      {
+        id: item.value,
+        name: item.label,
+        price: item.price,
+        cantidad: cantidadProduct
+      }
+    ];
+  });
+
+  setTotalVenta(prev =>
+    prev + (item.price * cantidadProduct)
+  );
+
   setSearch("");
+  setCantidadProduct(1);
 };
 
-useEffect(() => {
-  if (totalVenta > 0) {
-    setFlash(true);
+    useEffect(() => {
+        if (totalVenta > 0) {
+            setFlash(true);
 
-    const timer = setTimeout(() => {
-      setFlash(false);
-    }, 700); // milisegundos
+            const timer = setTimeout(() => {
+            setFlash(false);
+            }, 700); // milisegundos
 
-    return () => clearTimeout(timer);
-  }
-}, [totalVenta]);
+            return () => clearTimeout(timer);
+        }
+    }, [totalVenta]);
 
-const vaciarCarrito = () =>{
-    setSelectedProducts([]);
-}
+    const vaciarCarrito = () =>{
+        setSelectedProducts([]);
+        setTotalVenta(0);
+    }
+
+    const removeProduct = (id) => {
+        const productoAEliminar = selectedProducts.find(p => p.id === id);
+        
+
+        if (!productoAEliminar) return;
+
+        setSelectedProducts(prev => prev.filter(p => p.id !== id));
+
+        setTotalVenta(prev => prev - (productoAEliminar.price));
+    };
 
 return(
     <div className="flex w-full gap-4 items-start">
@@ -104,6 +134,16 @@ return(
                 { key: "name", label: "Nombre" },
                 { key: "price", label: "Precio" },
                 { key: "cantidad", label: "Cantidad" },
+                {
+                render: (p) => (
+                <div className="flex justify-end gap-3 items-center">
+                    <Trash
+                        className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                        onClick={() => removeProduct(p.id)}
+                    />
+                </div>
+                ),
+            },
             ]}
             />
 
