@@ -4,7 +4,7 @@ import DataTable from "../assets/components/DataTable";
 import Input from "../assets/components/Input";
 import Button from "../assets/components/button";
 import { Banknote, Trash } from 'lucide-react';
-import { Trash2 } from 'lucide-react';
+import { Trash2,UserRoundPlus } from 'lucide-react';
 import  Modal  from "../assets/components/Modal";
 import BarcodeSearch from "../assets/components/BarcodeSearch"
 
@@ -15,11 +15,21 @@ const [search, setSearch] = useState("");
 const [flash, setFlash] = useState(false);
 const[cantidadProduct,setCantidadProduct]=useState(1);
 const [f3Pressed, setF3Pressed] = useState(false);
+const [f8Pressed, setF8Pressed] = useState(false);
+const [entidad, setEntidad] = useState([]);
+const [selectedEntidad, setSelectedEntidad] = useState(null);
 
     const cargarProduct = async () => {
         const response = await fetch("http://localhost:8085/product");
         const data = await response.json();
         setProduct(data);
+        console.log(data)
+  };
+
+  const cargarEntidad = async () => {
+        const response = await fetch("http://localhost:8085/personas");
+        const data = await response.json();
+        setEntidad(data);
         console.log(data)
   };
 
@@ -31,6 +41,7 @@ const [f3Pressed, setF3Pressed] = useState(false);
   useEffect(()=>{
   
       cargarProduct();
+      cargarEntidad();
   
     },[])
 
@@ -39,6 +50,11 @@ const [f3Pressed, setF3Pressed] = useState(false);
         label: p.name,
         price: p.price,
         codbarras: p.codigoDeBarras
+    }));
+
+    const entidadOptions = entidad.map(p => ({
+        value: p.id,
+        label: p.nombre
     }));
 
 
@@ -109,6 +125,32 @@ const [f3Pressed, setF3Pressed] = useState(false);
         };
         }, []);
 
+        useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "F8") {
+            e.preventDefault();
+            setF8Pressed(!f8Pressed);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+        }, []);
+
+
+        const addEntidad = (item) => {
+        setSelectedEntidad({
+            id: item.value,
+            nombre: item.label
+        });
+
+        setSearch("");
+        setF8Pressed(false); // cerrar modal
+        };
+
 return(
     <div className="flex w-full gap-4 items-start">
 
@@ -121,6 +163,20 @@ return(
                     value={search}
                     setValue={setSearch}
                     onSelect={addProduct}
+                    />
+                </div>
+            </Modal>
+        }
+
+        {f8Pressed && 
+            <Modal onClose={() => setF3Pressed(false)} title={"Buscar Entidad"}>
+               <div className="w-96">
+                    <DropdownSearch
+                    label="Nombre"
+                    options={entidadOptions}
+                    value={search}
+                    setValue={setSearch}
+                    onSelect={addEntidad}
                     />
                 </div>
             </Modal>
@@ -148,15 +204,21 @@ return(
                     />
                 </div>
             </div>
-
+            <div className="flex gap-5">
             <span
                 className={`font-semibold text-xl transition-colors duration-300 ${
                     flash ? "text-green-500" : "text-gray-900"
                 }`}
                 >
                 Total: {totalVenta.toFixed(2)}
-                </span>
-
+            </span>
+            {selectedEntidad && (
+            <div className="flex p-1 bg-blue-100 rounded">
+                <UserRoundPlus/>
+                Cliente: {selectedEntidad.nombre}
+            </div>
+            )}
+            </div>
             <DataTable
             data={selectedProducts}
             columns={[

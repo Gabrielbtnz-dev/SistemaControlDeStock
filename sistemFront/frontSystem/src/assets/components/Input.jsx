@@ -20,7 +20,7 @@ export default function Input({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+        className="border border-gray-300 rounded-lg px-3 py-1 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
       />
     </div>
   );
