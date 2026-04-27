@@ -6,6 +6,7 @@ import Button from "../assets/components/button";
 import { Banknote, Trash } from 'lucide-react';
 import { Trash2,UserRoundPlus } from 'lucide-react';
 import  Modal  from "../assets/components/Modal";
+import DropDown from "../assets/components/DropDown";
 import BarcodeSearch from "../assets/components/BarcodeSearch"
 
 function Pdv(){
@@ -16,8 +17,11 @@ const [flash, setFlash] = useState(false);
 const[cantidadProduct,setCantidadProduct]=useState(1);
 const [f3Pressed, setF3Pressed] = useState(false);
 const [f8Pressed, setF8Pressed] = useState(false);
+const [f2Pressed, setF2Pressed] = useState(false);
 const [entidad, setEntidad] = useState([]);
 const [selectedEntidad, setSelectedEntidad] = useState(null);
+const [tipoPagoCobro,setTipoPagoCobro]=useState()
+const [finalizarPdv,setFinalizarPdv]=useState(false)
 
     const cargarProduct = async () => {
         const response = await fetch("http://localhost:8085/product");
@@ -114,7 +118,7 @@ const [selectedEntidad, setSelectedEntidad] = useState(null);
         const handleKeyDown = (e) => {
             if (e.key === "F3") {
             e.preventDefault();
-            setF3Pressed(!f3Pressed);
+            setF3Pressed(true);
             }
         };
 
@@ -129,7 +133,7 @@ const [selectedEntidad, setSelectedEntidad] = useState(null);
         const handleKeyDown = (e) => {
             if (e.key === "F8") {
             e.preventDefault();
-            setF8Pressed(!f8Pressed);
+            setF8Pressed(true);
             }
         };
 
@@ -138,6 +142,21 @@ const [selectedEntidad, setSelectedEntidad] = useState(null);
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
+        }, []);
+
+        useEffect(() => {
+            const handleKeyDown = (e) => {
+                if (e.key === "F2") {
+                e.preventDefault();
+                setFinalizarPdv(true);
+                }
+            };
+
+            window.addEventListener("keydown", handleKeyDown);
+
+            return () => {
+                window.removeEventListener("keydown", handleKeyDown);
+            };
         }, []);
 
 
@@ -169,7 +188,7 @@ return(
         }
 
         {f8Pressed && 
-            <Modal onClose={() => setF3Pressed(false)} title={"Buscar Entidad"}>
+            <Modal onClose={() => setF8Pressed(false)} title={"Buscar Entidad"}>
                <div className="w-96">
                     <DropdownSearch
                     label="Nombre"
@@ -181,9 +200,31 @@ return(
                 </div>
             </Modal>
         }
+
+        {finalizarPdv &&
+            <Modal onClose={() => setFinalizarPdv(false)} title={"Finalizar operacion"}>
+                <div className="mt-2">
+                    <DropDown 
+                            label="Formas cobros"
+                            value={tipoPagoCobro}
+                            onChange={(e)=>setTipoPagoCobro(e.target.value)}
+                            options={[
+                            {value:"efectivo", label:"Efectivo"},
+                            {value:"cheque", label:"Cheque"},
+                            {value:"transferencia", label:"Transferencia"}
+                            ]}
+                    />
+            </div>
+                <div className="mt-1">
+                    <Input
+                    type="number"
+                    />
+                </div>
+            </Modal>
+        }
         <div className="flex flex-col flex-1 gap-4 w-full">
             
-            <div className="flex">
+            <div className="flex gap-3">
                 <div className="w-96">
                    < BarcodeSearch
                     options={productOptions}
@@ -203,7 +244,13 @@ return(
                     onChange={(e)=>setCantidadProduct(e.target.value)}
                     />
                 </div>
+            <div className="bottom-2 ml-10 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg flex flex-col gap-1">
+                <div><span className="font-semibold">F2</span> → Finalizar venta</div>
+                <div><span className="font-semibold">F3</span> → Buscar producto por nombre</div>
+                <div><span className="font-semibold">F8</span> → Buscar entidad</div>
+                </div>
             </div>
+            
             <div className="flex gap-5">
             <span
                 className={`font-semibold text-xl transition-colors duration-300 ${
@@ -213,9 +260,15 @@ return(
                 Total: {totalVenta.toFixed(2)}
             </span>
             {selectedEntidad && (
-            <div className="flex p-1 bg-blue-100 rounded">
+            <div className="flex p-1 bg-blue-100 rounded gap-3 ">
                 <UserRoundPlus/>
                 Cliente: {selectedEntidad.nombre}
+                <div className="flex justify-end items-center">
+                    <Trash
+                        className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                        onClick={() => setSelectedEntidad(null)}
+                    />
+                </div>
             </div>
             )}
             </div>
@@ -248,7 +301,7 @@ return(
         <div className="w-64 shrink-0 border border-gray-300 rounded-lg p-3 bg-gray-50">
             <div className="flex gap-2">
 
-                <Button color="green">
+                <Button color="green" onClick={(e)=>setFinalizarPdv(true)}>
                     <Banknote />
                     <span>Finalizar</span>
                 </Button>
@@ -257,10 +310,10 @@ return(
                     <Trash2 />
                     <span>Vaciar Carrito</span>
                 </Button>
-
             </div>
+            
         </div>
-
+            
     </div>
 );
 }
