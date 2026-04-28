@@ -3,7 +3,7 @@ import DropdownSearch from "../assets/components/DropdownSearch"
 import DataTable from "../assets/components/DataTable";
 import Input from "../assets/components/Input";
 import Button from "../assets/components/button";
-import { Banknote, Trash } from 'lucide-react';
+import { Banknote, Trash, CircleDollarSign } from 'lucide-react';
 import { Trash2,UserRoundPlus } from 'lucide-react';
 import  Modal  from "../assets/components/Modal";
 import DropDown from "../assets/components/DropDown";
@@ -20,8 +20,11 @@ const [f8Pressed, setF8Pressed] = useState(false);
 const [f2Pressed, setF2Pressed] = useState(false);
 const [entidad, setEntidad] = useState([]);
 const [selectedEntidad, setSelectedEntidad] = useState(null);
-const [tipoPagoCobro,setTipoPagoCobro]=useState()
-const [finalizarPdv,setFinalizarPdv]=useState(false)
+const [tipoPagoCobro,setTipoPagoCobro]=useState("efectivo");
+const [finalizarPdv,setFinalizarPdv]=useState(false);
+const[valorTotalCobro,setValorTotalCobro]=useState(null);
+const [cobros, setCobros] = useState([]);
+const [valorEnCobros, setValorEnCobros] = useState(0);
 
     const cargarProduct = async () => {
         const response = await fetch("http://localhost:8085/product");
@@ -170,6 +173,26 @@ const [finalizarPdv,setFinalizarPdv]=useState(false)
         setF8Pressed(false); // cerrar modal
         };
 
+  
+        const agregarCobro = (tipo, valor) => {
+          /*  if(valor > totalVenta){
+                alert("El valor ingresado supera la venta")
+                return;
+            }*/
+            setCobros([
+                ...cobros,
+                { tipo: tipo, valor: Number(valor) }
+            ]);
+             setTotalCobros(prev => prev + Number(valor));
+             
+        };
+        /*cierra el modal de cobros */
+        useEffect(() => {
+            console.log(cobros);
+            console.log(valorEnCobros);
+            setFinalizarPdv(false)
+        }, [cobros]);
+
 return(
     <div className="flex w-full gap-4 items-start">
 
@@ -202,23 +225,32 @@ return(
         }
 
         {finalizarPdv &&
-            <Modal onClose={() => setFinalizarPdv(false)} title={"Finalizar operacion"}>
+            <Modal onClose={() => setFinalizarPdv(false)} title={"Metodos de cobro"}>
                 <div className="mt-2">
                     <DropDown 
-                            label="Formas cobros"
-                            value={tipoPagoCobro}
-                            onChange={(e)=>setTipoPagoCobro(e.target.value)}
-                            options={[
-                            {value:"efectivo", label:"Efectivo"},
-                            {value:"cheque", label:"Cheque"},
-                            {value:"transferencia", label:"Transferencia"}
-                            ]}
+                        label="Formas cobros"
+                        value={tipoPagoCobro}
+                        onChange={(e)=>setTipoPagoCobro(e.target.value)}
+                        options={[
+                        {value:"efectivo", label:"Efectivo"},
+                        {value:"cheque", label:"Cheque"},
+                        {value:"transferencia", label:"Transferencia"}
+                        ]}
                     />
-            </div>
+                </div>
                 <div className="mt-1">
                     <Input
+                    value={valorTotalCobro}
+                    onChange={(e)=>setValorTotalCobro(e.target.value)}
                     type="number"
+                    placeholder="Monto"
                     />
+                </div>
+                <div className=" flex mt-1 justify-center">
+                <Button color="green" onClick={()=>agregarCobro(tipoPagoCobro,valorTotalCobro)}>
+                    <CircleDollarSign />
+                    <span>Agregar</span>
+                </Button>
                 </div>
             </Modal>
         }
@@ -311,7 +343,16 @@ return(
                     <span>Vaciar Carrito</span>
                 </Button>
             </div>
-            
+
+            <span>Metodos de cobros</span>
+            {cobros.map((cobro, index) => (
+            <div key={index} className="flex w-20">
+                <Input
+                    value={cobro.tipo}/>
+                <Input
+                value={cobro.valor}/>
+            </div>
+            ))}
         </div>
             
     </div>
