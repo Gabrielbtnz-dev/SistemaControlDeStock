@@ -3,6 +3,8 @@ package com.sistema.sistema.Domain;
 import com.sistema.sistema.Service.Moneda;
 import jakarta.persistence.*;
 
+@Entity
+@Table (name = "tipo_cobro_pago")
 public class methodOfPaymed {
 
     @Id
@@ -16,10 +18,19 @@ public class methodOfPaymed {
 
     }
 
-    public methodOfPaymed( String name, Moneda moneda){
+    public methodOfPaymed(String name, Moneda moneda){
         this.name = name;
         this.moneda = moneda;
     }
+
+    public Moneda getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(Moneda moneda) {
+        this.moneda = moneda;
+    }
+
 
     public long getId() {
         return id;
