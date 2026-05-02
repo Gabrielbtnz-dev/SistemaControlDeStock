@@ -208,6 +208,12 @@ const cargarMethodPaymed = async () => {
             setFinalizarPdv(false)
         }, [cobros]);
 
+    const restante = totalVenta - valorEnCobros;
+
+    useEffect(() => {
+        setValorTotalCobro(restante > 0 ? restante : 0);
+    }, [totalVenta, cobros]);
+
 return(
     <div className="flex w-full gap-4 items-start">
 
@@ -330,14 +336,17 @@ return(
                 },
                 { key: "cantidad", label: "Cantidad" },
                 {
+            
                 render: (p) => (
-                <div className="flex justify-end gap-3 items-center">
-                    <Trash
-                        className="cursor-pointer hover:text-red-500 transition-colors duration-200"
-                        onClick={() => removeProduct(p.id)}
-                    />
-                </div>
-                ),
+                    valorEnCobros === 0 && (
+                        <div className="flex justify-end gap-3 items-center">
+                            <Trash
+                                className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                                onClick={() => removeProduct(p.id)}
+                            />
+                        </div>
+                    )
+                )
             },
             ]}
             />
