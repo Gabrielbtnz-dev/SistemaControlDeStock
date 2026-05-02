@@ -11,6 +11,7 @@ import BarcodeSearch from "../assets/components/BarcodeSearch"
 
 function Pdv(){
 const[product,setProduct]=useState([]);
+const[methodPaymed,setMethodPaymed]=useState([])
 const [selectedProducts, setSelectedProducts] = useState([]);
 const [search, setSearch] = useState("");
 const [flash, setFlash] = useState(false);
@@ -20,7 +21,7 @@ const [f8Pressed, setF8Pressed] = useState(false);
 const [f2Pressed, setF2Pressed] = useState(false);
 const [entidad, setEntidad] = useState([]);
 const [selectedEntidad, setSelectedEntidad] = useState(null);
-const [tipoPagoCobro,setTipoPagoCobro]=useState("efectivo");
+const [tipoPagoCobro,setTipoPagoCobro]=useState();
 const [finalizarPdv,setFinalizarPdv]=useState(false);
 const[valorTotalCobro,setValorTotalCobro]=useState(null);
 const [cobros, setCobros] = useState([]);
@@ -40,6 +41,12 @@ const [valorEnCobros, setValorEnCobros] = useState(0);
         console.log(data)
   };
 
+const cargarMethodPaymed = async () => {
+    const response = await fetch("http://localhost:8085/methodPaymed");
+    const data = await response.json();
+    setMethodPaymed(data);
+  };
+
   const totalVenta = selectedProducts.reduce(
   (acc, p) => acc + (p.price * p.cantidad),
   0
@@ -49,6 +56,7 @@ const [valorEnCobros, setValorEnCobros] = useState(0);
   
       cargarProduct();
       cargarEntidad();
+      cargarMethodPaymed();
   
     },[])
 
@@ -174,18 +182,25 @@ const [valorEnCobros, setValorEnCobros] = useState(0);
         };
 
   
-        const agregarCobro = (tipo, valor) => {
-          /*  if(valor > totalVenta){
-                alert("El valor ingresado supera la venta")
-                return;
-            }*/
-            setCobros([
-                ...cobros,
-                { tipo: tipo, valor: Number(valor) }
-            ]);
-             setTotalCobros(prev => prev + Number(valor));
-             
+        const agregarCobro = (tipoId, valor) => {
+
+        const metodo = methodPaymed.find(m => m.id == tipoId);
+
+        setCobros([
+            ...cobros,
+            { 
+            id: metodo.id,
+            tipo: metodo.name,
+            valor: Number(valor)
+            }
+        ]);
+
+        setValorEnCobros(prev => prev + Number(valor));
+
+        setTipoPagoCobro();
+        setValorTotalCobro(0);
         };
+
         /*cierra el modal de cobros */
         useEffect(() => {
             console.log(cobros);
@@ -230,12 +245,11 @@ return(
                     <DropDown 
                         label="Formas cobros"
                         value={tipoPagoCobro}
-                        onChange={(e)=>setTipoPagoCobro(e.target.value)}
-                        options={[
-                        {value:"efectivo", label:"Efectivo"},
-                        {value:"cheque", label:"Cheque"},
-                        {value:"transferencia", label:"Transferencia"}
-                        ]}
+                        onChange={(e)=>setTipoPagoCobro(Number(e.target.value))}
+                        options={methodPaymed.map(method => ({
+                            value: Number(method.id),
+                            label: method.name
+                            }))}
                     />
                 </div>
                 <div className="mt-1">
@@ -343,14 +357,24 @@ return(
                     <span>Vaciar Carrito</span>
                 </Button>
             </div>
+            <div className="flex gap-3 mt-2">
+                <span className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    Total:{totalVenta.toFixed(2)}
+                </span>
 
+                <span className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    Saldo:{totalVenta.toFixed(2) - valorEnCobros}
+                </span>
+            </div>
             <span>Metodos de cobros</span>
             {cobros.map((cobro, index) => (
-            <div key={index} className="flex w-20">
-                <Input
-                    value={cobro.tipo}/>
-                <Input
-                value={cobro.valor}/>
+            <div key={index} className="flex">
+                <span className="min-w-[120px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                {cobro.tipo}
+                </span>
+                <span className="min-w-[120px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                {cobro.valor}
+                </span>
             </div>
             ))}
         </div>

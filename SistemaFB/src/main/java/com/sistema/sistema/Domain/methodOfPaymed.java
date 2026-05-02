@@ -17,7 +17,7 @@ public class methodOfPaymed {
     public methodOfPaymed(){
 
     }
-
+ 
     public methodOfPaymed(String name, Moneda moneda){
         this.name = name;
         this.moneda = moneda;
