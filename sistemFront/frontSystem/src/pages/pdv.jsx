@@ -115,6 +115,9 @@ const cargarMethodPaymed = async () => {
 
     const vaciarCarrito = () =>{
         setSelectedProducts([]);
+        setCobros([]);
+        setValorEnCobros(0);
+        
     }
 
     const removeProduct = (id) => {
@@ -309,7 +312,7 @@ return(
                     flash ? "text-green-500" : "text-gray-900"
                 }`}
                 >
-                Total: {totalVenta.toFixed(2)}
+                Total: {totalVenta.toLocaleString('es-PY')}
             </span>
             {selectedEntidad && (
             <div className="flex p-1 bg-blue-100 rounded gap-3 ">
@@ -353,7 +356,7 @@ return(
 
         </div>
 
-        <div className="w-64 shrink-0 border border-gray-300 rounded-lg p-3 bg-gray-50">
+        <div className="shrink-0 border border-gray-300 rounded-lg p-3 bg-gray-50">
             <div className="flex gap-2">
 
                 <Button color="green" onClick={(e)=>setFinalizarPdv(true)}>
@@ -367,12 +370,12 @@ return(
                 </Button>
             </div>
             <div className="flex gap-3 mt-2">
-                <span className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                    Total:{totalVenta.toFixed(2)}
+                <span className="px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    Total:{totalVenta}
                 </span>
 
-                <span className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                    Saldo:{totalVenta.toFixed(2) - valorEnCobros}
+                <span className="px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    Saldo:{totalVenta - valorEnCobros}
                 </span>
             </div>
             <span>Metodos de cobros</span>
