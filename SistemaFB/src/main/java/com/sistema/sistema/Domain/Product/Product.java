@@ -1,4 +1,4 @@
-package com.sistema.sistema.Domain;
+package com.sistema.sistema.Domain.Product;
 
 import com.sistema.sistema.Service.Moneda;
 import jakarta.persistence.*;

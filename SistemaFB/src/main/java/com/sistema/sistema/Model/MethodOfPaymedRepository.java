@@ -1,6 +1,6 @@
 package com.sistema.sistema.Model;
 
-import com.sistema.sistema.Domain.methodOfPaymed;
+import com.sistema.sistema.Domain.MethodOfPaymed.methodOfPaymed;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.sistema.sistema.Domain;
+package com.sistema.sistema.Domain.Person;
 
 import jakarta.persistence.*;
 

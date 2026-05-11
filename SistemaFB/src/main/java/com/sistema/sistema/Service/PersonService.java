@@ -1,7 +1,7 @@
 package com.sistema.sistema.Service;
 
 
-import com.sistema.sistema.Domain.Person;
+import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Dto.PersonDtoGet;
 import com.sistema.sistema.Dto.PersonDtoPost;
 import com.sistema.sistema.Dto.PersonDtoUpdate;

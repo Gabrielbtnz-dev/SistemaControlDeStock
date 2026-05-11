@@ -1,16 +1,16 @@
-package com.sistema.sistema.Domain;
+package com.sistema.sistema.Domain.Sales;
 
+import com.sistema.sistema.Domain.Person.Person;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ventas")
-public class sales {
+public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @ManyToOne
     @JoinColumn(name = "id_person")
     private Person person;
@@ -22,11 +22,11 @@ public class sales {
     private BigDecimal valorPendiente;
     private String observaciones;
 
-    public sales(){
+    public Sales(){
 
     }
 
-    public sales( Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
+    public Sales(Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
         this.person = person;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
