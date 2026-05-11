@@ -1,7 +1,7 @@
 package com.sistema.sistema.Service;
 
 
-import com.sistema.sistema.Dto.methodOfPaymedDto;
+import com.sistema.sistema.Dto.DtoMethodOfPaymed.methodOfPaymedDto;
 import com.sistema.sistema.Model.MethodOfPaymedRepository;
 import org.springframework.stereotype.Service;
 

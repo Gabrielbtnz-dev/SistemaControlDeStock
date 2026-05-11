@@ -1,9 +1,8 @@
 package com.sistema.sistema.RestController;
 
-import com.sistema.sistema.Dto.PersonDtoGet;
-import com.sistema.sistema.Dto.ProductDtoGet;
-import com.sistema.sistema.Dto.ProductDtoPost;
-import com.sistema.sistema.Dto.ProductDtoUpdate;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoGet;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoPost;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoUpdate;
 import com.sistema.sistema.Service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

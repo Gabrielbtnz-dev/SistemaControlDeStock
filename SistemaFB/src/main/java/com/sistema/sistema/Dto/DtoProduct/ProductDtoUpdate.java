@@ -1,9 +1,9 @@
-package com.sistema.sistema.Dto;
+package com.sistema.sistema.Dto.DtoProduct;
 
 import com.sistema.sistema.Service.Moneda;
 import java.math.BigDecimal;
 
-public class ProductDtoPost {
+public class ProductDtoUpdate {
 
     private String name;
     private BigDecimal price;
@@ -11,11 +11,11 @@ public class ProductDtoPost {
     private Boolean controlaStock;
     private Boolean activo;
 
-    public ProductDtoPost(){
+    public ProductDtoUpdate(){
 
     }
 
-    public ProductDtoPost(String name,BigDecimal price, Moneda moneda, Boolean controlaStock,Boolean activo){
+    public ProductDtoUpdate(String name,BigDecimal price, Moneda moneda, Boolean controlaStock,Boolean activo){
         this.name = name;
         this.price = price;
         this.moneda = moneda;

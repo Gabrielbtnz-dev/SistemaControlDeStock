@@ -1,4 +1,4 @@
-package com.sistema.sistema.Dto;
+package com.sistema.sistema.Dto.DtoMethodOfPaymed;
 
 import com.sistema.sistema.Service.Moneda;
 

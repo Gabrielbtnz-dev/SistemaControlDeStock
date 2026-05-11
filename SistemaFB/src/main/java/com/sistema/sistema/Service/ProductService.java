@@ -1,9 +1,9 @@
 package com.sistema.sistema.Service;
 
 import com.sistema.sistema.Domain.Product.Product;
-import com.sistema.sistema.Dto.ProductDtoGet;
-import com.sistema.sistema.Dto.ProductDtoPost;
-import com.sistema.sistema.Dto.ProductDtoUpdate;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoGet;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoPost;
+import com.sistema.sistema.Dto.DtoProduct.ProductDtoUpdate;
 import com.sistema.sistema.Model.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

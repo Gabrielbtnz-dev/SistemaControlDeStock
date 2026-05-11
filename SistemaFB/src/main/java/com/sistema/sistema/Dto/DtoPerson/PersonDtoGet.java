@@ -1,26 +1,44 @@
-package com.sistema.sistema.Dto;
-public class PersonDtoPost {
+package com.sistema.sistema.Dto.DtoPerson;
+public class PersonDtoGet {
+    private long id;
     private String nombre;
     private String documento;
     private String digitoVerificador;
     private Boolean funcionario;
     private Boolean cliente;
     private Boolean contribuyente;
+    private Boolean activo;
 
-    public PersonDtoPost(){
+    public PersonDtoGet(){
     };
 
 
-    public PersonDtoPost(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente){
-
+    public PersonDtoGet( Long id,String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
+        this.id = id;
         this.nombre = nombre;
         this.documento = documento;
         this.digitoVerificador = digitoVerificador;
         this.funcionario = funcionario;
         this.cliente = cliente;
         this.contribuyente = contribuyente;
+        this.activo = activo;
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;

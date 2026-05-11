@@ -1,6 +1,7 @@
-package com.sistema.sistema.Dto;
-public class PersonDtoGet {
-    private long id;
+package com.sistema.sistema.Dto.DtoPerson;
+
+public class PersonDtoUpdate {
+
     private String nombre;
     private String documento;
     private String digitoVerificador;
@@ -9,12 +10,10 @@ public class PersonDtoGet {
     private Boolean contribuyente;
     private Boolean activo;
 
-    public PersonDtoGet(){
-    };
 
+    public PersonDtoUpdate(){};
 
-    public PersonDtoGet( Long id,String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
-        this.id = id;
+    public PersonDtoUpdate(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
         this.nombre = nombre;
         this.documento = documento;
         this.digitoVerificador = digitoVerificador;
@@ -22,23 +21,8 @@ public class PersonDtoGet {
         this.cliente = cliente;
         this.contribuyente = contribuyente;
         this.activo = activo;
-    }
+    };
 
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -86,5 +70,13 @@ public class PersonDtoGet {
 
     public void setContribuyente(Boolean contribuyente) {
         this.contribuyente = contribuyente;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

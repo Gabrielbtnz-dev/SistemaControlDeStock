@@ -1,6 +1,6 @@
 package com.sistema.sistema.RestController;
 
-import com.sistema.sistema.Dto.methodOfPaymedDto;
+import com.sistema.sistema.Dto.DtoMethodOfPaymed.methodOfPaymedDto;
 import com.sistema.sistema.Service.MethodPaymedService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

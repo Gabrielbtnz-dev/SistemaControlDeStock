@@ -1,34 +1,39 @@
-package com.sistema.sistema.Dto;
+package com.sistema.sistema.Dto.DtoProduct;
 
 import com.sistema.sistema.Service.Moneda;
+
 import java.math.BigDecimal;
 
-public class ProductDtoUpdate {
+public class ProductDtoGet {
 
+    private long id;
     private String name;
     private BigDecimal price;
     private Moneda moneda;
     private Boolean controlaStock;
     private Boolean activo;
+    private String codigoDeBarras;
 
-    public ProductDtoUpdate(){
+    public ProductDtoGet(){
 
     }
 
-    public ProductDtoUpdate(String name,BigDecimal price, Moneda moneda, Boolean controlaStock,Boolean activo){
+    public ProductDtoGet(Long id, String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo, String codigoDeBarras){
+        this.id = id;
         this.name = name;
         this.price = price;
         this.moneda = moneda;
         this.controlaStock = controlaStock;
         this.activo = activo;
+        this.codigoDeBarras = codigoDeBarras;
     }
 
-    public Boolean getActivo() {
-        return activo;
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public Moneda getMoneda() {
@@ -37,6 +42,14 @@ public class ProductDtoUpdate {
 
     public void setMoneda(Moneda moneda) {
         this.moneda = moneda;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -61,5 +74,13 @@ public class ProductDtoUpdate {
 
     public void setControlaStock(Boolean controlaStock) {
         this.controlaStock = controlaStock;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

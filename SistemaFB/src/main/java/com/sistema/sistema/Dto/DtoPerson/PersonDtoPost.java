@@ -1,27 +1,25 @@
-package com.sistema.sistema.Dto;
-
-public class PersonDtoUpdate {
-
+package com.sistema.sistema.Dto.DtoPerson;
+public class PersonDtoPost {
     private String nombre;
     private String documento;
     private String digitoVerificador;
     private Boolean funcionario;
     private Boolean cliente;
     private Boolean contribuyente;
-    private Boolean activo;
+
+    public PersonDtoPost(){
+    };
 
 
-    public PersonDtoUpdate(){};
+    public PersonDtoPost(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente){
 
-    public PersonDtoUpdate(String nombre, String documento, String digitoVerificador, Boolean funcionario, Boolean cliente, Boolean contribuyente, Boolean activo){
         this.nombre = nombre;
         this.documento = documento;
         this.digitoVerificador = digitoVerificador;
         this.funcionario = funcionario;
         this.cliente = cliente;
         this.contribuyente = contribuyente;
-        this.activo = activo;
-    };
+    }
 
 
     public String getNombre() {
@@ -70,13 +68,5 @@ public class PersonDtoUpdate {
 
     public void setContribuyente(Boolean contribuyente) {
         this.contribuyente = contribuyente;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
     }
 }

@@ -36,7 +36,7 @@ function Entity(){
     }
 
     const cargarPersonas = async () => {
-    const response = await fetch("/personas");
+    const response = await fetch("http://localhost:8085/personas");
     const data = await response.json();
     setPersona(data);
   };
@@ -58,7 +58,7 @@ const guardarEntidad = async () => {
         }
 
   try {
-    const response = await fetch("/addPerson", {
+    const response = await fetch("http://localhost:8085/addPerson", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -89,7 +89,7 @@ const removePerson = async (id)=>{
   const data={
     activo:false
   }
-  const response = await fetch(`/updatePerson/${id}`,{
+  const response = await fetch(`http://localhost:8085/updatePerson/${id}`,{
     method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -131,7 +131,7 @@ const editEntidad=(p)=>{
 
     const idEdit = id;
 
-    const response = await fetch(`/updatePerson/${idEdit}`,{
+    const response = await fetch(`http://localhost:8085/updatePerson/${idEdit}`,{
     method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

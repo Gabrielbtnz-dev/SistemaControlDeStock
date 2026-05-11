@@ -2,9 +2,9 @@ package com.sistema.sistema.Service;
 
 
 import com.sistema.sistema.Domain.Person.Person;
-import com.sistema.sistema.Dto.PersonDtoGet;
-import com.sistema.sistema.Dto.PersonDtoPost;
-import com.sistema.sistema.Dto.PersonDtoUpdate;
+import com.sistema.sistema.Dto.DtoPerson.PersonDtoGet;
+import com.sistema.sistema.Dto.DtoPerson.PersonDtoPost;
+import com.sistema.sistema.Dto.DtoPerson.PersonDtoUpdate;
 import com.sistema.sistema.Model.PersonRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
