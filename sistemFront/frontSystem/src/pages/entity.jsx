@@ -236,6 +236,8 @@ const editEntidad=(p)=>{
       <DataTable
         data={personFilterNombre}
         rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
+        itemsPerPage={20}
+        pagination={true}
         columns={[
           { key: "nombre", label: "Nombre" },
           { key: "documento", label: "Documento" },

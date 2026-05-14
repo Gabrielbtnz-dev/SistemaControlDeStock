@@ -245,6 +245,8 @@ function Product(){
      <DataTable
         data={productosFiltrados}
         rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
+        itemsPerPage={20}
+        pagination={true}
         columns={[
           { key: "name", label: "Nombre" },
           {

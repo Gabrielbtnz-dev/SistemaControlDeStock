@@ -1,36 +1,109 @@
-export default function DataTable({ columns, data, rowClassName }) {
+import { useState } from "react";
+
+export default function DataTable({
+  columns,
+  data,
+  rowClassName,
+  pagination = false,
+  itemsPerPage = 10,
+  maxHeight = "75vh",
+}) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // PAGINACIÓN
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentData = pagination
+    ? data.slice(startIndex, endIndex)
+    : data;
+
   return (
-    <div className="flex-1 overflow-y-auto bg-white shadow-md rounded-2xl">
-      <table className="min-w-full text-sm text-left">
+    <div className="flex flex-col gap-4">
 
-        {/* HEADER */}
-        <thead className="bg-blue-300 sticky top-0 z-10">
-          <tr>
-            {columns.map((col) => (
-              <th key={col.key} className="px-6 py-3">
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
+      {/* TABLA */}
+      <div
+        className="w-full overflow-auto bg-white shadow-md rounded-2xl"
+        style={{ maxHeight }}
+      >
+        <table className="w-full text-sm text-left table-auto">
 
-        {/* BODY */}
-        <tbody className="divide-y">
-          {data.map((row) => (
-            <tr
-              key={row.id}
-              className={`hover:bg-blue-50 ${rowClassName ? rowClassName(row) : ""}`}
-            >
+          {/* HEADER */}
+          <thead className="bg-blue-300 sticky top-0 z-10">
+            <tr>
               {columns.map((col) => (
-                <td key={col.key} className="px-6 py-3">
-                  {col.render ? col.render(row) : row[col.key]}
-                </td>
+                <th
+                  key={col.key}
+                  className="px-4 py-3 whitespace-nowrap"
+                >
+                  {col.label}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
+          </thead>
 
-      </table>
+          {/* BODY */}
+          <tbody className="divide-y">
+            {currentData.map((row) => (
+              <tr
+                key={row.id}
+                className={`hover:bg-blue-50 ${
+                  rowClassName ? rowClassName(row) : ""
+                }`}
+              >
+                {columns.map((col) => (
+                  <td
+                    key={col.key}
+                    className="px-4 py-3 whitespace-nowrap"
+                  >
+                    {col.render
+                      ? col.render(row)
+                      : row[col.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
+
+      {/* PAGINACIÓN */}
+      {pagination && (
+        <div className="flex justify-center items-center gap-4">
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.max(prev - 1, 1))
+            }
+            disabled={currentPage === 1}
+            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Anterior
+          </button>
+
+          <span className="text-sm font-medium">
+            Página {currentPage} de {totalPages || 1}
+          </span>
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) =>
+                Math.min(prev + 1, totalPages)
+              )
+            }
+            disabled={
+              currentPage === totalPages || totalPages === 0
+            }
+            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+
+        </div>
+      )}
     </div>
   );
 }

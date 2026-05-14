@@ -4,7 +4,7 @@ import DataTable from "../assets/components/DataTable";
 import Input from "../assets/components/Input";
 import Button from "../assets/components/button";
 import { Banknote, Trash, CircleDollarSign } from 'lucide-react';
-import { Trash2,UserRoundPlus } from 'lucide-react';
+import { Trash2,User } from 'lucide-react';
 import  Modal  from "../assets/components/Modal";
 import DropDown from "../assets/components/DropDown";
 import BarcodeSearch from "../assets/components/BarcodeSearch"
@@ -162,6 +162,10 @@ const cargarMethodPaymed = async () => {
             const handleKeyDown = (e) => {
                 if (e.key === "F2") {
                 e.preventDefault();
+
+                if (totalVenta === valorEnCobros) {
+                return;
+                }
                 setFinalizarPdv(true);
                 }
             };
@@ -171,7 +175,7 @@ const cargarMethodPaymed = async () => {
             return () => {
                 window.removeEventListener("keydown", handleKeyDown);
             };
-        }, []);
+        }, [totalVenta, valorEnCobros]);
 
 
         const addEntidad = (item) => {
@@ -277,7 +281,7 @@ return(
                 </div>
             </Modal>
         }
-        <div className="flex flex-col flex-1 gap-4 w-full">
+        <div className="flex flex-col flex-1 w-full">
             
             <div className="flex gap-3">
                 <div className="w-96">
@@ -306,7 +310,7 @@ return(
                 </div>
             </div>
             
-            <div className="flex gap-5">
+            <div className="flex gap-5 mb-1">
             <span
                 className={`font-semibold text-xl transition-colors duration-300 ${
                     flash ? "text-green-500" : "text-gray-900"
@@ -315,8 +319,8 @@ return(
                 Total: {totalVenta.toLocaleString('es-PY')}
             </span>
             {selectedEntidad && (
-            <div className="flex p-1 bg-blue-100 rounded gap-3 ">
-                <UserRoundPlus/>
+            <div className="flex p-1 bg-blue-100 rounded gap-1 ">
+                <User/>
                 Cliente: {selectedEntidad.nombre}
                 <div className="flex justify-end items-center">
                     <Trash
