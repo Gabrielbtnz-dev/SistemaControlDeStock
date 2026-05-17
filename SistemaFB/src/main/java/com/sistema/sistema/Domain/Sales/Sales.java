@@ -4,6 +4,7 @@ import com.sistema.sistema.Domain.Person.Person;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "ventas")
@@ -13,7 +14,7 @@ public class Sales {
     private long id;
     @ManyToOne
     @JoinColumn(name = "id_person")
-    private Person person;
+    private Person IdPerson;
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
     @Column(name = "valor_regularizado")
@@ -21,19 +22,40 @@ public class Sales {
     @Column(name = "valor_pendiente")
     private BigDecimal valorPendiente;
     private String observaciones;
+    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
+    private List<ItemsSales> items;
 
     public Sales(){
 
     }
 
-    public Sales(Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
-        this.person = person;
+    public Sales(Person IdPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
+        this.IdPerson = IdPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Person getIdPerson() {
+        return IdPerson;
+    }
+
+    public void setIdPerson(Person idPerson) {
+        IdPerson = idPerson;
+    }
+
+    public List<ItemsSales> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemsSales> items) {
+        this.items = items;
+    }
 
     public Long getId() {
         return id;
@@ -44,11 +66,11 @@ public class Sales {
     }
 
     public Person getPerson() {
-        return person;
+        return IdPerson;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setPerson(Person IdPerson) {
+        this.IdPerson = IdPerson;
     }
 
     public BigDecimal getValorTotal() {
