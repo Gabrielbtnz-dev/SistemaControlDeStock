@@ -1,5 +1,6 @@
 package com.sistema.sistema.Domain.Sales;
 
+import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
 import com.sistema.sistema.Domain.Person.Person;
 import jakarta.persistence.*;
 
@@ -24,6 +25,8 @@ public class Sales {
     private String observaciones;
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
     private List<ItemsSales> items;
+    @OneToMany(mappedBy = "venta")
+    private List<MovimientoDeCaja> movimientosCaja;
 
     public Sales(){
 

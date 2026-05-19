@@ -1,8 +1,9 @@
-package com.sistema.sistema.Dto.DtoMethodOfPaymed;
+package com.sistema.sistema.Dto.DtoCajas;
 
 import com.sistema.sistema.Service.Moneda;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CajasDto {
 
@@ -11,6 +12,7 @@ public class CajasDto {
     private Moneda moneda;
     private BigDecimal saldo;
     private Boolean activo;
+    private List<MovimientosDeCajasDto> movimientoDecajaDto;
 
     public CajasDto(){
 

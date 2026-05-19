@@ -22,6 +22,7 @@ public class MovimientoDeCaja {
     @Column(name = "tipo_movimieto")
     private String tipoMovimiento;
     private BigDecimal monto;
+    @Enumerated(EnumType.STRING)
     private Moneda moneda;
     private String descripcion;
     private LocalDateTime fecha;
