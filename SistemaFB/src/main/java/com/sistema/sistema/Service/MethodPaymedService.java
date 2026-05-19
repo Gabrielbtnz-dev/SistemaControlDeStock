@@ -21,7 +21,9 @@ public class MethodPaymedService {
                 m-> new methodOfPaymedDto(
                         m.getId(),
                         m.getName(),
-                        m.getMoneda()
+                        m.getMoneda(),
+                        m.getSaldo(),
+                        m.getActivo()
                 )
         ).toList();
     }

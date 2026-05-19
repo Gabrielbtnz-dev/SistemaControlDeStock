@@ -2,21 +2,43 @@ package com.sistema.sistema.Dto.DtoMethodOfPaymed;
 
 import com.sistema.sistema.Service.Moneda;
 
+import java.math.BigDecimal;
+
 public class methodOfPaymedDto {
 
     private Long id;
     private String name;
     private Moneda moneda;
+    private BigDecimal saldo;
+    private Boolean activo;
 
     public methodOfPaymedDto(){
 
     }
 
-    public methodOfPaymedDto( Long id, String name, Moneda moneda){
+    public methodOfPaymedDto( Long id, String name, Moneda moneda, BigDecimal saldo, Boolean activo){
         this.id = id;
         this.name = name;
         this.moneda = moneda;
+        this.saldo = saldo;
+        this.activo = activo;
 
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Long getId() {

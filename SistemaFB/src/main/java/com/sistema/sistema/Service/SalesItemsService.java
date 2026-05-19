@@ -8,11 +8,13 @@ import com.sistema.sistema.Dto.DtoSales.SalesDto;
 import com.sistema.sistema.Model.ItemSalesRepository;
 import com.sistema.sistema.Model.PersonRepository;
 import com.sistema.sistema.Model.SalesRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SalesItemsService {
@@ -61,7 +63,12 @@ public class SalesItemsService {
 
        saved.setItems(items);
 
-       return ResponseEntity.ok(saved);
+       return ResponseEntity
+               .status(HttpStatus.CREATED)
+               .body(Map.of(
+                       "success", true,
+                       "message", "Venta realizada con exito"
+               ));
     }
 
 }
