@@ -1,24 +1,24 @@
 package com.sistema.sistema.Service;
 
 
-import com.sistema.sistema.Dto.DtoMethodOfPaymed.methodOfPaymedDto;
+import com.sistema.sistema.Dto.DtoMethodOfPaymed.CajasDto;
 import com.sistema.sistema.Model.MethodOfPaymedRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class MethodPaymedService {
+public class CajasService {
 
     private final MethodOfPaymedRepository paymedRepo;
 
-    public MethodPaymedService(MethodOfPaymedRepository paymedRepo) {
+    public CajasService(MethodOfPaymedRepository paymedRepo) {
         this.paymedRepo = paymedRepo;
     }
 
-    public List<methodOfPaymedDto> getMethodPaymed(){
+    public List<CajasDto> getMethodPaymed(){
         return paymedRepo.findAllByOrderByIdDesc().stream().map(
-                m-> new methodOfPaymedDto(
+                m-> new CajasDto(
                         m.getId(),
                         m.getName(),
                         m.getMoneda(),

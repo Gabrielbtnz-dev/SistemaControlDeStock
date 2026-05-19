@@ -1,6 +1,5 @@
-package com.sistema.sistema.Domain.MethodOfPaymed;
+package com.sistema.sistema.Domain.Cajas;
 
-import com.sistema.sistema.Domain.MovimientoDeCaja.MovimientoDeCaja;
 import com.sistema.sistema.Service.Moneda;
 import jakarta.persistence.*;
 

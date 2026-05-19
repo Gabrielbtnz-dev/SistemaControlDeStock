@@ -4,7 +4,7 @@ import com.sistema.sistema.Service.Moneda;
 
 import java.math.BigDecimal;
 
-public class methodOfPaymedDto {
+public class CajasDto {
 
     private Long id;
     private String name;
@@ -12,11 +12,11 @@ public class methodOfPaymedDto {
     private BigDecimal saldo;
     private Boolean activo;
 
-    public methodOfPaymedDto(){
+    public CajasDto(){
 
     }
 
-    public methodOfPaymedDto( Long id, String name, Moneda moneda, BigDecimal saldo, Boolean activo){
+    public CajasDto(Long id, String name, Moneda moneda, BigDecimal saldo, Boolean activo){
         this.id = id;
         this.name = name;
         this.moneda = moneda;
