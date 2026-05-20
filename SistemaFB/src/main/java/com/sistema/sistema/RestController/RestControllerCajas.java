@@ -16,7 +16,7 @@ public class RestControllerCajas {
         this.cajasService = cajasService;
     }
 
-    @GetMapping("/methodPaymed")
+    @GetMapping("/cuentasCajas")
     public List<CajasDto> getMethodOfPaymed(){
         return cajasService.getMethodPaymed();
     }
