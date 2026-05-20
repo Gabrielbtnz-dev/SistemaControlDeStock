@@ -42,7 +42,7 @@ const [valorEnCobros, setValorEnCobros] = useState(0);
   };
 
 const cargarMethodPaymed = async () => {
-    const response = await fetch("http://localhost:8085/methodPaymed");
+    const response = await fetch("http://localhost:8085/cuentasCajas");
     const data = await response.json();
     setMethodPaymed(data);
   };
@@ -221,6 +221,46 @@ const cargarMethodPaymed = async () => {
         setValorTotalCobro(restante > 0 ? restante : 0);
     }, [totalVenta, cobros]);
 
+    const finalizarVenta = async () => {
+
+    const venta = {
+        idPerson: selectedEntidad.id,
+
+        valorTotal: totalVenta,
+        valorRegularizado: totalVenta,
+        valorPendiente: 0,
+
+        items: selectedProducts.map(p => ({
+            idProducto: p.id,
+            cantidad: p.cantidad,
+            precio: p.price,
+            valor: p.price * p.cantidad
+        })),
+
+        caja: cobros.map(c => ({
+            idCaja: c.id,
+            monto: c.valor,
+            moneda: "PYG"
+        }))
+        
+    };
+
+    console.log(JSON.stringify(venta, null, 2));
+
+    const response = await fetch("http://localhost:8085/addSales", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(venta)
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+    window.location.reload();
+};
+
 return(
     <div className="flex w-full gap-4 items-start">
 
@@ -363,7 +403,7 @@ return(
         <div className="shrink-0 border border-gray-300 rounded-lg p-3 bg-gray-50">
             <div className="flex gap-2">
 
-                <Button color="green" onClick={(e)=>setFinalizarPdv(true)}>
+                <Button color="green" onClick={(e)=>finalizarVenta()}>
                     <Banknote />
                     <span>Finalizar</span>
                 </Button>

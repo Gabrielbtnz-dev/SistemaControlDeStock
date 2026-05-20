@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Users, Menu as MenuIcon, Home } from "lucide-react";
 import { ShoppingBag } from 'lucide-react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Landmark } from 'lucide-react';
 import { Link } from "react-router-dom";
 
 function Menu() {
@@ -53,6 +53,17 @@ function Menu() {
   <span>PDV</span>
   </Link>
 }
+
+{open && 
+  <Link
+  to="/cuentasCajas"
+  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+  >
+  <Landmark />
+  <span>Cuentas Cajas</span>
+  </Link>
+}
+
 
     </div>
   );

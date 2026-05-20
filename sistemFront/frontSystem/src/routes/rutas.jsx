@@ -4,6 +4,7 @@ import Entity from "../pages/entity"
 import Pdv from "../pages/pdv"
 import MainLayout from "../assets/layout/MainLayout"
 import Product from "../pages/product"
+import CuentasCajas from "../pages/CuentasCajas"
 
 function Rutas(){
     return(
@@ -16,6 +17,7 @@ function Rutas(){
                     <Route path="/Entity" element={<Entity />} />
                     <Route path="/Product" element={<Product/>}/>
                     <Route path="/pdv" element={<Pdv/>} />
+                    <Route path="/cuentasCajas" element={<CuentasCajas/>} />
                 </Route>
             </Routes>
         
