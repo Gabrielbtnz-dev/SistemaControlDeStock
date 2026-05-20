@@ -2,7 +2,7 @@ package com.sistema.sistema.Service;
 
 
 import com.sistema.sistema.Dto.DtoCajas.CajasDto;
-import com.sistema.sistema.Model.MethodOfPaymedRepository;
+import com.sistema.sistema.Model.CajasRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class CajasService {
 
-    private final MethodOfPaymedRepository paymedRepo;
+    private final CajasRepository paymedRepo;
 
-    public CajasService(MethodOfPaymedRepository paymedRepo) {
+    public CajasService(CajasRepository paymedRepo) {
         this.paymedRepo = paymedRepo;
     }
 

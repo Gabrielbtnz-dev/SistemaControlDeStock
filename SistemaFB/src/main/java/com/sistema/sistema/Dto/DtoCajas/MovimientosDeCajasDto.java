@@ -1,9 +1,6 @@
 package com.sistema.sistema.Dto.DtoCajas;
 
-import com.sistema.sistema.Domain.Cajas.Cajas;
-import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Service.Moneda;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,18 +12,27 @@ public class MovimientosDeCajasDto {
     private Moneda moneda;
     private String descripcion;
     private LocalDateTime fecha;
+    private Long idCaja;
+
 
     public MovimientosDeCajasDto(){
 
     }
 
-    public MovimientosDeCajasDto(Sales venta, Cajas caja, String tipoMovimiento, BigDecimal monto, Moneda moneda, String descripcion, LocalDateTime fecha){
+    public MovimientosDeCajasDto(String tipoMovimiento, BigDecimal monto, Moneda moneda, String descripcion, LocalDateTime fecha){
         this.tipoMovimiento = tipoMovimiento;
         this.monto = monto;
         this.moneda = moneda;
         this.descripcion = descripcion;
         this.fecha = fecha;
 
+    }
+    public Long getIdCaja() {
+        return idCaja;
+    }
+
+    public void setIdCaja(Long idCaja) {
+        this.idCaja = idCaja;
     }
 
     public LocalDateTime getFecha() {

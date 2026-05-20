@@ -19,7 +19,7 @@ public class MovimientoDeCaja {
     @ManyToOne
     @JoinColumn(name = "id_caja")
     private Cajas caja;
-    @Column(name = "tipo_movimieto")
+    @Column(name = "tipo_movimiento")
     private String tipoMovimiento;
     private BigDecimal monto;
     @Enumerated(EnumType.STRING)

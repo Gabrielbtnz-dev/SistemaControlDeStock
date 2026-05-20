@@ -1,5 +1,7 @@
 package com.sistema.sistema.Dto.DtoSales;
 
+import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,18 +12,28 @@ public class SalesDto {
     private BigDecimal valorPendiente;
     private String observaciones;
     private List<ItemsSalesDto> items;
+    private List<MovimientosDeCajasDto> caja;
 
     public SalesDto(){
 
     }
 
-    public SalesDto(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
+    public SalesDto( Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
     }
+
+    public List<MovimientosDeCajasDto> getCaja() {
+        return caja;
+    }
+
+    public void setCaja(List<MovimientosDeCajasDto> caja) {
+        this.caja = caja;
+    }
+
 
 
 
@@ -33,11 +45,11 @@ public class SalesDto {
         this.valorTotal = valorTotal;
     }
 
-    public Long getidPerson() {
+    public Long getIdPerson() {
         return idPerson;
     }
 
-    public void setidPerson(Long idPerson) {
+    public void setIdPerson(Long idPerson) {
         this.idPerson = idPerson;
     }
 
