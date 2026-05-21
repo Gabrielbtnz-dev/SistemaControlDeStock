@@ -3,6 +3,7 @@ package com.sistema.sistema.Service;
 import com.sistema.sistema.Domain.Cajas.Cajas;
 import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
 import com.sistema.sistema.Domain.Person.Person;
+import com.sistema.sistema.Domain.Product.Product;
 import com.sistema.sistema.Domain.Sales.ItemsSales;
 import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
@@ -26,13 +27,15 @@ public class SalesItemsService {
     private final PersonRepository personReposi;
     private final MovimientoDeCajasRepository moviReposi;
     private final CajasRepository cajaReposi;
+    private final ProductRepository productReposi;
     /*mas de una variable en un solo constructor, mas de un repository*/
-    public SalesItemsService(ItemSalesRepository itemReposi, SalesRepository salesReposi, PersonRepository personReposi, MovimientoDeCajasRepository moviReposi, CajasRepository cajaReposi) {
+    public SalesItemsService(ItemSalesRepository itemReposi, SalesRepository salesReposi, PersonRepository personReposi, MovimientoDeCajasRepository moviReposi, CajasRepository cajaReposi, ProductRepository productReposi) {
         this.itemReposi = itemReposi;
         SalesReposi = salesReposi;
         this.personReposi = personReposi;
         this.moviReposi = moviReposi;
         this.cajaReposi = cajaReposi;
+        this.productReposi = productReposi;
     }
 
    public ResponseEntity<?> addSales( SalesDto dto){
@@ -58,7 +61,9 @@ public class SalesItemsService {
                item.setPrecio(i.getPrecio());
                item.setCantidad(i.getCantidad());
                item.setValor(i.getValor());
-
+               Product product = productReposi.findById(i.getIdProducto())
+                       .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                item.setProduct(product);
                item.setSales(saved);
 
                items.add(item);

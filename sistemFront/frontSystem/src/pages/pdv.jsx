@@ -258,7 +258,7 @@ const cargarMethodPaymed = async () => {
     const data = await response.json();
 
     console.log(data);
-    window.location.reload();
+    
 };
 
 return(

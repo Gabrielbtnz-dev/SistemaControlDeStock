@@ -1,5 +1,7 @@
 package com.sistema.sistema.Dto.DtoSales;
 
+import com.sistema.sistema.Domain.Product.Product;
+
 import java.math.BigDecimal;
 
 public class ItemsSalesDto {
@@ -7,16 +9,26 @@ public class ItemsSalesDto {
     private BigDecimal precio;
     private BigDecimal valor;
     private BigDecimal cantidad;
+    private Long idProducto;
 
     public ItemsSalesDto(){
 
     }
 
-    public ItemsSalesDto(BigDecimal precio, BigDecimal valor, BigDecimal cantidad){
+    public ItemsSalesDto(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Long idProducto){
         this.cantidad = cantidad;
         this.valor = valor;
         this.precio = precio;
+        this.idProducto = idProducto;
 
+    }
+
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public BigDecimal getCantidad() {

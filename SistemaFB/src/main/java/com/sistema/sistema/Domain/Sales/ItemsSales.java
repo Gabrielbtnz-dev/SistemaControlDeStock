@@ -1,6 +1,7 @@
 package com.sistema.sistema.Domain.Sales;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sistema.sistema.Domain.Product.Product;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -19,17 +20,28 @@ public class ItemsSales {
     @ManyToOne
     @JoinColumn(name = "id_venta")
     private Sales sales;
+    @ManyToOne
+    @JoinColumn(name = "id_producto")
+    private Product product;
 
     public ItemsSales(){
 
     }
 
-    public ItemsSales(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Sales sales){
+    public ItemsSales(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Sales sales,Product product){
         this.sales = sales;
         this.cantidad = cantidad;
         this.valor = valor;
         this.precio = precio;
+        this.product = product;
+    }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public long getId() {
