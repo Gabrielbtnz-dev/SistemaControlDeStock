@@ -56,7 +56,7 @@ export default function DataTable({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="px-4 py-3 whitespace-nowrap"
+                    className="px-3 py-1 whitespace-nowrap"
                   >
                     {col.render
                       ? col.render(row)

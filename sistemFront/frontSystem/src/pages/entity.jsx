@@ -25,9 +25,6 @@ function Entity(){
      const [butonEdit, setButonEdit] = useState("");
     const[personFilterName,setPersonFilterName]=useState("");
 
-    
-
-    
 
     const abrirPopUp=()=>{
       setButonEdit(false)
@@ -64,7 +61,7 @@ const guardarEntidad = async () => {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    if(result.succes = true){
+    if(result.succes){
       setMensajeRespuesta("Cliente agregado con exito!");
       setShowCheck(true);
       setTimeout(() => {
@@ -231,7 +228,7 @@ const editEntidad=(p)=>{
       <Button color="green" onClick={abrirPopUp}>
           <UserRoundPlus size={16} className="inline-block" /> 
           <span> Agregar nueva entidad</span>
-          </Button>
+      </Button>
     </div>
       <DataTable
         data={personFilterNombre}
