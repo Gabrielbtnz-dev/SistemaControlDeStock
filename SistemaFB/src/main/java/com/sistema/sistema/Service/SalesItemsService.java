@@ -61,6 +61,7 @@ public class SalesItemsService {
                item.setPrecio(i.getPrecio());
                item.setCantidad(i.getCantidad());
                item.setValor(i.getValor());
+               /* se busca el id producto*/
                Product product = productReposi.findById(i.getIdProducto())
                        .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
                 item.setProduct(product);
