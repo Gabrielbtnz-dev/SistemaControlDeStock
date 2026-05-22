@@ -6,11 +6,9 @@ export default function DataTable({
   rowClassName,
   pagination = false,
   itemsPerPage = 10,
-  maxHeight = "75vh",
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // PAGINACIÓN
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -21,58 +19,60 @@ export default function DataTable({
     : data;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 w-full">
 
-      {/* TABLA */}
-      <div
-        className="w-full overflow-auto bg-white shadow-md rounded-2xl"
-        style={{ maxHeight }}
-      >
-        <table className="w-full text-sm text-left table-auto">
+      {/* CONTENEDOR PRINCIPAL */}
+      <div className="w-full bg-white shadow-md rounded-2xl overflow-hidden">
 
-          {/* HEADER */}
-          <thead className="bg-blue-300 sticky top-0 z-10">
-            <tr>
-              {columns.map((col) => (
-                <th
-                  key={col.key}
-                  className="px-4 py-3 whitespace-nowrap"
-                >
-                  {col.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
+        {/* SCROLL TABLA OCUPA TODA LA PANTALLA */}
+        <div className="overflow-y-auto h-[calc(100vh-200px)]">
 
-          {/* BODY */}
-          <tbody className="divide-y">
-            {currentData.map((row) => (
-              <tr
-                key={row.id}
-                className={`hover:bg-blue-50 ${
-                  rowClassName ? rowClassName(row) : ""
-                }`}
-              >
+          <table className="w-full text-sm text-left table-auto">
+
+            {/* HEADER STICKY */}
+            <thead className="bg-blue-300 sticky top-0 z-10">
+              <tr>
                 {columns.map((col) => (
-                  <td
+                  <th
                     key={col.key}
-                    className="px-3 py-1 whitespace-nowrap"
+                    className="px-4 py-3 whitespace-nowrap"
                   >
-                    {col.render
-                      ? col.render(row)
-                      : row[col.key]}
-                  </td>
+                    {col.label}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
+            </thead>
 
-        </table>
+            {/* BODY */}
+            <tbody className="divide-y">
+              {currentData.map((row) => (
+                <tr
+                  key={row.id}
+                  className={`hover:bg-blue-50 ${
+                    rowClassName ? rowClassName(row) : ""
+                  }`}
+                >
+                  {columns.map((col) => (
+                    <td
+                      key={col.key}
+                      className="px-3 py-2 whitespace-nowrap"
+                    >
+                      {col.render
+                        ? col.render(row)
+                        : row[col.key]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        </div>
       </div>
 
       {/* PAGINACIÓN */}
       {pagination && (
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex justify-center items-center gap-4 mt-2">
 
           <button
             onClick={() =>
@@ -104,6 +104,7 @@ export default function DataTable({
 
         </div>
       )}
+
     </div>
   );
 }

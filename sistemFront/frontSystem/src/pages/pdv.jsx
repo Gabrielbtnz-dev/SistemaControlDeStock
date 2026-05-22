@@ -8,6 +8,7 @@ import { Trash2,User } from 'lucide-react';
 import  Modal  from "../assets/components/Modal";
 import DropDown from "../assets/components/DropDown";
 import BarcodeSearch from "../assets/components/BarcodeSearch"
+import Swal from "sweetalert2";
 
 function Pdv(){
 const[product,setProduct]=useState([]);
@@ -223,6 +224,41 @@ const cargarMethodPaymed = async () => {
 
     const finalizarVenta = async () => {
 
+        let diferenciaVentaCobro = totalVenta - valorEnCobros;
+
+        if (selectedProducts.length === 0) {
+            Swal.fire({
+                title: "Productos requerido",
+                text: "Seleccione  al menos un producto",
+                icon: "warning",
+                confirmButtonColor: "#28a745",
+                confirmButtonText: "Entendido"
+                });
+                return
+            }
+         if (diferenciaVentaCobro > 0) {
+               
+               Swal.fire({
+                title: "El valor del cobro debe de ser igual al valor de la venta",
+                text: "Seleccione  al menos un metodo de cobro",
+                icon: "warning",
+                confirmButtonColor: "#28a745",
+                confirmButtonText: "Entendido"
+                });
+                return
+            }
+
+        if (!selectedEntidad?.id) {
+            Swal.fire({
+                title: "Cliente requerido",
+                text: "Seleccione un cliente",
+                icon: "warning",
+                confirmButtonColor: "#28a745",
+                confirmButtonText: "Entendido"
+                });
+            return
+            }
+
     const venta = {
         idPerson: selectedEntidad.id,
 
@@ -258,6 +294,7 @@ const cargarMethodPaymed = async () => {
     const data = await response.json();
 
     console.log(data);
+    window.location.reload();
     
 };
 
