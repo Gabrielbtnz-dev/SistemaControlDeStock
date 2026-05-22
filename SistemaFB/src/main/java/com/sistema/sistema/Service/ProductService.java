@@ -39,7 +39,7 @@ public class ProductService {
         Product product = new Product();
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
-        product.setMoneda(dto.getMoneda());
+        product.setMoneda(Moneda.PYG);
         product.setControlaStock(dto.getControlaStock());
         product.setActivo(true);
 

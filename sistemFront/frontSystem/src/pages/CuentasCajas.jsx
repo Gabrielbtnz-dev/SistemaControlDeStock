@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import InputFilterText from "../assets/components/InputFilterText";
 import DataTable from "../assets/components/DataTable";
 import Button from "../assets/components/button";
-import { Landmark } from 'lucide-react';
+import { Landmark,Trash,Pencil } from 'lucide-react';
 import Modal from "../assets/components/Modal";
 import Input from "../assets/components/Input";
 import DropDown from "../assets/components/DropDown";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
+import Swal from 'sweetalert2'
 
 
 function CuentasCajas(){
@@ -68,9 +69,37 @@ function CuentasCajas(){
     }
 
     await cargarCuentasCajas();
+    
 
     }
+    
+    const removeCuentasCajas = async (id)=>{
 
+    const response = await fetch(`http://localhost:8085/deleteCuentasCajas/${id}`,{
+      method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      });
+      const result = await response.json();
+
+      if(result.success){
+        Swal.fire({
+            title: result.message,
+            icon: "success",
+            confirmButtonColor: "#28a745",
+            confirmButtonText: "Entendido"
+            });
+        }
+        if(!result.success){
+            Swal.fire({
+            title: result.message,
+            icon: "error",
+            confirmButtonColor: "red",
+            confirmButtonText: "Entendido"
+        });
+       await cargarCuentasCajas();
+      }
+
+    }
   
 
 
@@ -137,7 +166,28 @@ function CuentasCajas(){
                         minimumFractionDigits: 0
                         }).format(row.saldo)
                 },
-                { key: "moneda", label: "Moneda" }
+                { key: "moneda", label: "Moneda" },
+                {
+                    render: (p) => (
+                        <div className="flex justify-end gap-3 items-center">
+                            
+                            {p.activo && (
+                            <Trash
+                                className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                                onClick={() => removeCuentasCajas(p.id)}
+                            />
+                            )}
+
+                            {p.activo && (
+                            <Pencil
+                                className="cursor-pointer hover:text-blue-500"
+                                onClick={() => editProduct(p)}
+                            />
+                            )}
+
+                        </div>
+                        ),
+                }
                 ]}
             />
         </div>
