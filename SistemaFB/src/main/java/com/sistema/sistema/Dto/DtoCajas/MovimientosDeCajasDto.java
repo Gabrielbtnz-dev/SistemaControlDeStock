@@ -1,32 +1,57 @@
 package com.sistema.sistema.Dto.DtoCajas;
 
-import com.sistema.sistema.Service.Moneda;
+import com.sistema.sistema.Service.Enum.Moneda;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class MovimientosDeCajasDto {
 
+    private Long idCaja;
     private String tipoMovimiento;
     private BigDecimal monto;
     private Moneda moneda;
     private String descripcion;
     private LocalDateTime fecha;
-    private Long idCaja;
+    private String nombreCaja;
+    private Long idVenta;
 
+    public MovimientosDeCajasDto() {}
 
-    public MovimientosDeCajasDto(){
-
-    }
-
-    public MovimientosDeCajasDto(String tipoMovimiento, BigDecimal monto, Moneda moneda, String descripcion, LocalDateTime fecha){
+    public MovimientosDeCajasDto(Long idCaja,
+                                 String tipoMovimiento,
+                                 BigDecimal monto,
+                                 Moneda moneda,
+                                 String descripcion,
+                                 LocalDateTime fecha,
+                                 String nombreCaja,
+                                 Long idVenta) {
+        this.idCaja = idCaja;
         this.tipoMovimiento = tipoMovimiento;
         this.monto = monto;
         this.moneda = moneda;
         this.descripcion = descripcion;
         this.fecha = fecha;
-
+        this.nombreCaja = nombreCaja;
+        this.idVenta = idVenta;
     }
+
+    public Long getIdVenta() {
+        return idVenta;
+    }
+
+    public void setIdVenta(Long idVenta) {
+        this.idVenta = idVenta;
+    }
+
+    public String getNombreCaja() {
+        return nombreCaja;
+    }
+
+    public void setNombreCaja(String nombreCaja) {
+        this.nombreCaja = nombreCaja;
+    }
+
     public Long getIdCaja() {
         return idCaja;
     }
@@ -35,28 +60,12 @@ public class MovimientosDeCajasDto {
         this.idCaja = idCaja;
     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
+    public String getTipoMovimiento() {
+        return tipoMovimiento;
     }
 
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Moneda getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(Moneda moneda) {
-        this.moneda = moneda;
+    public void setTipoMovimiento(String tipoMovimiento) {
+        this.tipoMovimiento = tipoMovimiento;
     }
 
     public BigDecimal getMonto() {
@@ -67,11 +76,27 @@ public class MovimientosDeCajasDto {
         this.monto = monto;
     }
 
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
+    public Moneda getMoneda() {
+        return moneda;
     }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
+    public void setMoneda(Moneda moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 }

@@ -1,4 +1,4 @@
-package com.sistema.sistema.Service;
+package com.sistema.sistema.Service.Enum;
 
 public enum Moneda {
     PYG,

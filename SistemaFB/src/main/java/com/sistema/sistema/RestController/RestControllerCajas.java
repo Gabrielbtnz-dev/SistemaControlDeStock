@@ -1,7 +1,7 @@
 package com.sistema.sistema.RestController;
 
 import com.sistema.sistema.Dto.DtoCajas.CajasDto;
-import com.sistema.sistema.Service.CajasService;
+import com.sistema.sistema.Service.CajasService.CajasService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

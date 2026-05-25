@@ -5,36 +5,36 @@ import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class SalesDto {
+public class SalesDtoGet {
     private Long idPerson;
     private BigDecimal valorTotal;
     private BigDecimal valorRegularizado;
     private BigDecimal valorPendiente;
     private String observaciones;
-    private List<ItemsSalesDto> items;
-    private List<MovimientosDeCajasDto> caja;
     private String namePerson;
+    private Long idVenta;
 
-    public SalesDto(){
+    public SalesDtoGet(){
 
     }
 
-    public SalesDto( Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones,String namePerson){
+    public SalesDtoGet(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson,Long idVenta){
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
         this.namePerson = namePerson;
+        this.idVenta = idVenta;
 
     }
 
-    public List<MovimientosDeCajasDto> getCaja() {
-        return caja;
+    public Long getIdVenta() {
+        return idVenta;
     }
 
-    public void setCaja(List<MovimientosDeCajasDto> caja) {
-        this.caja = caja;
+    public void setIdVenta(Long idVenta) {
+        this.idVenta = idVenta;
     }
 
     public String getNamePerson() {
@@ -85,11 +85,4 @@ public class SalesDto {
         this.observaciones = observaciones;
     }
 
-    public List<ItemsSalesDto> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemsSalesDto> items) {
-        this.items = items;
-    }
 }

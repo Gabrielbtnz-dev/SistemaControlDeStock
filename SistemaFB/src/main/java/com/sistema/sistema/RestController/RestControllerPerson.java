@@ -3,7 +3,7 @@ package com.sistema.sistema.RestController;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoGet;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoPost;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoUpdate;
-import com.sistema.sistema.Service.PersonService;
+import com.sistema.sistema.Service.PersonService.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

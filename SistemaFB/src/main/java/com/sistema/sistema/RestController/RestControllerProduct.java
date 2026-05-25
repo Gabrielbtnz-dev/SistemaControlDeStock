@@ -3,7 +3,7 @@ package com.sistema.sistema.RestController;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoGet;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoPost;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoUpdate;
-import com.sistema.sistema.Service.ProductService;
+import com.sistema.sistema.Service.ProductService.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

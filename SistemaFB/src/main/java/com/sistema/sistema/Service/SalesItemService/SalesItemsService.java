@@ -1,4 +1,4 @@
-package com.sistema.sistema.Service;
+package com.sistema.sistema.Service.SalesItemService;
 
 import com.sistema.sistema.Domain.Cajas.Cajas;
 import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
@@ -9,6 +9,7 @@ import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoSales.ItemsSalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDto;
+import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
 import com.sistema.sistema.Model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class SalesItemsService {
 
     private final ItemSalesRepository itemReposi;
-    private final SalesRepository SalesReposi;
+    private final SalesRepository salesReposi;
     private final PersonRepository personReposi;
     private final MovimientoDeCajasRepository moviReposi;
     private final CajasRepository cajaReposi;
@@ -31,11 +32,15 @@ public class SalesItemsService {
     /*mas de una variable en un solo constructor, mas de un repository*/
     public SalesItemsService(ItemSalesRepository itemReposi, SalesRepository salesReposi, PersonRepository personReposi, MovimientoDeCajasRepository moviReposi, CajasRepository cajaReposi, ProductRepository productReposi) {
         this.itemReposi = itemReposi;
-        SalesReposi = salesReposi;
+        this.salesReposi = salesReposi;
         this.personReposi = personReposi;
         this.moviReposi = moviReposi;
         this.cajaReposi = cajaReposi;
         this.productReposi = productReposi;
+    }
+
+    public List<SalesDtoGet> getSales(){
+        return salesReposi.getVentasResumidas();
     }
 
    public ResponseEntity<?> addSales( SalesDto dto){
@@ -50,7 +55,7 @@ public class SalesItemsService {
 
        sales.setPerson(person);
 
-       Sales saved = SalesReposi.save(sales);
+       Sales saved = salesReposi.save(sales);
 
        List<ItemsSales> items = new ArrayList<>();
 
@@ -88,7 +93,7 @@ public class SalesItemsService {
                    "INGRESO",
                    item.getMonto(),
                    item.getMoneda(),
-                   "VENTA REALIZADA",
+                   "VENTA",
                    LocalDateTime.now()
            );
            movimientos.add(mov);

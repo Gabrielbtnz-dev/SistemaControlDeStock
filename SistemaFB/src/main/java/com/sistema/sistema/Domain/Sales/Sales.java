@@ -15,7 +15,7 @@ public class Sales {
     private long id;
     @ManyToOne
     @JoinColumn(name = "id_person")
-    private Person IdPerson;
+    private Person person;
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
     @Column(name = "valor_regularizado")
@@ -32,8 +32,8 @@ public class Sales {
 
     }
 
-    public Sales(Person IdPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
-        this.IdPerson = IdPerson;
+    public Sales(Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
+        this.person = person;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
@@ -44,12 +44,12 @@ public class Sales {
         this.id = id;
     }
 
-    public Person getIdPerson() {
-        return IdPerson;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setIdPerson(Person idPerson) {
-        IdPerson = idPerson;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public List<ItemsSales> getItems() {
@@ -66,14 +66,6 @@ public class Sales {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Person getPerson() {
-        return IdPerson;
-    }
-
-    public void setPerson(Person IdPerson) {
-        this.IdPerson = IdPerson;
     }
 
     public BigDecimal getValorTotal() {

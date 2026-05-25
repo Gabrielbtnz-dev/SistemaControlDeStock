@@ -5,6 +5,8 @@ import Pdv from "../pages/pdv"
 import MainLayout from "../assets/layout/MainLayout"
 import Product from "../pages/product"
 import CuentasCajas from "../pages/CuentasCajas"
+import MovimientosDeCajas from "../pages/MovimientosDeCajas"
+import VentasResumido from "../pages/VentasResumido"
 
 function Rutas(){
     return(
@@ -18,6 +20,8 @@ function Rutas(){
                     <Route path="/Product" element={<Product/>}/>
                     <Route path="/pdv" element={<Pdv/>} />
                     <Route path="/cuentasCajas" element={<CuentasCajas/>} />
+                    <Route path="/movimientosdecaja" element={<MovimientosDeCajas/>} />
+                    <Route path="/VentasResumido" element={<VentasResumido/>} />
                 </Route>
             </Routes>
         

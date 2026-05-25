@@ -1,6 +1,6 @@
 package com.sistema.sistema.Domain.Cajas;
 
-import com.sistema.sistema.Service.Moneda;
+import com.sistema.sistema.Service.Enum.Moneda;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

@@ -1,6 +1,6 @@
 package com.sistema.sistema.Dto.DtoProduct;
 
-import com.sistema.sistema.Service.Moneda;
+import com.sistema.sistema.Service.Enum.Moneda;
 
 import java.math.BigDecimal;
 
