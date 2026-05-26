@@ -14,6 +14,8 @@ import {
   ChevronDown,
   ShoppingBasket,
   FileChartColumn,
+  BaggageClaim
+  
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -27,7 +29,12 @@ const navConfig = [
   {
     to: "/pdv",
     icon: ShoppingCart,
-    label: "PDV",
+    label: "Vender",
+  },
+    {
+    to: "/pdc",
+    icon: BaggageClaim,
+    label: "Comprar",
   },
   {
     to: "/cuentasCajas",
@@ -282,12 +289,15 @@ function Menu() {
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
             {open && (
+              <>
               <span
                 className="text-xs font-medium"
                 style={{ animation: "fadeIn 0.2s ease-out both" }}
               >
                 En línea
               </span>
+              <span className="text-xs font-medium">versión 10.0.0</span>
+              </>
             )}
           </div>
         </div>

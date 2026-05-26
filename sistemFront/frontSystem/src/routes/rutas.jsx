@@ -1,12 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Dashboard from "../pages/dashboard"
-import Entity from "../pages/entity"
-import Pdv from "../pages/pdv"
-import MainLayout from "../assets/layout/MainLayout"
-import Product from "../pages/product"
-import CuentasCajas from "../pages/CuentasCajas"
-import MovimientosDeCajas from "../pages/MovimientosDeCajas"
-import VentasResumido from "../pages/VentasResumido"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "../pages/dashboard";
+import Entity from "../pages/entity";
+import Pdv from "../pages/pdv";
+import MainLayout from "../assets/layout/MainLayout";
+import Product from "../pages/product";
+import CuentasCajas from "../pages/CuentasCajas";
+import MovimientosDeCajas from "../pages/MovimientosDeCajas";
+import VentasResumido from "../pages/VentasResumido";
+import Pdc from "../pages/pdc";
 
 function Rutas(){
     return(
@@ -22,6 +23,7 @@ function Rutas(){
                     <Route path="/cuentasCajas" element={<CuentasCajas/>} />
                     <Route path="/movimientosdecaja" element={<MovimientosDeCajas/>} />
                     <Route path="/VentasResumido" element={<VentasResumido/>} />
+                    <Route path="/Pdc" element={<Pdc/>} />
                 </Route>
             </Routes>
         
