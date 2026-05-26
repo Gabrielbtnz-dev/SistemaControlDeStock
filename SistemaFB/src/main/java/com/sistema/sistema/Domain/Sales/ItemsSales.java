@@ -23,17 +23,27 @@ public class ItemsSales {
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Product product;
+    private Boolean activo;
 
     public ItemsSales(){
 
     }
 
-    public ItemsSales(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Sales sales,Product product){
+    public ItemsSales(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Sales sales,Product product, Boolean activo){
         this.sales = sales;
         this.cantidad = cantidad;
         this.valor = valor;
         this.precio = precio;
         this.product = product;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Product getProduct() {

@@ -27,17 +27,27 @@ public class Sales {
     private List<ItemsSales> items;
     @OneToMany(mappedBy = "venta")
     private List<MovimientoDeCaja> movimientosCaja;
+    private Boolean activo;
 
     public Sales(){
 
     }
 
-    public Sales(Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones){
+    public Sales(Person person, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, Boolean activo){
         this.person = person;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public void setId(long id) {

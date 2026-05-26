@@ -13,12 +13,13 @@ public class SalesDtoGet {
     private String observaciones;
     private String namePerson;
     private Long idVenta;
+    private Boolean activo;
 
     public SalesDtoGet(){
 
     }
 
-    public SalesDtoGet(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson,Long idVenta){
+    public SalesDtoGet(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson,Long idVenta, Boolean activo){
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
@@ -26,7 +27,16 @@ public class SalesDtoGet {
         this.observaciones = observaciones;
         this.namePerson = namePerson;
         this.idVenta = idVenta;
+        this.activo = activo;
 
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Long getIdVenta() {

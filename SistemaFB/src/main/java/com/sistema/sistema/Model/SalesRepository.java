@@ -11,18 +11,19 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     List<Sales> findAllByOrderByIdDesc();
 
     @Query("""
-SELECT new com.sistema.sistema.Dto.DtoSales.SalesDtoGet(
-    p.id,
-    v.valorTotal,
-    v.valorRegularizado,
-    v.valorPendiente,
-    v.observaciones,
-    p.nombre,
-    v.id
-)
-FROM Sales v
-JOIN v.person p
-ORDER BY v.id DESC
-""")
+    SELECT new com.sistema.sistema.Dto.DtoSales.SalesDtoGet(
+        p.id,
+        v.valorTotal,
+        v.valorRegularizado,
+        v.valorPendiente,
+        v.observaciones,
+        p.nombre,
+        v.id,
+        v.activo
+    )
+        FROM Sales v
+        JOIN v.person p
+        ORDER BY v.id DESC
+    """)
     List<SalesDtoGet> getVentasResumidas();
 }

@@ -49,6 +49,7 @@ public class SalesItemsService {
        sales.setValorRegularizado(dto.getValorRegularizado());
        sales.setValorPendiente(dto.getValorPendiente());
        sales.setObservaciones(dto.getObservaciones());
+       sales.setActivo(true);
 
        Person person = personReposi.findById(dto.getIdPerson())
                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
@@ -107,6 +108,51 @@ public class SalesItemsService {
                        "success", true,
                        "message", "Venta realizada con exito"
                ));
+    }
+
+    public ResponseEntity<?> deleteSales(Long id){
+        Sales sales = salesReposi.findById(id)
+                .orElseThrow(()-> new RuntimeException("No se encontro la venta"));
+
+        System.out.println(sales.getActivo());
+
+        if (sales.getActivo()){
+            sales.setActivo(false);
+        }else {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "La venta ya esta inactiva"
+                    ));
+        }
+
+        itemReposi.desactivarPorVenta(id);
+
+        List<MovimientoDeCaja> movimiento = moviReposi.findByVentaId(id);
+
+        for (MovimientoDeCaja mov : movimiento ){
+            MovimientoDeCaja movimientoInverso = new MovimientoDeCaja();
+
+            movimientoInverso.setCaja(mov.getCaja());
+            movimientoInverso.setDescripcion("Desactivacion de venta id venta: " + mov.getVenta().getId());
+            movimientoInverso.setFecha(LocalDateTime.now());
+            movimientoInverso.setMoneda(mov.getMoneda());
+            movimientoInverso.setTipoMovimiento("EGRESO");
+            movimientoInverso.setMonto(mov.getMonto());
+            movimientoInverso.setVenta(mov.getVenta());
+
+            moviReposi.save(movimientoInverso);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Venta desactivada con exito"
+                ));
+
+
     }
 
 }

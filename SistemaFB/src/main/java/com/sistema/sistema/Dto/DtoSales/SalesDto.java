@@ -14,19 +14,29 @@ public class SalesDto {
     private List<ItemsSalesDto> items;
     private List<MovimientosDeCajasDto> caja;
     private String namePerson;
+    private Boolean activo;
 
     public SalesDto(){
 
     }
 
-    public SalesDto( Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones,String namePerson){
+    public SalesDto( Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones,String namePerson,Boolean activo){
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
         this.namePerson = namePerson;
+        this.activo = activo;
 
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public List<MovimientosDeCajasDto> getCaja() {

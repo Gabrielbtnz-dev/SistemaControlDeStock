@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import DataTable from "../assets/components/DataTable";
 import { BanknoteArrowDown,BanknoteArrowUp } from 'lucide-react';
+import { Trash } from "lucide-react";
+import Swal from "sweetalert2";
 
 function VentasResumido() {
 
@@ -12,6 +14,30 @@ function VentasResumido() {
         setsales(data);
     };
 
+
+    const removeSales = async(id) => {
+
+      const response = await fetch(`http://localhost:8085/deletesales/${id}`,{
+      method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const result = await response.json();
+
+      if(result.success){
+          Swal.fire({
+                title: "Venta eliminada",
+                text: "Por favor certifique que la caja tenga el valor correcto",
+                icon: "success",
+                confirmButtonColor: "#28a745",
+                confirmButtonText: "Entendido"
+                });
+            };
+
+      cargarVenta();
+
+    }
+
     useEffect(() => {
         cargarVenta();
     }, []);
@@ -20,6 +46,7 @@ function VentasResumido() {
         <div>
             <DataTable
                 data={sales}
+                rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
                 itemsPerPage={20}
                 pagination={true}
                 columns={[
@@ -63,6 +90,21 @@ function VentasResumido() {
                         </div>
                     },
                     { key: "observaciones", label: "Observacion" },
+                    {
+                        key: "acciones",
+                        render: (p) => (
+                        <div className="flex justify-end gap-3 items-center">
+                            
+                            {p.activo && (
+                            <Trash
+                                className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                                onClick={() => removeSales(p.idVenta)}
+                            />
+                            )}
+
+              </div>
+            ),
+          },
                 ]}
             />
         </div>
