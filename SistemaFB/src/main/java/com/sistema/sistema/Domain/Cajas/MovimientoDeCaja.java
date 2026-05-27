@@ -1,5 +1,6 @@
 package com.sistema.sistema.Domain.Cajas;
 
+import com.sistema.sistema.Domain.Compras.Compra;
 import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Service.Enum.Moneda;
 import jakarta.persistence.*;
@@ -26,6 +27,9 @@ public class MovimientoDeCaja {
     private Moneda moneda;
     private String descripcion;
     private LocalDateTime fecha;
+    @ManyToOne
+    @JoinColumn(name = "id_compra")
+    private Compra compra;
 
     public MovimientoDeCaja(){
 
