@@ -27,6 +27,7 @@ const [finalizarPdv,setFinalizarPdv]=useState(false);
 const[valorTotalCobro,setValorTotalCobro]=useState(null);
 const [cobros, setCobros] = useState([]);
 const [valorEnCobros, setValorEnCobros] = useState(0);
+const [precioProduct,setPrecioProduct] = useState(0);
 
     const cargarProduct = async () => {
         const response = await fetch("http://localhost:8085/product");
@@ -92,7 +93,7 @@ const cargarMethodPaymed = async () => {
       {
         id: item.value,
         name: item.label,
-        price: item.price,
+        price: Number(precioProduct || item.price),
         cantidad: Number(cantidadProduct)
       }
     ];
@@ -372,12 +373,19 @@ return(
                     label="Codigo de barras"
                     />
                 </div>
-                <div className="w-14">
+                <div className="w-16">
                     <Input 
                     label="Cantidad"
                     value={cantidadProduct}
                     type="number"
                     onChange={(e)=>setCantidadProduct(e.target.value)}
+                    />
+                </div>
+                <div className="w-20">
+                    <Input 
+                    label="Precio"
+                    value={precioProduct}
+                    onChange={(e)=>setPrecioProduct(e.target.value)}
                     />
                 </div>
             <div className="bottom-2 ml-10 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg flex flex-col gap-1">
@@ -452,11 +460,11 @@ return(
             </div>
             <div className="flex gap-3 mt-2">
                 <span className="px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                    Total:{totalVenta}
+                    Total: {totalVenta}
                 </span>
 
                 <span className="px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                    Saldo:{totalVenta - valorEnCobros}
+                    Saldo: {totalVenta - valorEnCobros}
                 </span>
             </div>
             <span>Metodos de cobros</span>

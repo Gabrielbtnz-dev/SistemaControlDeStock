@@ -179,33 +179,6 @@ const editEntidad=(p)=>{
               <Input label="Digito verificador" type="number" width="w-[120px]" value={digitoVerificador} onChange={(e)=> setDigitoVerificador(e.target.value)} />
             </div>
       </div>
-      <div className="flex gap-3 mt-3">
-        <div>
-        <Toggle
-                label="contribuyente"
-                value={esContribuyente}
-                onChange={setEsContribuyente}
-                
-              />
-        </div>
-
-        <div>
-        <Toggle
-                label="Funcionario"
-                value={esFuncionario}
-                onChange={SetEsFuncionario}
-              />
-        </div>
-
-        <div>
-        <Toggle
-                label="Cliente"
-                value={esCliente}
-                onChange={setEsCliente}
-
-              />
-        </div>
-      </div>
 
       <div>  
         <div className="flex justify-end p-3 w-50">
@@ -239,22 +212,6 @@ const editEntidad=(p)=>{
           { key: "nombre", label: "Nombre" },
           { key: "documento", label: "Documento" },
           { key: "digitoVerificador", label: "DV" },
-
-          {
-            key: "funcionario",
-            label: "Funcionario",
-            render: (p) => (p.funcionario ? "Si" : "No"),
-          },
-          {
-            key: "cliente",
-            label: "Cliente",
-            render: (p) => (p.cliente ? "Si" : "No"),
-          },
-          {
-            key: "contribuyente",
-            label: "Contribuyente",
-            render: (p) => (p.contribuyente ? "Si" : "No"),
-          },
           {
             render: (p) => (
               <div className="flex justify-end gap-3 items-center">

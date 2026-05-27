@@ -469,7 +469,7 @@ return(
                     Saldo: {totalVenta - valorEnCobros}
                 </span>
             </div>
-            <span>Metodos de cobros</span>
+            <span>Metodos de pagos</span>
             {cobros.map((cobro, index) => (
             <div key={index} className="flex">
                 <span className="min-w-[120px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
