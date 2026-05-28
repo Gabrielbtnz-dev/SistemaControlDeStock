@@ -19,11 +19,13 @@ public interface MovimientoDeCajasRepository extends JpaRepository<MovimientoDeC
             m.descripcion,
             m.fecha,
             c.name,
-            s.id
+            s.id,
+            com.id
         )
         FROM MovimientoDeCaja m
         JOIN m.caja c
-        JOIN m.venta s
+        LEFT JOIN m.venta s
+        LEFT JOIN m.compra com
         ORDER BY m.id DESC
         """)
     List<MovimientosDeCajasDto> getMovimientosDecajas();

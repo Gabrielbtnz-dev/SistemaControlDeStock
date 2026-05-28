@@ -23,7 +23,14 @@ function MovimientosDeCajas() {
                 itemsPerPage={20}
                 pagination={true}
                 columns={[
-                    { key: "idVenta", label: "Cod. venta" },
+                    {
+                        key: "Cod. venta/compra",
+                        label: "Cod. venta/compra",
+                        render: (row) =>
+                            row.idVenta
+                                ? `Venta N: ${row.idVenta}`
+                                : `Compra N: ${row.idCompra}`
+                    },
                     { key: "nombreCaja", label: "Cuenta caja" },
                     {
                         key: "monto",

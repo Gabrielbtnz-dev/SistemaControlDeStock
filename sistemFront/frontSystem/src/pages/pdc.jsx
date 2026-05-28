@@ -286,7 +286,7 @@ const cargarMethodPaymed = async () => {
 
     console.log(JSON.stringify(venta, null, 2));
 
-    const response = await fetch("http://localhost:8085/addSales", {
+    const response = await fetch("http://localhost:8085/addcompra", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -306,6 +306,22 @@ return(
 
         {f3Pressed && 
             <Modal onClose={() => setF3Pressed(false)} title={"Buscar Producto"}>
+                <div className="flex gap-3">
+                    <div className="w-16">
+                    <Input 
+                    label="Cantidad"
+                    value={cantidadProduct}
+                    onChange={(e)=>setCantidadProduct(e.target.value)}
+                    />
+                </div>
+                <div className="w-20">
+                    <Input 
+                    label="Precio"
+                    value={precioProduct}
+                    onChange={(e)=>setPrecioProduct(e.target.value)}
+                    />
+                </div>
+                </div>
                <div className="w-96">
                     <DropdownSearch
                     label="Productos"

@@ -95,7 +95,8 @@ public class SalesItemsService {
                    item.getMonto(),
                    item.getMoneda(),
                    "VENTA",
-                   LocalDateTime.now()
+                   LocalDateTime.now(),
+                   null
            );
            movimientos.add(mov);
        }

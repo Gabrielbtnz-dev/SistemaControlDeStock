@@ -32,10 +32,9 @@ public class MovimientoDeCaja {
     private Compra compra;
 
     public MovimientoDeCaja(){
-
     }
 
-    public MovimientoDeCaja(Sales venta, Cajas caja, String tipoMovimiento, BigDecimal monto, Moneda moneda, String descripcion, LocalDateTime fecha){
+    public MovimientoDeCaja(Sales venta, Cajas caja, String tipoMovimiento, BigDecimal monto, Moneda moneda, String descripcion, LocalDateTime fecha, Compra compra){
         this.venta = venta;
         this.caja = caja;
         this.tipoMovimiento = tipoMovimiento;
@@ -44,6 +43,7 @@ public class MovimientoDeCaja {
         this.descripcion = descripcion;
         this.fecha = fecha;
 
+        this.compra = compra;
     }
 
     public long getId() {
