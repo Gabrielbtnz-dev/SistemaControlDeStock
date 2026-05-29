@@ -2,9 +2,12 @@ package com.sistema.sistema.Domain.Compras;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sistema.sistema.Domain.Product.Product;
+import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 @Entity
 @Table(name = "items_compra")
 public class ItemCompras {
@@ -23,6 +26,8 @@ public class ItemCompras {
     @JoinColumn(name = "id_producto")
     private Product product;
     private Boolean activo;
+    @OneToMany( mappedBy = "itemCompra")
+    private List<MovimientoDeStock> movimientostock;
 
     public ItemCompras(){
 
@@ -35,6 +40,14 @@ public class ItemCompras {
         this.precio = precio;
         this.product = product;
         this.activo = activo;
+    }
+
+    public List<MovimientoDeStock> getMovimientostock() {
+        return movimientostock;
+    }
+
+    public void setMovimientostock(List<MovimientoDeStock> movimientostock) {
+        this.movimientostock = movimientostock;
     }
 
     public Product getProduct() {

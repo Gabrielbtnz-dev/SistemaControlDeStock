@@ -2,6 +2,7 @@ package com.sistema.sistema.Domain.Sales;
 
 import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
 import com.sistema.sistema.Domain.Person.Person;
+import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

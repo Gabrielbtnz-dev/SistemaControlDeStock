@@ -1,5 +1,6 @@
 package com.sistema.sistema.Domain.Product;
 
+import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Service.Enum.Moneda;
 import jakarta.persistence.*;
 
@@ -20,6 +21,8 @@ public class Product {
     private Boolean activo;
     @Column(name = "codigo_de_barras")
     private String codigoDeBarras;
+    @OneToOne(mappedBy = "product")
+    private Stock stock;
 
     public Product(){
 
