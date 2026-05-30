@@ -9,6 +9,7 @@ import InputFilterText from "../assets/components/InputFilterText";
 import DropDown from "../assets/components/DropDown";
 import {Plus} from"lucide-react"
 import AnimatedCheck from "../assets/components/AnimatedCheck";
+import Swal from "sweetalert2";
 
 function Product(){
   const[product,setProduct]=useState([]);
@@ -59,11 +60,12 @@ function Product(){
       const result = await response.json();
 
       if(result.succes = true){
-          setMensajeRespuesta(result.message);
-          setShowCheck(true);
-          setTimeout(() => {
-              setShowCheck(false);
-            }, 1000);
+              Swal.fire({
+              title: result.message,
+              icon: "success",
+              confirmButtonColor: "#28a745",
+              confirmButtonText: "Aceptar"
+              });
 
         setOpenPopup(false)
         setPrecio("")
@@ -145,11 +147,12 @@ function Product(){
       const result = await response.json();
 
       if(result.success){
-          setMensajeRespuesta(result.message);
-          setShowCheck(true);
-          setTimeout(() => {
-              setShowCheck(false);
-            }, 1000);
+          Swal.fire({
+              title: result.message,
+              icon: "success",
+              confirmButtonColor: "#28a745",
+              confirmButtonText: "Aceptar"
+              });
         
         setIdProduct(0);
         setOpenPopup(false)

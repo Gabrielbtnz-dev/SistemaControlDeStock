@@ -1,24 +1,29 @@
 package com.sistema.sistema.Service.ProductService;
 
 import com.sistema.sistema.Domain.Product.Product;
+import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoGet;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoPost;
 import com.sistema.sistema.Dto.DtoProduct.ProductDtoUpdate;
 import com.sistema.sistema.Model.ProductRepository;
+import com.sistema.sistema.Model.StockRepository;
 import com.sistema.sistema.Service.Enum.Moneda;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class ProductService {
     private final ProductRepository productReposi;
+    private final StockRepository stockReposi;
 
-    public ProductService(ProductRepository productReposi) {
+    public ProductService(ProductRepository productReposi, StockRepository stockReposi) {
         this.productReposi = productReposi;
+        this.stockReposi = stockReposi;
     }
 
     public List<ProductDtoGet> getProduct(){
@@ -46,6 +51,14 @@ public class ProductService {
 
         productReposi.save(product);
 
+        Stock stock = new Stock();
+        stock.setProduct(product);
+        stock.setCantidad(BigDecimal.ZERO);
+        stock.setCantidad(BigDecimal.ZERO);
+        stock.setPrecio(BigDecimal.ZERO);
+        stock.setValor(BigDecimal.ZERO);
+
+        stockReposi.save(stock);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(Map.of(

@@ -6,6 +6,8 @@ import com.sistema.sistema.Domain.Compras.Compra;
 import com.sistema.sistema.Domain.Compras.ItemCompras;
 import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Domain.Product.Product;
+import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
+import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoCompra.CompraDtoPost;
 import com.sistema.sistema.Dto.DtoCompra.ItemsCompraPost;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ComprasItemService {
@@ -31,14 +34,18 @@ public class ComprasItemService {
     private final ItemsCompraRepository itemsReposi;
     private final MovimientoDeCajasRepository movimientoReposi;
     private final CajasRepository cajaReposi;
+    private final StockRepository stockReposi;
+    private final MovimentoDeStockRepository moviStockReposi;
 
-    public ComprasItemService(PersonRepository personReposi, ComprasRepository compraReposi, ProductRepository productReposi, ItemsCompraRepository itemsReposi, MovimientoDeCajasRepository movimientoReposi, CajasRepository cajaReposi) {
+    public ComprasItemService(PersonRepository personReposi, ComprasRepository compraReposi, ProductRepository productReposi, ItemsCompraRepository itemsReposi, MovimientoDeCajasRepository movimientoReposi, CajasRepository cajaReposi, StockRepository stockReposi, MovimentoDeStockRepository moviStockReposi) {
         this.personReposi = personReposi;
         this.compraReposi = compraReposi;
         this.productReposi = productReposi;
         this.itemsReposi = itemsReposi;
         this.movimientoReposi = movimientoReposi;
         this.cajaReposi = cajaReposi;
+        this.stockReposi = stockReposi;
+        this.moviStockReposi = moviStockReposi;
     }
 
     @Transactional
@@ -55,6 +62,8 @@ public class ComprasItemService {
         compra.setPerson(person);
 
         Compra saved = compraReposi.save(compra);
+
+
 
         List<ItemCompras> items = new ArrayList<>();
 
@@ -79,6 +88,11 @@ public class ComprasItemService {
         itemsReposi.saveAll(items);
 
         saved.setItems(items);
+        Map<Long, ItemCompras> itemsMap = items.stream()
+                .collect(Collectors.toMap(
+                        i -> i.getProduct().getId(),
+                        i -> i
+                ));
 
         List<MovimientoDeCaja> movimientos = new ArrayList<>();
 
@@ -98,6 +112,53 @@ public class ComprasItemService {
             movimientos.add(mov);
         }
         movimientoReposi.saveAll(movimientos);
+
+
+        List<Product> productos = productReposi.findAllById(
+                dto.getItems().stream()
+                        .map(ItemsCompraPost::getIdProducto)
+                        .toList()
+        );
+
+        Map<Long, Product> productMap = productos.stream()
+                .collect(Collectors.toMap(Product::getId, p -> p));
+
+        List<Stock> stocks = stockReposi.findByProduct_IdIn(
+                dto.getItems().stream()
+                        .map(ItemsCompraPost::getIdProducto)
+                        .toList()
+        );
+
+        Map<Long, Stock> stockMap = stocks.stream()
+                .collect(Collectors.toMap(
+                        s -> s.getProduct().getId(),
+                        s -> s
+                ));
+
+        for (ItemsCompraPost item : dto.getItems()) {
+
+            Product product = productMap.get(item.getIdProducto());
+
+            if (product == null) continue;
+            if (!product.getControlaStock()) continue;
+
+            Stock stock = stockMap.get(item.getIdProducto());
+
+            ItemCompras itemCompras = itemsMap.get(item.getIdProducto());
+
+            if (stock == null || itemCompras == null) continue;
+
+            MovimientoDeStock mov = new MovimientoDeStock(
+                    item.getPrecio().multiply(item.getCantidad()),
+                    "Compra",
+                    item.getCantidad(),
+                    "INGRESO"
+            );
+
+            mov.setStock(stock);
+            mov.setItemCompra(itemCompras);
+            moviStockReposi.save(mov);
+        }
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
