@@ -172,7 +172,7 @@ function Product(){
 
   return (
     
-  <div className="h-full flex flex-col p-6">
+  <div className="w-full h-full flex flex-col min-h-0">
 
       <AnimatedCheck show={showCheck} message={mensajeRespuesta}></AnimatedCheck>
   {openPopup &&

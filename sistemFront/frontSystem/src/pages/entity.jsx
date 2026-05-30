@@ -161,7 +161,7 @@ const editEntidad=(p)=>{
   )
 
   return (
-  <div className="h-full flex flex-col p-6">
+  <div className="w-full h-full flex flex-col min-h-0">
  <AnimatedCheck show={showCheck} message={mensajeRespuesta}/>
 { openPopUp &&
       <Modal onClose={() => setOpenPopUp(false)} title={"Agregar nuevo cliente"}>

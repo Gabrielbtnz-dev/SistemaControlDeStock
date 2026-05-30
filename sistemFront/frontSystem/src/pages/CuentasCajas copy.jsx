@@ -104,7 +104,7 @@ function CuentasCajas(){
 
 
     return(
-        <div>
+        <div className="w-full h-full flex flex-col min-h-0">
             <AnimatedCheck show={showCheck} message={mensajeRespuesta}></AnimatedCheck>
             {openNuevaCuentaCaja &&
                 <Modal onClose={() => setOpenNuevaCuentaCaja(false)} title={"Agregar nueva cuenta caja"}>

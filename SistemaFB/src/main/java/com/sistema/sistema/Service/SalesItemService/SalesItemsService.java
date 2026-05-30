@@ -6,10 +6,13 @@ import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Domain.Product.Product;
 import com.sistema.sistema.Domain.Sales.ItemsSales;
 import com.sistema.sistema.Domain.Sales.Sales;
+import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
+import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoSales.ItemsSalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
+import com.sistema.sistema.Dto.DtoStock.MovimientoDeStockDto;
 import com.sistema.sistema.Model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SalesItemsService {
@@ -29,14 +33,18 @@ public class SalesItemsService {
     private final MovimientoDeCajasRepository moviReposi;
     private final CajasRepository cajaReposi;
     private final ProductRepository productReposi;
+    private final StockRepository stockReposi;
+    private final MovimentoDeStockRepository moviStockReposi;
     /*mas de una variable en un solo constructor, mas de un repository*/
-    public SalesItemsService(ItemSalesRepository itemReposi, SalesRepository salesReposi, PersonRepository personReposi, MovimientoDeCajasRepository moviReposi, CajasRepository cajaReposi, ProductRepository productReposi) {
+    public SalesItemsService(ItemSalesRepository itemReposi, SalesRepository salesReposi, PersonRepository personReposi, MovimientoDeCajasRepository moviReposi, CajasRepository cajaReposi, ProductRepository productReposi, StockRepository stockReposi, MovimentoDeStockRepository moviStockReposi) {
         this.itemReposi = itemReposi;
         this.salesReposi = salesReposi;
         this.personReposi = personReposi;
         this.moviReposi = moviReposi;
         this.cajaReposi = cajaReposi;
         this.productReposi = productReposi;
+        this.stockReposi = stockReposi;
+        this.moviStockReposi = moviStockReposi;
     }
 
     public List<SalesDtoGet> getSales(){
@@ -79,8 +87,13 @@ public class SalesItemsService {
 
        itemReposi.saveAll(items);
 
-       saved.setItems(items);
 
+       saved.setItems(items);
+       Map<Long, ItemsSales> itemsMap = items.stream()
+               .collect(Collectors.toMap(
+                       i -> i.getProduct().getId(),
+                       i -> i
+               ));
        List<MovimientoDeCaja> movimientos = new ArrayList<>();
 
        for (MovimientosDeCajasDto item : dto.getCaja()){
@@ -102,6 +115,54 @@ public class SalesItemsService {
        }
 
        moviReposi.saveAll(movimientos);
+
+
+       List<Product> productos = productReposi.findAllById(
+               dto.getItems().stream()
+                       .map(ItemsSalesDto::getIdProducto)
+                       .toList()
+       );
+
+       Map<Long, Product> productMap = productos.stream()
+               .collect(Collectors.toMap(Product::getId, p -> p));
+
+       List<Stock> stocks = stockReposi.findByProduct_IdIn(
+               dto.getItems().stream()
+                       .map(ItemsSalesDto::getIdProducto)
+                       .toList()
+       );
+
+       Map<Long, Stock> stockMap = stocks.stream()
+               .collect(Collectors.toMap(
+                       s -> s.getProduct().getId(),
+                       s -> s
+               ));
+
+       for (ItemsSalesDto item : dto.getItems()) {
+
+           Product product = productMap.get(item.getIdProducto());
+
+           if (product == null) continue;
+           if (!product.getControlaStock()) continue;
+
+           Stock stock = stockMap.get(item.getIdProducto());
+
+           ItemsSales itemSale = itemsMap.get(item.getIdProducto());
+
+           if (stock == null || itemSale == null) continue;
+
+           MovimientoDeStock mov = new MovimientoDeStock(
+                   stock.getPrecio().multiply(item.getCantidad()),
+                   "venta",
+                   item.getCantidad(),
+                   "EGRESO"
+           );
+
+           mov.setStock(stock);
+           mov.setItemsSales(itemSale);
+           moviStockReposi.save(mov);
+       }
+
 
        return ResponseEntity
                .status(HttpStatus.CREATED)

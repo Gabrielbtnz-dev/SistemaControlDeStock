@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "movimiento_de_stock")
 public class MovimientoDeStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +29,25 @@ public class MovimientoDeStock {
     private BigDecimal valor;
     private String observacion;
     private BigDecimal cantidad;
+    private String tipomovimiento;
 
     public MovimientoDeStock(){
 
     }
 
-    public MovimientoDeStock(BigDecimal valor, String observacion, BigDecimal cantidad) {
+    public MovimientoDeStock(BigDecimal valor, String observacion, BigDecimal cantidad, String tipomovimiento) {
         this.valor = valor;
         this.observacion = observacion;
         this.cantidad = cantidad;
+        this.tipomovimiento = tipomovimiento;
+    }
+
+    public String getTipomovimiento() {
+        return tipomovimiento;
+    }
+
+    public void setTipomovimiento(String tipomovimiento) {
+        this.tipomovimiento = tipomovimiento;
     }
 
     public BigDecimal getValor() {
