@@ -36,7 +36,7 @@ public interface MovimentoDeStockRepository extends JpaRepository<MovimientoDeSt
     LEFT JOIN it.product sp
     LEFT JOIN it.sales sl
     LEFT JOIN sl.person ps
-    ORDER BY m.createdAt  DESC
+    ORDER BY m.createdAt DESC
 """)
     List<MovimientoDeStockDtoGet> getMovimientosDeStock();
 }
