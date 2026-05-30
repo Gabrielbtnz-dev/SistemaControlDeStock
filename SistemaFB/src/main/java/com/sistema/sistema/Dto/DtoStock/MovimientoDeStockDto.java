@@ -3,8 +3,6 @@ package com.sistema.sistema.Dto.DtoStock;
 import com.sistema.sistema.Domain.Compras.ItemCompras;
 import com.sistema.sistema.Domain.Sales.ItemsSales;
 import com.sistema.sistema.Domain.Stock.Stock;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 import java.math.BigDecimal;
 

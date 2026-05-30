@@ -8,6 +8,7 @@ import CuentasCajas from "../pages/CuentasCajas";
 import MovimientosDeCajas from "../pages/MovimientosDeCajas";
 import VentasResumido from "../pages/VentasResumido";
 import Pdc from "../pages/pdc";
+import MovimientosDeStock from "../pages/MovimientosDeStock";
 
 function Rutas(){
     return(
@@ -24,6 +25,7 @@ function Rutas(){
                     <Route path="/movimientosdecaja" element={<MovimientosDeCajas/>} />
                     <Route path="/VentasResumido" element={<VentasResumido/>} />
                     <Route path="/Pdc" element={<Pdc/>} />
+                    <Route path="/MovimientosDeStock" element={<MovimientosDeStock/>} />
                 </Route>
             </Routes>
         

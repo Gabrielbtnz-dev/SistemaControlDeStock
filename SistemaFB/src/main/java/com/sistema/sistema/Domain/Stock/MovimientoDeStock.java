@@ -4,8 +4,10 @@ package com.sistema.sistema.Domain.Stock;
 import com.sistema.sistema.Domain.Compras.ItemCompras;
 import com.sistema.sistema.Domain.Sales.ItemsSales;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "movimiento_de_stock")
@@ -30,6 +32,9 @@ public class MovimientoDeStock {
     private String observacion;
     private BigDecimal cantidad;
     private String tipomovimiento;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public MovimientoDeStock(){
 
@@ -40,6 +45,14 @@ public class MovimientoDeStock {
         this.observacion = observacion;
         this.cantidad = cantidad;
         this.tipomovimiento = tipomovimiento;
+    }
+
+    public LocalDateTime getCreated_at() {
+        return createdAt;
+    }
+
+    public void setCreated_at(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getTipomovimiento() {

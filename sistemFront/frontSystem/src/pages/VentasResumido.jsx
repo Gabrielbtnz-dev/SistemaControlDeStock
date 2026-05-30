@@ -43,7 +43,7 @@ function VentasResumido() {
     }, []);
 
     return (
-        <div>
+        <div className="w-full h-full flex flex-col min-h-0 p-1">
             <DataTable
                 data={sales}
                 rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}

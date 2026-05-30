@@ -153,6 +153,7 @@ public class ComprasItemService {
                     "Compra",
                     item.getCantidad(),
                     "INGRESO"
+
             );
 
             mov.setStock(stock);

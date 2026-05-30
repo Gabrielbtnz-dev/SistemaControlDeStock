@@ -14,7 +14,8 @@ import {
   ChevronDown,
   ShoppingBasket,
   FileChartColumn,
-  BaggageClaim
+  BaggageClaim,
+  Boxes
   
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -65,8 +66,13 @@ const navConfig = [
         label: "Ventas resumido",
         icon: FileChartColumn,
       },
+      {
+        to: "/MovimientosDeStock",
+        label: "Movimientos de stock",
+        icon: Boxes,
+      },
     ],
-  },
+  }
 ];
 
 // ── Cash icon ─────────────────────────────────────────────────
@@ -229,7 +235,7 @@ function Menu() {
           relative flex flex-col h-screen
           bg-slate-900 border-r border-slate-800
           transition-all duration-300 ease-in-out
-          ${open ? "w-56" : "w-16"}
+          ${open ? "w-57" : "w-16"}
         `}
       >
         {/* Top bar */}
