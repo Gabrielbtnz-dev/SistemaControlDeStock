@@ -33,9 +33,9 @@ function Entity(){
     }
 
     const cargarPersonas = async () => {
-    const response = await fetch("http://localhost:8085/personas");
-    const data = await response.json();
-    setPersona(data);
+      const response = await fetch("http://localhost:8085/personas");
+      const data = await response.json();
+      setPersona(data);
   };
 
   useEffect(()=>{

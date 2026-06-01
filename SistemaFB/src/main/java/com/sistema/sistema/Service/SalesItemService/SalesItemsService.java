@@ -12,6 +12,7 @@ import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoSales.ItemsSalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
+import com.sistema.sistema.Dto.DtoSales.SalesTotalDelMesyMesAnterior;
 import com.sistema.sistema.Dto.DtoStock.MovimientoDeStockDto;
 import com.sistema.sistema.Model.*;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,16 @@ public class SalesItemsService {
         this.moviStockReposi = moviStockReposi;
     }
 
+    public List<Map<String, Object>> getGraficoVentasPorAgno() {
+        return salesReposi.getVentasGrafico();
+    }
+
     public List<SalesDtoGet> getSales(){
         return salesReposi.getVentasResumidas();
+    }
+
+    public SalesTotalDelMesyMesAnterior getTotalVentasMesMesAnterior(){
+        return salesReposi.getTotalVentasMes();
     }
 
    public ResponseEntity<?> addSales( SalesDto dto){

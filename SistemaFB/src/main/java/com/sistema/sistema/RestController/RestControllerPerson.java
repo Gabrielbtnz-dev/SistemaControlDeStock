@@ -19,6 +19,11 @@ public class RestControllerPerson {
         this.personService = personService;
     }
 
+    @GetMapping("/personactivos")
+    public Long getCountPersonActive(){
+        return personService.getCountPerson();
+    }
+
     @GetMapping("/personas")
     public List<PersonDtoGet> getPerson(){
         return personService.getPerson();
