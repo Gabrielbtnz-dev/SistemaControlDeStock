@@ -21,7 +21,7 @@ public class Product {
     private Boolean activo;
     @Column(name = "codigo_de_barras")
     private String codigoDeBarras;
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private Stock stock;
 
     public Product(){

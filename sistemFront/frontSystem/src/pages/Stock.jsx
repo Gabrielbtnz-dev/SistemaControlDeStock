@@ -3,61 +3,77 @@ import DataTable from "../assets/components/DataTable";
 import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
 
 function Stock() {
-    const [movimientosDeCajas, setMovimientoDeCajas] = useState([]);
+    const [disponibilidadStock, setDisponibilidadStock] = useState([]);
 
-    const cargarMovimientosDeCajas = async () => {
-        const response = await fetch("http://localhost:8085/movimientosdecajas");
+    const cargarDisponibilidadStock = async () => {
+        const response = await fetch("http://localhost:8085/disponibilidadstock");
         const data = await response.json();
-        setMovimientoDeCajas(data);
+        setDisponibilidadStock(data);
     };
 
     useEffect(() => {
-        cargarMovimientosDeCajas();
+        cargarDisponibilidadStock();
     }, []);
 
     return (
 
         <div className="w-full h-full flex flex-col min-h-0 p-1">
             <DataTable
-                data={movimientosDeCajas}
+                data={disponibilidadStock}
                 itemsPerPage={20}
                 pagination={true}
                 columns={[
                     {
-                        key: "Cod. venta/compra",
-                        label: "Cod. venta/compra",
-                        render: (row) =>
-                            row.idVenta
-                                ? `Venta N: ${row.idVenta}`
-                                : `Compra N: ${row.idCompra}`
+                        key: "idProducto",
+                        label: "Cod. Producto"
                     },
-                    { key: "nombreCaja", label: "Cuenta caja" },
-                    {
-                        key: "monto",
-                        label: "Valor",
+                    { key: "nombreProducto", 
+                        label: "Producto" 
+                    },
+                    { key: "cantidad", 
+                        label: "Disponible",
                         render: (row) => (
                             <div className="flex items-center gap-2">
-                               {row.tipoMovimiento === "INGRESO" ? (
-                                    <BanknoteArrowUp size={14} className="text-green-500" />
-                                ) : (
-                                    <BanknoteArrowDown size={14} className="text-red-500" />
-                                )}
-                                {new Intl.NumberFormat("es-PY", {
-                                    style: "currency",
-                                    currency: "PYG",
-                                    minimumFractionDigits: 0
-                                }).format(row.monto)}
+                            <span
+                                className={
+                                row.cantidad === 1
+                                    ? "text-red-500"
+                                    : row.cantidad === 2
+                                    ? "text-yellow-500"
+                                    : row.cantidad < 3
+                                    ? "text-red-500"
+                                    : ""
+                                }
+                            >
+                                {row.cantidad}
+                            </span>
                             </div>
                         )
                     },
-                    { key: "tipoMovimiento", label: "Tipo" },
-                    { key: "moneda", label: "Moneda" },
-                    { key: "descripcion", label: "Descripción" },
-                    { 
-                        key: "fecha", 
-                        label: "Fecha",
-                        render: (row) => new Date(row.fecha).toLocaleDateString("es-PY")
+                    {
+                        key: "precioUnitario",
+                        label: "Precio",
+                        render: (row) =>
+                        <div className="flex items-center gap-2">
+                            {new Intl.NumberFormat("es-PY", {
+                                style: "currency",
+                                currency: "PYG",
+                                minimumFractionDigits: 0
+                            }).format(row.precioUnitario)}
+                        </div>
                     },
+                    {
+                        key: "valorTotal",
+                        label: "Valor",
+                        render: (row) =>
+                        <div className="flex items-center gap-2">
+                            {new Intl.NumberFormat("es-PY", {
+                                style: "currency",
+                                currency: "PYG",
+                                minimumFractionDigits: 0
+                            }).format(row.valorTotal)}
+                        </div>
+                    }
                 ]}
             />
         </div>

@@ -15,7 +15,8 @@ import {
   ShoppingBasket,
   FileChartColumn,
   BaggageClaim,
-  Boxes
+  Boxes,
+  PackageOpen
   
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -70,6 +71,11 @@ const navConfig = [
         to: "/MovimientosDeStock",
         label: "Movimientos de stock",
         icon: Boxes,
+      },
+      {
+        to: "/StockDisponibilidad",
+        label: "Stock",
+        icon: PackageOpen,
       },
     ],
   }

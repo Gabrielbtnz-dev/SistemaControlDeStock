@@ -15,7 +15,7 @@ public class Stock {
     private BigDecimal valor;
     private BigDecimal precio;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product")
     private Product product;
 
