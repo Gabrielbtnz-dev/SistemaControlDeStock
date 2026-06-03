@@ -15,6 +15,7 @@ public interface ItemSalesRepository extends JpaRepository<ItemsSales, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE items_sales SET activo = false WHERE id_venta = :id", nativeQuery = true)
+    @Query(value =
+            "UPDATE items_sales SET activo = false WHERE id_venta = :id", nativeQuery = true)
     void desactivarPorVenta(@Param("id") Long id);
 }

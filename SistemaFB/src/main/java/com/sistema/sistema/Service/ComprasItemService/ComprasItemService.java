@@ -10,6 +10,7 @@ import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoCompra.CompraDtoPost;
+import com.sistema.sistema.Dto.DtoCompra.ComprasResumidasDto;
 import com.sistema.sistema.Dto.DtoCompra.ItemsCompraPost;
 import com.sistema.sistema.Model.*;
 import com.sistema.sistema.Service.Enum.Moneda;
@@ -46,6 +47,11 @@ public class ComprasItemService {
         this.cajaReposi = cajaReposi;
         this.stockReposi = stockReposi;
         this.moviStockReposi = moviStockReposi;
+    }
+
+
+    public List<ComprasResumidasDto> getComprasResumidas(){
+        return compraReposi.getComprasResumidas();
     }
 
     @Transactional
@@ -166,6 +172,50 @@ public class ComprasItemService {
                 .body(Map.of(
                         "success", true,
                         "message", "Compra realizada con exito"
+                ));
+    }
+
+    public ResponseEntity<?> deleteCompra(Long id){
+        Compra compra = compraReposi.findById(id)
+                .orElseThrow(() -> new RuntimeException("Acceso denegado"));
+
+        if (compra.getActivo()){
+            compra.setActivo(false);
+        }else {
+            ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "No puedes desactivar esta venta"
+                    ));
+        }
+
+        compraReposi.save(compra);
+
+        itemsReposi.desactivarPorCompra(id);
+
+        List<MovimientoDeCaja> movimiento = movimientoReposi.findByVentaId(id);
+
+        for (MovimientoDeCaja mov : movimiento ){
+            MovimientoDeCaja movimientoInverso = new MovimientoDeCaja();
+
+            movimientoInverso.setCaja(mov.getCaja());
+            movimientoInverso.setDescripcion("Desactivacion de compra, id compra: " + mov.getCompra().getId());
+            movimientoInverso.setFecha(LocalDateTime.now());
+            movimientoInverso.setMoneda(mov.getMoneda());
+            movimientoInverso.setTipoMovimiento("INGRESO");
+            movimientoInverso.setMonto(mov.getMonto());
+            movimientoInverso.setVenta(mov.getVenta());
+
+            movimientoReposi.save(movimientoInverso);
+        }
+
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Compra desactivada con exito"
                 ));
     }
 

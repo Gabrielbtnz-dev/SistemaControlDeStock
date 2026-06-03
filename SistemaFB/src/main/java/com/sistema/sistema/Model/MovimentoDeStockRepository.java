@@ -39,4 +39,7 @@ public interface MovimentoDeStockRepository extends JpaRepository<MovimientoDeSt
     ORDER BY m.createdAt DESC
 """)
     List<MovimientoDeStockDtoGet> getMovimientosDeStock();
+
+
+    List<MovimientoDeStock> findByItemsSalesSalesId(Long id);
 }

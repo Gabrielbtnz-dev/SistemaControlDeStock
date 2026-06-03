@@ -87,8 +87,9 @@ public class SalesItemsService {
                /* se busca el id producto*/
                Product product = productReposi.findById(i.getIdProducto())
                        .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-                item.setProduct(product);
+               item.setProduct(product);
                item.setSales(saved);
+               item.setActivo(true);
 
                items.add(item);
            }
@@ -214,6 +215,23 @@ public class SalesItemsService {
             movimientoInverso.setVenta(mov.getVenta());
 
             moviReposi.save(movimientoInverso);
+        }
+
+        List<MovimientoDeStock> movimientoDeStock = moviStockReposi.findByItemsSalesSalesId(id);
+
+        System.out.println("SIZE MOV STOCK: " + movimientoDeStock.size());
+
+        for (MovimientoDeStock movstock : movimientoDeStock){
+            MovimientoDeStock movimientoInverso = new MovimientoDeStock();
+            movimientoInverso.setStock(movstock.getStock());
+            movimientoInverso.setItemsSales(movstock.getItemsSales());
+            movimientoInverso.setValor(movstock.getValor());
+            movimientoInverso.setObservacion("Desactivacion Venta N: " + movstock.getItemsSales().getSales().getId());
+            movimientoInverso.setCantidad(movstock.getCantidad());
+            movimientoInverso.setTipomovimiento("INGRESO");
+
+            moviStockReposi.save(movimientoInverso);
+
         }
 
         return ResponseEntity

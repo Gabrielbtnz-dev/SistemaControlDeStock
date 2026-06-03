@@ -107,9 +107,9 @@ function MovimientosDeCajas() {
                         render: (row) => (
                             <div className="flex items-center gap-2">
                                 {row.tipoMovimiento === "INGRESO" ? (
-                                    <BanknoteArrowUp size={14} className="text-green-500" />
+                                    <BanknoteArrowDown size={14} className="text-green-500" />
                                 ) : (
-                                    <BanknoteArrowDown size={14} className="text-red-500" />
+                                    <BanknoteArrowUp size={14} className="text-red-500" />
                                 )}
                                 {new Intl.NumberFormat("es-PY", {
                                     style: "currency",
