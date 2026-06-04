@@ -67,6 +67,12 @@ const navConfig = [
         label: "Ventas resumido",
         icon: FileChartColumn,
       },
+      ,
+      {
+        to: "/ComprasResumido",
+        label: "Compras resumido",
+        icon: FileChartColumn,
+      },
       {
         to: "/MovimientosDeStock",
         label: "Movimientos de stock",

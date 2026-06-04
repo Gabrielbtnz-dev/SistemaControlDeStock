@@ -4,10 +4,7 @@ import com.sistema.sistema.Dto.DtoCompra.CompraDtoPost;
 import com.sistema.sistema.Dto.DtoCompra.ComprasResumidasDto;
 import com.sistema.sistema.Service.ComprasItemService.ComprasItemService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,10 @@ public class RestControllerCompra {
     @PostMapping("/addcompra")
     public ResponseEntity<?> addCompra(@RequestBody CompraDtoPost dto){
         return compraService.addCompra(dto);
+    }
+
+    @DeleteMapping("/deletecompra/{id}")
+    public ResponseEntity<?> deleteCompra(@PathVariable Long id){
+        return compraService.deleteCompra(id);
     }
 }

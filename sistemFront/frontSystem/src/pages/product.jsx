@@ -7,7 +7,7 @@ import {Package, Trash, Pencil} from"lucide-react"
 import Toggle from "../assets/components/Toggle"
 import InputFilterText from "../assets/components/InputFilterText";
 import DropDown from "../assets/components/DropDown";
-import {Plus} from"lucide-react"
+import {Plus, Save } from"lucide-react"
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import Swal from "sweetalert2";
 
@@ -217,7 +217,7 @@ function Product(){
         <div className="flex justify-end">
         <Button color={modoEdit ? "blue" : "green"} onClick={modoEdit ? updateProduct : addProduct}>
           <div className="flex items-center">
-              <Plus size={16}/>
+              <Save size={16}/>
             <span>{modoEdit ? "Editar" : "Agregar"}</span>
           </div>
         </Button>

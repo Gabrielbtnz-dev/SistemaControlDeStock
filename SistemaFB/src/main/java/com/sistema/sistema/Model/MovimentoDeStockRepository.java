@@ -42,4 +42,6 @@ public interface MovimentoDeStockRepository extends JpaRepository<MovimientoDeSt
 
 
     List<MovimientoDeStock> findByItemsSalesSalesId(Long id);
+
+    List<MovimientoDeStock> findByItemCompraCompraId(Long id);
 }

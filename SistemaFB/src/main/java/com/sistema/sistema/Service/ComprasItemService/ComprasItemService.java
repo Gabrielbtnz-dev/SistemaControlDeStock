@@ -175,6 +175,7 @@ public class ComprasItemService {
                 ));
     }
 
+    @Transactional
     public ResponseEntity<?> deleteCompra(Long id){
         Compra compra = compraReposi.findById(id)
                 .orElseThrow(() -> new RuntimeException("Acceso denegado"));
@@ -186,7 +187,7 @@ public class ComprasItemService {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(Map.of(
                             "success", false,
-                            "message", "No puedes desactivar esta venta"
+                            "message", "No puedes desactivar esta Compra"
                     ));
         }
 
@@ -194,20 +195,34 @@ public class ComprasItemService {
 
         itemsReposi.desactivarPorCompra(id);
 
-        List<MovimientoDeCaja> movimiento = movimientoReposi.findByVentaId(id);
-
+        List<MovimientoDeCaja> movimiento = movimientoReposi.findByCompraId(id);
+        System.out.println("SIZE MOV STOCK: " + movimiento.size());
         for (MovimientoDeCaja mov : movimiento ){
             MovimientoDeCaja movimientoInverso = new MovimientoDeCaja();
 
             movimientoInverso.setCaja(mov.getCaja());
-            movimientoInverso.setDescripcion("Desactivacion de compra, id compra: " + mov.getCompra().getId());
+            movimientoInverso.setDescripcion("Desactivacion de compra N: " + mov.getCompra().getId());
             movimientoInverso.setFecha(LocalDateTime.now());
             movimientoInverso.setMoneda(mov.getMoneda());
             movimientoInverso.setTipoMovimiento("INGRESO");
             movimientoInverso.setMonto(mov.getMonto());
-            movimientoInverso.setVenta(mov.getVenta());
+            movimientoInverso.setCompra(mov.getCompra());
 
             movimientoReposi.save(movimientoInverso);
+        }
+
+        List<MovimientoDeStock> movimientoStock = moviStockReposi.findByItemCompraCompraId(id);
+        System.out.println("SIZE MOV STOCK: " + movimientoStock.size());
+        for (MovimientoDeStock movStock : movimientoStock){
+            MovimientoDeStock movimientoInverso = new MovimientoDeStock();
+            movimientoInverso.setStock(movStock.getStock());
+            movimientoInverso.setItemCompra(movStock.getItemCompra());
+            movimientoInverso.setValor(movStock.getValor());
+            movimientoInverso.setObservacion("Desactivacion Compra N: " + movStock.getItemCompra().getCompra().getId());
+            movimientoInverso.setCantidad(movStock.getCantidad());
+            movimientoInverso.setTipomovimiento("EGRESO");
+
+            moviStockReposi.save(movimientoInverso);
         }
 
 

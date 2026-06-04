@@ -31,4 +31,6 @@ public interface MovimientoDeCajasRepository extends JpaRepository<MovimientoDeC
     List<MovimientosDeCajasDto> getMovimientosDecajas();
 
     List<MovimientoDeCaja> findByVentaId(Long idVenta);
+
+    List<MovimientoDeCaja> findByCompraId(Long id);
 }

@@ -3,6 +3,7 @@ import DataTable from "../assets/components/DataTable";
 import { BanknoteArrowDown,BanknoteArrowUp } from 'lucide-react';
 import { Trash } from "lucide-react";
 import Swal from "sweetalert2";
+import PageHeader from "../assets/components/PageHeader"
 
 function ComprasResumido() {
 
@@ -43,7 +44,8 @@ function ComprasResumido() {
     }, []);
 
     return (
-        <div className="w-full h-full flex flex-col min-h-0 p-1">
+        <div className="w-full h-full flex flex-col min-h-0">
+            
             <DataTable
                 data={compra}
                 rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
