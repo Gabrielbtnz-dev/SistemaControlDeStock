@@ -9,16 +9,19 @@ public class ProductDtoGet {
     private long id;
     private String name;
     private BigDecimal price;
-    private Moneda moneda;
+    private String moneda;
     private Boolean controlaStock;
     private Boolean activo;
     private String codigoDeBarras;
+    private BigDecimal valorEnStock;
+    private BigDecimal precioStock;
+    private BigDecimal cantidad;
 
     public ProductDtoGet(){
 
     }
 
-    public ProductDtoGet(Long id, String name,BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo, String codigoDeBarras){
+    public ProductDtoGet(Long id, String name, BigDecimal price, String moneda, Boolean controlaStock, Boolean activo, String codigoDeBarras, BigDecimal valorEnStock, BigDecimal precioStock, BigDecimal cantidad){
         this.id = id;
         this.name = name;
         this.price = price;
@@ -26,6 +29,33 @@ public class ProductDtoGet {
         this.controlaStock = controlaStock;
         this.activo = activo;
         this.codigoDeBarras = codigoDeBarras;
+        this.valorEnStock = valorEnStock;
+        this.precioStock = precioStock;
+        this.cantidad = cantidad;
+    }
+
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public BigDecimal getValorEnStock() {
+        return valorEnStock;
+    }
+
+    public void setValorEnStock(BigDecimal valorEnStock) {
+        this.valorEnStock = valorEnStock;
+    }
+
+    public BigDecimal getPrecioStock() {
+        return precioStock;
+    }
+
+    public void setPrecioStock(BigDecimal precioStock) {
+        this.precioStock = precioStock;
     }
 
     public String getCodigoDeBarras() {
@@ -36,11 +66,11 @@ public class ProductDtoGet {
         this.codigoDeBarras = codigoDeBarras;
     }
 
-    public Moneda getMoneda() {
+    public String getMoneda() {
         return moneda;
     }
 
-    public void setMoneda(Moneda moneda) {
+    public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
 

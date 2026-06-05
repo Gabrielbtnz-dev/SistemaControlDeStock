@@ -10,17 +10,28 @@ public class ProductDtoPost {
     private Moneda moneda;
     private Boolean controlaStock;
     private Boolean activo;
+    private String codigoDeBarras;
+
 
     public ProductDtoPost(){
 
     }
 
-    public ProductDtoPost(String name,BigDecimal price, Moneda moneda, Boolean controlaStock,Boolean activo){
+    public ProductDtoPost(String name, BigDecimal price, Moneda moneda, Boolean controlaStock, Boolean activo, String codigoDeBarras){
         this.name = name;
         this.price = price;
         this.moneda = moneda;
         this.controlaStock = controlaStock;
         this.activo = activo;
+        this.codigoDeBarras = codigoDeBarras;
+    }
+
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
+    }
+
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public Boolean getActivo() {

@@ -27,17 +27,7 @@ public class ProductService {
     }
 
     public List<ProductDtoGet> getProduct(){
-        return productReposi.findAllByOrderByIdDesc().stream().map(
-                p-> new ProductDtoGet(
-                        p.getId(),
-                        p.getName(),
-                        p.getPrice(),
-                        p.getMoneda(),
-                        p.getControlaStock(),
-                        p.getActivo(),
-                        p.getCodigoDeBarras()
-                ))
-        .toList();
+        return productReposi.getProduct();
     }
 
 
@@ -48,6 +38,7 @@ public class ProductService {
         product.setMoneda(Moneda.PYG);
         product.setControlaStock(dto.getControlaStock());
         product.setActivo(true);
+        product.setCodigoDeBarras(dto.getCodigoDeBarras());
 
         productReposi.save(product);
 

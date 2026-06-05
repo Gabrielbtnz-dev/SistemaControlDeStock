@@ -3,7 +3,7 @@ import DataTable from "../assets/components/DataTable";
 import Button from "../assets/components/button";
 import Modal from "../assets/components/Modal"
 import Input from "../assets/components/Input"
-import {Package, Trash, Pencil} from"lucide-react"
+import {Package, Trash, Pencil, EllipsisVertical} from"lucide-react"
 import Toggle from "../assets/components/Toggle"
 import InputFilterText from "../assets/components/InputFilterText";
 import DropDown from "../assets/components/DropDown";
@@ -23,7 +23,17 @@ function Product(){
   const[controlaStock,setControlaStock]=useState(false);
   const[showCheck,setShowCheck]=useState(false);
   const[mensajeRespuesta,setMensajeRespuesta]=useState("");
-
+  const[codBarras,setCodBarras]=useState("");
+  const[openPopupOpciones,setOpenPopupOpciones]=useState(false);
+  const[openPopupAjusteStock,setOpenPopupAjusteStock]=useState(false);
+  const[valorStock,setValorStock]=useState("");
+  const[precioEnStock,setPrecioEnStock]=useState("");
+  const[cantidadEnStock,setCantidadEnStock]=useState("");
+  
+  const[precioNuevoStock,setPrecioNuevoStock]=useState(0);
+  const[cantidadAjusteStock,setCantidadAjusteStock]=useState(0);
+  const[valorNuevoStock,setValorNuevoStock]=useState(0);
+  const[tipoOperacionAjusteStock,setTipoOperacionAjusteStock]=useState("INGRESO");
  const cargarProduct = async () => {
 
     const response = await fetch("http://localhost:8085/product");
@@ -48,7 +58,8 @@ function Product(){
       name:nombre,
       price:precio,
       moneda:moneda,
-      controlaStock:controlaStock
+      controlaStock:controlaStock,
+      codigoDeBarras:codBarras
     }
     console.log("se ejecuto el post")
     try{
@@ -107,16 +118,20 @@ function Product(){
   }
 
   const editProduct = (p) => {
-
     setModoEdit(true)
     setIdProduct(p.id)
     setNombre(p.name)
     setPrecio(p.price)
     setMoneda(p.moneda)
     setControlaStock(p.controlaStock)
-    
-    setOpenPopup(true)
-
+    setCodBarras(p.codigoDeBarras)
+    setPrecioEnStock(p.precioStock)
+    setValorStock(p.valorEnStock)
+    setCantidadEnStock(p.cantidad)
+    setCantidadAjusteStock(0)
+    setValorNuevoStock(0)
+    setPrecioNuevoStock(0)
+    setOpenPopupOpciones(true)
   }
 
   const abrirPopUp = () =>{
@@ -124,9 +139,12 @@ function Product(){
     setNombre("")
     setPrecio("")
     setMoneda("")
+    setPrecioEnStock("")
+    setValorStock("")
     setControlaStock(false)
     setOpenPopup(true)
-  }    
+    setOpenPopupOpciones(false)
+  }
 
 
    const updateProduct = async () => {
@@ -135,7 +153,8 @@ function Product(){
       name:nombre,
       price:precio,
       moneda:moneda,
-      controlaStock:controlaStock
+      controlaStock:controlaStock,
+      codigoDeBarras:codBarras
     }
     console.log("se ejecuto el post")
     try{
@@ -160,6 +179,7 @@ function Product(){
         setNombre("")
         setMoneda("")
         setControlaStock(false)
+        setCodBarras("")
 
       }else{
         alert("Por algun motivo no se pudo editar el producto");
@@ -172,6 +192,15 @@ function Product(){
     await cargarProduct();
 
     }
+
+    useEffect(() => {
+      const precio = parseFloat(precioNuevoStock) || 0;
+      const cantidad = parseFloat(cantidadAjusteStock) || 0;
+
+      const total = precio * cantidad;
+
+      setValorNuevoStock(total);
+    }, [precioNuevoStock, cantidadAjusteStock]);
 
   return (
     
@@ -203,18 +232,23 @@ function Product(){
             {value:"USD", label:"Dolares"}
         ]}
         />
-        
       </div>
 
       <div>
-        <div className="flex"> 
+        <div className="flex gap-3"> 
         <Toggle 
           label="Controla Stock"
           value={controlaStock}
           onChange={setControlaStock}
           />
-        </div>
-        <div className="flex justify-end">
+      <Input 
+        label="Codigo de barras"
+        value={codBarras}
+        onChange={(e)=>setCodBarras(e.target.value)}
+        />
+      </div>
+
+        <div className="flex justify-end mt-2">
         <Button color={modoEdit ? "blue" : "green"} onClick={modoEdit ? updateProduct : addProduct}>
           <div className="flex items-center">
               <Save size={16}/>
@@ -223,8 +257,126 @@ function Product(){
         </Button>
         </div>
       </div>
-      
+  </Modal>
+  }
+  {openPopupOpciones &&
+    <Modal onClose={ () => setOpenPopupOpciones(false) } title={"Gestión de producto"}>
+      <div className="flex gap-3">
+        <Button color="green" onClick={() => {
+                                setOpenPopup(true);
+                                setOpenPopupOpciones(false);
+                              }}>
+        <span className="ml-2">Editar Producto</span>
+      </Button>
+      <Button color="green" onClick={ () => {setOpenPopupAjusteStock(true); setOpenPopupOpciones(false); } }>
+        <span className="ml-2">Ajustar Stock</span>
+      </Button>
+      </div>
     </Modal>
+  }
+  {openPopupAjusteStock &&
+    <Modal
+      onClose={() => setOpenPopupAjusteStock(false)}
+      title={"Ajuste de stock manual"}
+    >
+  <div className="w-full max-w-2xl space-y-4">
+
+    {/* FILA 1 */}
+    <div className="grid grid-cols-2 gap-3 w-full">
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Nombre</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {nombre}
+        </span>
+      </div>
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Precio</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {precio}
+        </span>
+      </div>
+
+    </div>
+
+    {/* FILA 2 */}
+    <div className="grid grid-cols-2 gap-3 w-full">
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Precio en stock</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {precioEnStock}
+        </span>
+      </div>
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Valor total en stock</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {valorStock}
+        </span>
+      </div>
+
+    </div>
+
+    {/* FILA 3 */}
+    <div className="grid grid-cols-2 gap-3 w-full">
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Cantidad en stock</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {cantidadEnStock}
+        </span>
+      </div>
+
+      <div className="flex flex-col w-full">
+        <span className="text-xs text-gray-500">Moneda</span>
+        <span className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 truncate">
+          {moneda}
+        </span>
+      </div>
+
+    </div>
+
+    {/* INPUTS */}
+    <div className="grid grid-cols-2 gap-3 w-full">
+
+      <Input
+        label="Precio"
+        value={precioNuevoStock}
+        onChange={(e) => setPrecioNuevoStock(e.target.value)}
+        className="w-full"
+      />
+
+      <Input
+        label="Cantidad"
+        value={cantidadAjusteStock}
+        onChange={(e) => setCantidadAjusteStock(e.target.value)}
+        className="w-full"
+      />
+
+      <Input
+        label="Valor"
+        value={valorNuevoStock}
+        onChange={(e) => setValorNuevoStock(e.target.value)}
+        className="w-full"
+        readOnly
+      />
+
+      <DropDown 
+        label="Tipo de operación"
+        value={tipoOperacionAjusteStock}
+        onChange={(e)=>setTipoOperacionAjusteStock(e.target.value)}
+        options={[
+          {value:"EGRESO", label:"Salida"},
+           {value:"INGRESO", label:"Entrada"}
+        ]}
+      />
+
+    </div>
+
+  </div>
+</Modal>
   }
     <div className="flex justify-between items-center p-3">
       <div className="flex">
@@ -279,7 +431,7 @@ function Product(){
                 )}
 
                 {p.activo && (
-                  <Pencil
+                  <EllipsisVertical
                     className="cursor-pointer hover:text-blue-500"
                     onClick={() => editProduct(p)}
                   />
