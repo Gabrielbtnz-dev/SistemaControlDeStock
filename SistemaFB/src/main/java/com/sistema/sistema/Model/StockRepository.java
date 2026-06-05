@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock> findAllByOrderByIdDesc();
+
 
     List<Stock> findByProduct_IdIn(List<Long> list);
 
@@ -33,4 +35,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     WHERE p.controlaStock = true
 """)
     List<StockDisponibilidadDto> obtenerDisponibilidadStock();
+
+    Optional<Stock> findByProduct_Id(Long id);
 }

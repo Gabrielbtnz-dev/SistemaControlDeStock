@@ -7,7 +7,7 @@ import {Package, Trash, Pencil, EllipsisVertical} from"lucide-react"
 import Toggle from "../assets/components/Toggle"
 import InputFilterText from "../assets/components/InputFilterText";
 import DropDown from "../assets/components/DropDown";
-import {Plus, Save } from"lucide-react"
+import {Plus, Save,ArrowRightLeft  } from"lucide-react"
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import Swal from "sweetalert2";
 
@@ -34,6 +34,8 @@ function Product(){
   const[cantidadAjusteStock,setCantidadAjusteStock]=useState(0);
   const[valorNuevoStock,setValorNuevoStock]=useState(0);
   const[tipoOperacionAjusteStock,setTipoOperacionAjusteStock]=useState("INGRESO");
+
+
  const cargarProduct = async () => {
 
     const response = await fetch("http://localhost:8085/product");
@@ -202,6 +204,53 @@ function Product(){
       setValorNuevoStock(total);
     }, [precioNuevoStock, cantidadAjusteStock]);
 
+
+    const AjustarStock = async () => {
+
+    const data = {
+      precio:cantidadAjusteStock,
+      cantidad:precioNuevoStock,
+      valor:valorNuevoStock,
+      tipo: tipoOperacionAjusteStock
+    }
+    console.log("se ejecuto el post")
+    try{
+    const response = await fetch(`http://localhost:8085/ajustarstock/${idProduct}`,{
+      method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+
+      if(result.success){
+          Swal.fire({
+              title: result.message,
+              icon: "success",
+              confirmButtonColor: "#28a745",
+              confirmButtonText: "Aceptar"
+              });
+        
+        setIdProduct(0);
+        setOpenPopup(false)
+        setPrecio("")
+        setNombre("")
+        setMoneda("")
+        setControlaStock(false)
+        setCodBarras("")
+        setOpenPopupAjusteStock(false)
+
+      }else{
+        alert("Por algun motivo no se pudo editar el producto");
+      }
+
+    }catch(err){
+        alert("Por algun motivo el servidor del sistema no respondio, contacte con Gabriel")
+    }
+
+    await cargarProduct();
+
+    }
+
   return (
     
   <div className="w-full h-full flex flex-col min-h-0">
@@ -344,23 +393,21 @@ function Product(){
       <Input
         label="Precio"
         value={precioNuevoStock}
-        onChange={(e) => setPrecioNuevoStock(e.target.value)}
+        onChange={(e) => setPrecioNuevoStock(Number(e.target.value))}
         className="w-full"
       />
 
       <Input
         label="Cantidad"
         value={cantidadAjusteStock}
-        onChange={(e) => setCantidadAjusteStock(e.target.value)}
+        onChange={(e) => setCantidadAjusteStock(Number(e.target.value))}
         className="w-full"
       />
 
       <Input
         label="Valor"
         value={valorNuevoStock}
-        onChange={(e) => setValorNuevoStock(e.target.value)}
         className="w-full"
-        readOnly
       />
 
       <DropDown 
@@ -374,7 +421,12 @@ function Product(){
       />
 
     </div>
-
+    <div className="flex justify-end">
+      <Button color="green" onClick={AjustarStock}>
+        <ArrowRightLeft size={12} />
+        <span>Ajustar Stock</span>
+      </Button>
+    </div>
   </div>
 </Modal>
   }
