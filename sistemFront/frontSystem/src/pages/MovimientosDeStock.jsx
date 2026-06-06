@@ -34,10 +34,7 @@ function MovimientosDeStock(){
                     {
                         key: "Cod.",
                         label: "Cod.",
-                        render: (row) =>
-                            row.idVenta
-                                ? `${row.idVenta}`
-                                : `${row.idCompra}`
+                        render: (row) => row.idVenta ?? row.idCompra ?? "-"
                     },
 
                     { key: "idStock", label: "Cod. stock" },
