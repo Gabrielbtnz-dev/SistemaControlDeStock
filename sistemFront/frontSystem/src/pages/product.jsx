@@ -208,8 +208,8 @@ function Product(){
     const AjustarStock = async () => {
 
     const data = {
-      precio:cantidadAjusteStock,
-      cantidad:precioNuevoStock,
+      precio:precioNuevoStock,
+      cantidad:cantidadAjusteStock,
       valor:valorNuevoStock,
       tipo: tipoOperacionAjusteStock
     }
