@@ -15,7 +15,7 @@ public interface MovimentoDeStockRepository extends JpaRepository<MovimientoDeSt
     @Query("""
     SELECT new com.sistema.sistema.Dto.DtoStock.MovimientoDeStockDtoGet(
         s.id,
-        COALESCE(ip.name, sp.name),
+        COALESCE(ip.name, sp.name, p.name),
         COALESCE(pc.nombre, ps.nombre),
         m.valor,
         m.observacion,
@@ -23,11 +23,12 @@ public interface MovimentoDeStockRepository extends JpaRepository<MovimientoDeSt
         m.tipomovimiento,
         c.id,
         sl.id,
-        COALESCE(ip.moneda, sp.moneda),
+        COALESCE(ip.moneda, sp.moneda, p.moneda),
         m.createdAt
     )
     FROM MovimientoDeStock m
     JOIN m.stock s
+    LEFT JOIN s.product p
     LEFT JOIN m.itemCompra ic
     LEFT JOIN ic.product ip
     LEFT JOIN ic.compra c
