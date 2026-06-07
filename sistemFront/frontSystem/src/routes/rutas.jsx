@@ -11,6 +11,7 @@ import Pdc from "../pages/pdc";
 import MovimientosDeStock from "../pages/MovimientosDeStock";
 import Stock from "../pages/Stock";
 import ComprasResumido from "../pages/ComprasResumido";
+import Login from "../pages/Login"
 
 function Rutas(){
     return(
@@ -18,6 +19,7 @@ function Rutas(){
         <BrowserRouter>
         
             <Routes>
+                <Route path="/Login" element={<Login/>}/>
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/Entity" element={<Entity />} />
@@ -30,6 +32,7 @@ function Rutas(){
                     <Route path="/MovimientosDeStock" element={<MovimientosDeStock/>} />
                     <Route path="/StockDisponibilidad" element={<Stock/>} />
                     <Route path="/ComprasResumido" element={<ComprasResumido/>} />
+                    
                 </Route>
             </Routes>
         
