@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import { login } from "../api/authApi";
+import { TokenService } from "../auth/TokenService";
 
 function InputField({ icon: Icon, label, type, value, onChange, placeholder, delay }) {
   const [focused, setFocused] = useState(false);
@@ -61,13 +63,34 @@ export default function Login() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    setError("");
-    if (!email || !password) { setError("Completá todos los campos para continuar."); return; }
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  setError("");
+
+  if (!email || !password) {
+    setError("Completá todos los campos para continuar.");
+    return;
+  }
+
+  try {
     setLoading(true);
-    setTimeout(() => { setLoading(false); setError("Credenciales incorrectas. Verificá tus datos."); }, 2000);
-  };
+
+    const data = await login(email, password);
+
+    TokenService.saveToken(data.accessToken);
+
+    console.log("Token guardado:", data.accessToken);
+
+    // acá luego redirigimos al dashboard
+    window.location.href = "/dashboard";
+
+  } catch (err) {
+    setError("Usuario o contraseña incorrectos.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>

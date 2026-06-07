@@ -5,6 +5,7 @@ import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
 import com.sistema.sistema.Dto.DtoSales.SalesTotalDelMesyMesAnterior;
 import com.sistema.sistema.Service.SalesItemService.SalesItemsService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class RestControllerSales {
         this.salesItemsService = salesItemsService;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/ventasporagno")
     public List<Map<String, Object>> getVentasPorAgno(){
         return salesItemsService.getGraficoVentasPorAgno();

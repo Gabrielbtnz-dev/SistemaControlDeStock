@@ -8,13 +8,22 @@ import Input from "../assets/components/Input";
 import DropDown from "../assets/components/DropDown";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import Swal from 'sweetalert2'
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 
 function MovimientosDeStock(){
     const[movimientosDeStock,setMovimientosDeStock]=useState([])
 
     const cargarMovimientosDeStock = async () => {
-    const response = await fetch("http://localhost:8085/movimientostock");
+    const token = TokenService.getToken();
+    const response = await fetch("http://localhost:8085/movimientostock", {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        }
+    });
     const data = await response.json();
     setMovimientosDeStock(data);
     };

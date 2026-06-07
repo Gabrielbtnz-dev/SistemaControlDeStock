@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Dashboard from "../pages/dashboard";
 import Entity from "../pages/entity";
 import Pdv from "../pages/pdv";
@@ -7,36 +8,45 @@ import Product from "../pages/product";
 import CuentasCajas from "../pages/CuentasCajas";
 import MovimientosDeCajas from "../pages/MovimientosDeCajas";
 import VentasResumido from "../pages/VentasResumido";
-import Pdc from "../pages/pdc";
+import Pdc from "../pages/Pdc";
 import MovimientosDeStock from "../pages/MovimientosDeStock";
 import Stock from "../pages/Stock";
 import ComprasResumido from "../pages/ComprasResumido";
-import Login from "../pages/Login"
+import Login from "../pages/Login";
 
-function Rutas(){
-    return(
-        
-        <BrowserRouter>
-        
-            <Routes>
-                <Route path="/Login" element={<Login/>}/>
-                <Route element={<MainLayout />}>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/Entity" element={<Entity />} />
-                    <Route path="/Product" element={<Product/>}/>
-                    <Route path="/pdv" element={<Pdv/>} />
-                    <Route path="/cuentasCajas" element={<CuentasCajas/>} />
-                    <Route path="/movimientosdecaja" element={<MovimientosDeCajas/>} />
-                    <Route path="/VentasResumido" element={<VentasResumido/>} />
-                    <Route path="/Pdc" element={<Pdc/>} />
-                    <Route path="/MovimientosDeStock" element={<MovimientosDeStock/>} />
-                    <Route path="/StockDisponibilidad" element={<Stock/>} />
-                    <Route path="/ComprasResumido" element={<ComprasResumido/>} />
-                    
-                </Route>
-            </Routes>
-        
-        </BrowserRouter>
-    )
+import ProtectedRoute from "../auth/ProtectedRoute";
+
+function Rutas() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* PUBLICA */}
+        <Route path="/login" element={<Login />} />
+
+        {/* PROTEGIDAS */}
+        <Route element={<ProtectedRoute />}>
+          
+          {/* LAYOUT */}
+          <Route element={<MainLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/entity" element={<Entity />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/pdv" element={<Pdv />} />
+            <Route path="/cuentasCajas" element={<CuentasCajas />} />
+            <Route path="/movimientosdecaja" element={<MovimientosDeCajas />} />
+            <Route path="/ventasresumido" element={<VentasResumido />} />
+            <Route path="/pdc" element={<Pdc />} />
+            <Route path="/movimientosdestock" element={<MovimientosDeStock />} />
+            <Route path="/stockdisponibilidad" element={<Stock />} />
+            <Route path="/comprasresumido" element={<ComprasResumido />} />
+          </Route>
+
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
-export default Rutas
+
+export default Rutas;
