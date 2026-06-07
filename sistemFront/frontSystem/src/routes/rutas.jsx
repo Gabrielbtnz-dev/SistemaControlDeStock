@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Navigate } from "react-router-dom";
 import Dashboard from "../pages/dashboard";
 import Entity from "../pages/entity";
 import Pdv from "../pages/pdv";
@@ -19,16 +19,18 @@ import ProtectedRoute from "../auth/ProtectedRoute";
 function Rutas() {
   return (
     <BrowserRouter>
-      <Routes>
+            <Routes>
+
+        {/* REDIRECCIÓN RAÍZ */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* PUBLICA */}
         <Route path="/login" element={<Login />} />
 
         {/* PROTEGIDAS */}
         <Route element={<ProtectedRoute />}>
-          
-          {/* LAYOUT */}
-          <Route element={<MainLayout />}>
+            
+            <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/entity" element={<Entity />} />
             <Route path="/product" element={<Product />} />
@@ -40,11 +42,11 @@ function Rutas() {
             <Route path="/movimientosdestock" element={<MovimientosDeStock />} />
             <Route path="/stockdisponibilidad" element={<Stock />} />
             <Route path="/comprasresumido" element={<ComprasResumido />} />
-          </Route>
+            </Route>
 
         </Route>
 
-      </Routes>
+        </Routes>
     </BrowserRouter>
   );
 }

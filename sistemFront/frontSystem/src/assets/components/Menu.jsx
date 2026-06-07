@@ -24,7 +24,7 @@ import { Link, useLocation } from "react-router-dom";
 // ── Nav structure ─────────────────────────────────────────────
 const navConfig = [
   {
-    to: "/",
+    to: "/dashboard",
     icon: Home,
     label: "Home",
   },

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { TokenService } from "../../auth/TokenService";
+import axios from "axios";
 import {
   Line,
   XAxis,
@@ -51,8 +53,15 @@ export default function DashboardGrafico() {
   const previousYear = currentYear - 1;
 
   const cargarGrafico = async () => {
+    const token = TokenService.getToken();
     try {
-      const response = await fetch("http://localhost:8085/ventasporagno");
+      const response = await fetch("http://localhost:8085/ventasporagno",{
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+      }
+  });
       const data = await response.json();
 
       const formatted = data.map((item) => ({
