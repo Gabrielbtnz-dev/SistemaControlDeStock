@@ -8,6 +8,8 @@ import Input from "../assets/components/Input";
 import DropDown from "../assets/components/DropDown";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import Swal from 'sweetalert2'
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 
 function CuentasCajas(){
@@ -19,8 +21,16 @@ function CuentasCajas(){
     const[showCheck,setShowCheck]=useState(false);
     const[mensajeRespuesta,setMensajeRespuesta]=useState("");
 
+
     const cargarCuentasCajas = async () => {
-    const response = await fetch("http://localhost:8085/cuentasCajas");
+    const token = TokenService.getToken();
+    const response = await fetch("http://localhost:8085/cuentasCajas",{
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        }
+    });
     const data = await response.json();
     setCuentasCajas(data);
     };
@@ -34,7 +44,7 @@ function CuentasCajas(){
     )
 
     const addCuentasCajas= async () => {
-
+    const token = TokenService.getToken();
     const data = {
       name:nombre,
       moneda:moneda
@@ -42,10 +52,13 @@ function CuentasCajas(){
     console.log("se ejecuto el post")
     try{
     const response = await fetch("http://localhost:8085/addCuentasCajas",{
-      method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
-      });
+    });
       const result = await response.json();
 
       if(result.success){
@@ -74,11 +87,14 @@ function CuentasCajas(){
     }
     
     const removeCuentasCajas = async (id)=>{
-
+    const token = TokenService.getToken();
     const response = await fetch(`http://localhost:8085/deleteCuentasCajas/${id}`,{
-      method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-      });
+        method: "DELETE",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        }
+    });
       const result = await response.json();
 
       if(result.success){

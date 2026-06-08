@@ -40,21 +40,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         String token = obtenerTokenDeSolicitud(request);
-        if (StringUtils.hasText(token) && jwtGenerador.validarToken(token)){
+
+        if (StringUtils.hasText(token) && jwtGenerador.validarToken(token)) {
+
             String username = jwtGenerador.obtenerUsuarioNombreDeJwt(token);
+
             UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-            List<String> userRoles = userDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).toList();
-            if (userRoles.contains("USER") || userRoles.contains("ADMIN")){
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+            authenticationToken.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
         filterChain.doFilter(request, response);
     }
 }
