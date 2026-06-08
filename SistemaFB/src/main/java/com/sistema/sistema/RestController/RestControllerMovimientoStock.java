@@ -18,12 +18,13 @@ public class RestControllerMovimientoStock {
         MovimientoService = movimientoService;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('Reportes de movimientos de stock')")
     @GetMapping("/movimientostock")
     public List<MovimientoDeStockDtoGet> getMovimientoStock(){
         return MovimientoService.getMovimientoStock();
     }
 
+    @PreAuthorize("hasAuthority('Ajustar Stock')")
     @PostMapping("/ajustarstock/{id}")
     public ResponseEntity<?> postAjusteDeStock(@RequestBody AjusteDeStockDtoPost dto, @PathVariable Long id){
         return MovimientoService.postAjusteDeStock(dto, id);

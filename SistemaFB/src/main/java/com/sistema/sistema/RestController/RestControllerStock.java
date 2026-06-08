@@ -3,6 +3,7 @@ package com.sistema.sistema.RestController;
 import com.sistema.sistema.Dto.DtoStock.StockDisponibilidadDto;
 import com.sistema.sistema.Dto.DtoStock.StockValorTotalDto;
 import com.sistema.sistema.Service.StockService.StockService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,11 +18,13 @@ public class RestControllerStock {
         this.stockService = stockService;
     }
 
+    @PreAuthorize("hasAuthority('Dashboard stock')")
     @GetMapping("/stockestadistica")
     public StockValorTotalDto getValorTotalStock(){
         return stockService.getStockValorTotal();
     }
 
+    @PreAuthorize("hasAuthority('Ver disponibilidad de stock')")
     @GetMapping("/disponibilidadstock")
     public List<StockDisponibilidadDto> getDisponibilidadStock(){
         return stockService.getDisponibilidadStock();

@@ -21,27 +21,31 @@ public class RestControllerSales {
         this.salesItemsService = salesItemsService;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('Dashboard ventas')")
     @GetMapping("/ventasporagno")
     public List<Map<String, Object>> getVentasPorAgno(){
         return salesItemsService.getGraficoVentasPorAgno();
     }
 
+    @PreAuthorize("hasAuthority('Ver todas las ventas)")
     @GetMapping("/sales")
     public List<SalesDtoGet> getSales(){
         return salesItemsService.getSales();
     }
 
+    @PreAuthorize("hasAuthority('Dashboard estadisticas de venta')")
     @GetMapping("/ventasestadistica")
     public SalesTotalDelMesyMesAnterior getResumenMesMesanterior(){
         return salesItemsService.getTotalVentasMesMesAnterior();
     }
 
+    @PreAuthorize("hasAuthority('Crear nueva venta')")
     @PostMapping("/addSales")
     public ResponseEntity<?> addSales(@RequestBody SalesDto sales) {
         return salesItemsService.addSales(sales);
     }
 
+    @PreAuthorize("hasAuthority('Eliminar ventas')")
     @DeleteMapping("/deletesales/{id}")
     public ResponseEntity<?> deleteSales(@PathVariable Long id){
         return salesItemsService.deleteSales(id);
