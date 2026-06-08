@@ -4,13 +4,23 @@ import { BanknoteArrowDown,BanknoteArrowUp } from 'lucide-react';
 import { Trash } from "lucide-react";
 import Swal from "sweetalert2";
 import PageHeader from "../assets/components/PageHeader"
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function ComprasResumido() {
 
     const [compra, setCompra] = useState([]);
 
     const cargarCompra = async () => {
-        const response = await fetch("http://localhost:8085/comprasresumidas");
+        const token = TokenService.getToken();
+        const response = await fetch("http://localhost:8085/comprasresumidas",{
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+    });
         const data = await response.json();
         setCompra(data);
     };
@@ -19,9 +29,13 @@ function ComprasResumido() {
     const removeCompra = async(id) => {
 
       const response = await fetch(`http://localhost:8085/deletecompra/${id}`,{
-      method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-      });
+        method: "DELETE",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+    });
 
       const result = await response.json();
 
