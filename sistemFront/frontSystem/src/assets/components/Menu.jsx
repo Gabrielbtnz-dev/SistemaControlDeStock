@@ -16,7 +16,10 @@ import {
   FileChartColumn,
   BaggageClaim,
   Boxes,
-  PackageOpen
+  PackageOpen,
+  CircleDollarSign,
+  MoveRight,
+  MoveLeft
   
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -42,6 +45,15 @@ const navConfig = [
     to: "/cuentasCajas",
     icon: Landmark,
     label: "Cuentas Cajas",
+  },
+  {
+    label: "Financiero",
+    icon: CircleDollarSign,
+    group: true,
+    children: [
+      { to: "/login", icon: ArrowIconRight, label: "Ingreso financiero" },
+      { to: "/login", icon: ArrowIconLeft, label: "Egreso financiero" },
+    ],
   },
   {
     label: "Catastro",
@@ -93,6 +105,22 @@ function CashIcon() {
     <div className="flex flex-col items-center justify-center w-5 h-5">
       <BanknoteArrowUp size={13} color="#4ade80" strokeWidth={2.5} />
       <BanknoteArrowDown size={13} color="#f87171" strokeWidth={2.5} />
+    </div>
+  );
+}
+
+function ArrowIconLeft() {
+  return (
+    <div className="flex flex-col items-center justify-center w-5 h-5">
+      <MoveRight color="#4ade80" />
+    </div>
+  );
+}
+
+function ArrowIconRight() {
+  return (
+    <div className="flex flex-col items-center justify-center w-5 h-5">
+      <MoveLeft color="#f87171" />
     </div>
   );
 }
