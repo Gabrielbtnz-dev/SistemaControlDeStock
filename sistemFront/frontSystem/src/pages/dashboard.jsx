@@ -2,15 +2,26 @@ import { useState, useEffect } from "react";
 import { DashboardCard } from "../assets/components/DashboardCard";
 import { DollarSign, Users, AlertTriangle, PackageOpen } from 'lucide-react';
 import DashboardGrafico from "../assets/components/DashboardGrafico";
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function Dashboard() {
     const [estadisticaVenta, setEstadisticaVenta] = useState(null);
     const [estadisticaStock, setEstadisticaStock] = useState(null);
     const [estadisticaPerson, setEstadisticaPerson] = useState(0);
+    
+    
+    const token = TokenService.getToken();
 
     const cargarEstadisticas = async () => {
         try {
-            const response = await fetch("http://localhost:8085/ventasestadistica");
+            const response = await fetch("http://localhost:8085/ventasestadistica",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
             const data = await response.json();
             setEstadisticaVenta(data);
         } catch (error) {
@@ -20,7 +31,13 @@ function Dashboard() {
 
     const cargarEstadisticasStock = async () => {
         try {
-            const response = await fetch("http://localhost:8085/stockestadistica");
+            const response = await fetch("http://localhost:8085/stockestadistica",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
             const data = await response.json();
             setEstadisticaStock(data);
         } catch (error) {
@@ -30,7 +47,13 @@ function Dashboard() {
 
     const cargarEstadisticasPerson = async () => {
         try {
-            const response = await fetch("http://localhost:8085/personactivos");
+            const response = await fetch("http://localhost:8085/personactivos",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
             const data = await response.json();
             setEstadisticaPerson(data);
         } catch (error) {

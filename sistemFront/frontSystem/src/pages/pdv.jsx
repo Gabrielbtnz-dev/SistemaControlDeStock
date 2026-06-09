@@ -9,6 +9,8 @@ import  Modal  from "../assets/components/Modal";
 import DropDown from "../assets/components/DropDown";
 import BarcodeSearch from "../assets/components/BarcodeSearch"
 import Swal from "sweetalert2";
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function Pdv(){
 const[product,setProduct]=useState([]);
@@ -29,22 +31,42 @@ const [cobros, setCobros] = useState([]);
 const [valorEnCobros, setValorEnCobros] = useState(0);
 const [precioProduct,setPrecioProduct] = useState(0);
 
+const token = TokenService.getToken();
+
     const cargarProduct = async () => {
-        const response = await fetch("http://localhost:8085/product");
+        const response = await fetch("http://localhost:8085/product",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+        });
         const data = await response.json();
         setProduct(data);
         console.log(data)
   };
 
   const cargarEntidad = async () => {
-        const response = await fetch("http://localhost:8085/personas");
+        const response = await fetch("http://localhost:8085/personas",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+        });
         const data = await response.json();
         setEntidad(data);
         console.log(data)
   };
 
 const cargarMethodPaymed = async () => {
-    const response = await fetch("http://localhost:8085/cuentasCajas");
+    const response = await fetch("http://localhost:8085/cuentasCajas",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+    });
     const data = await response.json();
     setMethodPaymed(data);
   };
@@ -287,7 +309,8 @@ const cargarMethodPaymed = async () => {
     const response = await fetch("http://localhost:8085/addSales", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
         },
         body: JSON.stringify(venta)
     });

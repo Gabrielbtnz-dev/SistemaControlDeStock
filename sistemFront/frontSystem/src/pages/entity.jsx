@@ -9,6 +9,8 @@ import { Pencil } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import DataTable from "../assets/components/DataTable";
 import InputFilterText from "../assets/components/InputFilterText"
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 function Entity(){
 
     const[persona,setPersona]=useState([])
@@ -25,6 +27,8 @@ function Entity(){
      const [butonEdit, setButonEdit] = useState("");
     const[personFilterName,setPersonFilterName]=useState("");
 
+    
+    const token = TokenService.getToken();
 
     const abrirPopUp=()=>{
       setButonEdit(false)
@@ -33,7 +37,13 @@ function Entity(){
     }
 
     const cargarPersonas = async () => {
-      const response = await fetch("http://localhost:8085/personas");
+      const response = await fetch("http://localhost:8085/personas",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
       const data = await response.json();
       setPersona(data);
   };
@@ -57,7 +67,10 @@ const guardarEntidad = async () => {
   try {
     const response = await fetch("http://localhost:8085/addPerson", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                },
       body: JSON.stringify(data),
     });
     const result = await response.json();
@@ -83,12 +96,16 @@ const guardarEntidad = async () => {
 };
 
 const removePerson = async (id)=>{
+  const token = TokenService.getToken();
   const data={
     activo:false
   }
   const response = await fetch(`http://localhost:8085/updatePerson/${id}`,{
     method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                },
       body: JSON.stringify(data),
     });
     const result = await response.json();
@@ -130,7 +147,10 @@ const editEntidad=(p)=>{
 
     const response = await fetch(`http://localhost:8085/updatePerson/${idEdit}`,{
     method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                },
       body: JSON.stringify(data),
     });
     const result = await response.json();

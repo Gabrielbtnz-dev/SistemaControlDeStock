@@ -3,13 +3,21 @@ import DataTable from "../assets/components/DataTable";
 import { BanknoteArrowDown,BanknoteArrowUp } from 'lucide-react';
 import { Trash } from "lucide-react";
 import Swal from "sweetalert2";
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function VentasResumido() {
 
     const [sales, setsales] = useState([]);
 
     const cargarVenta = async () => {
-        const response = await fetch("http://localhost:8085/sales");
+        const response = await fetch("http://localhost:8085/sales",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+        });
         const data = await response.json();
         setsales(data);
     };
@@ -19,7 +27,10 @@ function VentasResumido() {
 
       const response = await fetch(`http://localhost:8085/deletesales/${id}`,{
       method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+        }
       });
 
       const result = await response.json();

@@ -10,6 +10,8 @@ import DropDown from "../assets/components/DropDown";
 import {Plus, Save,ArrowRightLeft  } from"lucide-react"
 import AnimatedCheck from "../assets/components/AnimatedCheck";
 import Swal from "sweetalert2";
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function Product(){
   const[product,setProduct]=useState([]);
@@ -35,10 +37,18 @@ function Product(){
   const[valorNuevoStock,setValorNuevoStock]=useState(0);
   const[tipoOperacionAjusteStock,setTipoOperacionAjusteStock]=useState("INGRESO");
 
+  const token = TokenService.getToken();
+
 
  const cargarProduct = async () => {
 
-    const response = await fetch("http://localhost:8085/product");
+    const response = await fetch("http://localhost:8085/product",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
     const data = await response.json();
     setProduct(data);
     console.log(data)
@@ -67,7 +77,10 @@ function Product(){
     try{
     const response = await fetch("http://localhost:8085/addProduct",{
       method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
       });
       const result = await response.json();
@@ -102,7 +115,10 @@ function Product(){
 
       const response = await fetch(`http://localhost:8085/deleteProduct/${id}`,{
       method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+          }
       });
 
       const result = await response.json();
@@ -162,7 +178,10 @@ function Product(){
     try{
     const response = await fetch(`http://localhost:8085/updateProduct/${idProduct}`,{
       method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
       });
       const result = await response.json();
@@ -217,7 +236,10 @@ function Product(){
     try{
     const response = await fetch(`http://localhost:8085/ajustarstock/${idProduct}`,{
       method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
       });
       const result = await response.json();

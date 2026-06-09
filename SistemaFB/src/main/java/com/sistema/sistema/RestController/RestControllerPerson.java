@@ -38,7 +38,7 @@ public class RestControllerPerson {
         return personService.postPerson(persondto);
     }
 
-    @PreAuthorize("hasAuthority('Editar datos del cliente')")
+    @PreAuthorize("hasAuthority('Editar cliente')")
     @PatchMapping("/updatePerson/{id}")
     public ResponseEntity<?> updatePerson(@PathVariable Long id, @RequestBody PersonDtoUpdate persondto){
         return personService.updatePerson(id,persondto);

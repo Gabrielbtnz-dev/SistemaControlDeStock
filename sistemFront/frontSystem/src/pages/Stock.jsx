@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
 import DataTable from "../assets/components/DataTable";
 import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function Stock() {
     const [disponibilidadStock, setDisponibilidadStock] = useState([]);
+    const token = TokenService.getToken();
 
     const cargarDisponibilidadStock = async () => {
-        const response = await fetch("http://localhost:8085/disponibilidadstock");
+        const response = await fetch("http://localhost:8085/disponibilidadstock",{
+                method: "GET",
+                headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                }
+            });
         const data = await response.json();
         setDisponibilidadStock(data);
     };

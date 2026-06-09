@@ -4,6 +4,8 @@ import { FilterInput } from "../assets/components/FilterInput";
 import { FilterDropdown } from "../assets/components/FilterDropdown";
 import { FilterDateRange } from "../assets/components/FilterDateRange";
 import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
+import { TokenService } from "../auth/TokenService";
+import axios from "axios";
 
 function MovimientosDeCajas() {
     const [movimientosDeCajas, setMovimientoDeCajas] = useState([]);
@@ -11,9 +13,16 @@ function MovimientosDeCajas() {
     const [filtroCaja, setFiltroCaja] = useState("");
     const [filtroDesde, setFiltroDesde] = useState("");
     const [filtroHasta, setFiltroHasta] = useState("");
+    const token = TokenService.getToken();
 
     const cargarMovimientosDeCajas = async () => {
-        const response = await fetch("http://localhost:8085/movimientosdecajas");
+        const response = await fetch("http://localhost:8085/movimientosdecajas",{
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+        }
+    });
         const data = await response.json();
         setMovimientoDeCajas(data);
     };
