@@ -10,6 +10,8 @@ function VentasResumido() {
 
     const [sales, setsales] = useState([]);
 
+    const token = TokenService.getToken();
+    
     const cargarVenta = async () => {
         const response = await fetch("http://localhost:8085/sales",{
                 method: "GET",

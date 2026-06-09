@@ -11,6 +11,7 @@ import BarcodeSearch from "../assets/components/BarcodeSearch"
 import Swal from "sweetalert2";
 import { TokenService } from "../auth/TokenService";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Pdv(){
 const[product,setProduct]=useState([]);
@@ -31,20 +32,40 @@ const [cobros, setCobros] = useState([]);
 const [valorEnCobros, setValorEnCobros] = useState(0);
 const [precioProduct,setPrecioProduct] = useState(0);
 
+const navigate = useNavigate();
+
 const token = TokenService.getToken();
 
     const cargarProduct = async () => {
-        const response = await fetch("http://localhost:8085/product",{
-                method: "GET",
-                headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-                }
+    const response = await fetch("http://localhost:8085/product", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        console.log(data);
+
+        Swal.fire({
+            title: "Acceso denegado",
+            text: data.message || "No tienes permisos",
+            icon: "error",
+            confirmButtonText: "Volver"
         });
-        const data = await response.json();
-        setProduct(data);
-        console.log(data)
-  };
+
+        setProduct([]);
+
+        navigate("/dashboard");
+        return;
+    }
+
+    setProduct(Array.isArray(data) ? data : []);
+    console.log(data);
+};
 
   const cargarEntidad = async () => {
         const response = await fetch("http://localhost:8085/personas",{

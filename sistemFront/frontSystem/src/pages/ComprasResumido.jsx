@@ -18,8 +18,7 @@ function ComprasResumido() {
         headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
+        }
     });
         const data = await response.json();
         setCompra(data);

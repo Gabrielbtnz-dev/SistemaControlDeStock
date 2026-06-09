@@ -27,7 +27,7 @@ public class RestControllerSales {
         return salesItemsService.getGraficoVentasPorAgno();
     }
 
-    @PreAuthorize("hasAuthority('Ver todas las ventas)")
+    @PreAuthorize("hasAuthority('Ver todas las ventas')")
     @GetMapping("/sales")
     public List<SalesDtoGet> getSales(){
         return salesItemsService.getSales();
