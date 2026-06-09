@@ -15,6 +15,8 @@ import ComprasResumido from "../pages/ComprasResumido";
 import Login from "../pages/Login";
 
 import ProtectedRoute from "../auth/ProtectedRoute";
+import EgresoFinanciero from "../pages/EgresoFinanciero";
+import IngresoFinanciero from "../pages/IngresoFInanciero";
 
 function Rutas() {
   return (
@@ -42,6 +44,8 @@ function Rutas() {
             <Route path="/movimientosdestock" element={<MovimientosDeStock />} />
             <Route path="/stockdisponibilidad" element={<Stock />} />
             <Route path="/comprasresumido" element={<ComprasResumido />} />
+            <Route path="/EgresoFinanciero" element={<EgresoFinanciero/>}/>
+            <Route path="/IngresoFinanciero" element={<IngresoFinanciero/>}/>
             </Route>
 
         </Route>

@@ -17,7 +17,7 @@ export default function Toggle({
     <div className="flex flex-col gap-2">
       
       {label && (
-        <label className="text-sm font-medium text-gray-600 whitespace-nowrap">
+        <label className="text-xs font-medium text-gray-600 whitespace-nowrap">
           {label}
         </label>
       )}

@@ -51,8 +51,8 @@ const navConfig = [
     icon: CircleDollarSign,
     group: true,
     children: [
-      { to: "/login", icon: ArrowIconRight, label: "Ingreso financiero" },
-      { to: "/login", icon: ArrowIconLeft, label: "Egreso financiero" },
+      { to: "/EgresoFinanciero", icon: ArrowIconRight, label: "Egreso financiero" },
+      { to: "/IngresoFinanciero", icon: ArrowIconLeft, label: "Ingreso financiero" },
     ],
   },
   {

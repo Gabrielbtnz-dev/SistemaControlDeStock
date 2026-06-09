@@ -11,7 +11,7 @@ export default function Input({
     <div className={`flex flex-col gap-1 ${width}`}>
       
       {label && (
-        <label className="text-sm font-medium text-gray-600 whitespace-nowrap">
+        <label className="text-xs font-medium text-gray-600 whitespace-nowrap">
           {label}
         </label>
       )}
