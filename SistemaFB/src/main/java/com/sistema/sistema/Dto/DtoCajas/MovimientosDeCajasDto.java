@@ -16,6 +16,7 @@ public class MovimientosDeCajasDto {
     private String nombreCaja;
     private Long idVenta;
     private Long idCompra;
+    private Long idRegistroFinanciero;
 
     public MovimientosDeCajasDto() {}
 
@@ -27,7 +28,7 @@ public class MovimientosDeCajasDto {
                                  LocalDateTime fecha,
                                  String nombreCaja,
                                  Long idVenta,
-                                 Long idCompra) {
+                                 Long idCompra, Long idRegistroFinanciero) {
         this.idCaja = idCaja;
         this.tipoMovimiento = tipoMovimiento;
         this.monto = monto;
@@ -37,6 +38,15 @@ public class MovimientosDeCajasDto {
         this.nombreCaja = nombreCaja;
         this.idVenta = idVenta;
         this.idCompra = idCompra;
+        this.idRegistroFinanciero = idRegistroFinanciero;
+    }
+
+    public Long getIdRegistroFinanciero() {
+        return idRegistroFinanciero;
+    }
+
+    public void setIdRegistroFinanciero(Long idRegistroFinanciero) {
+        this.idRegistroFinanciero = idRegistroFinanciero;
     }
 
     public Long getIdCompra() {

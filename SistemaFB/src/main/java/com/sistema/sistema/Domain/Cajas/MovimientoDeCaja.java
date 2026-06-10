@@ -1,6 +1,7 @@
 package com.sistema.sistema.Domain.Cajas;
 
 import com.sistema.sistema.Domain.Compras.Compra;
+import com.sistema.sistema.Domain.ResgistroFinanciero.RegistroFinanciero;
 import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Service.Enum.Moneda;
 import jakarta.persistence.*;
@@ -30,6 +31,9 @@ public class MovimientoDeCaja {
     @ManyToOne
     @JoinColumn(name = "id_compra")
     private Compra compra;
+    @ManyToOne
+    @JoinColumn(name = "id_registro_financiero")
+    private RegistroFinanciero registroFinanciero;
 
     public MovimientoDeCaja(){
     }
@@ -44,6 +48,14 @@ public class MovimientoDeCaja {
         this.fecha = fecha;
 
         this.compra = compra;
+    }
+
+    public RegistroFinanciero getRegistroFinanciero() {
+        return registroFinanciero;
+    }
+
+    public void setRegistroFinanciero(RegistroFinanciero registroFinanciero) {
+        this.registroFinanciero = registroFinanciero;
     }
 
     public Compra getCompra() {
