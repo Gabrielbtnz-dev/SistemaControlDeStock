@@ -8,7 +8,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
+@Entity
+@Table(name = "registro_financiero ")
 public class RegistroFinanciero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class RegistroFinanciero {
     private String tipoOperacion;
     @Enumerated(EnumType.STRING)
     private Moneda moneda;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_person")
     private Person person;
     @OneToMany(mappedBy = "registroFinanciero")

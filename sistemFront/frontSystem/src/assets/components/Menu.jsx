@@ -54,6 +54,8 @@ const navConfig = [
       { to: "/EgresoFinanciero", icon: ArrowIconRight, label: "Egreso financiero" },
       { to: "/IngresoFinanciero", icon: ArrowIconLeft, label: "Ingreso financiero" },
     ],
+
+    
   },
   {
     label: "Catastro",

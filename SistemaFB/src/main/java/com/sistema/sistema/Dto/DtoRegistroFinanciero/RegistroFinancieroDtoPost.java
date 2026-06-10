@@ -2,6 +2,7 @@ package com.sistema.sistema.Dto.DtoRegistroFinanciero;
 
 import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
 import com.sistema.sistema.Domain.Person.Person;
+import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,14 +18,13 @@ public class RegistroFinancieroDtoPost {
     private String tipoOperacion;
     private String moneda;
     private Long idPerson;
-    private List<MovimientoDeCaja> cajas;
+    private List<MovimientosDeCajasDto> movimientoCajas;
 
-    public RegistroFinancieroDtoPost(List<MovimientoDeCaja> cajas){
+    public RegistroFinancieroDtoPost(){
 
-        this.cajas = cajas;
     }
 
-    public RegistroFinancieroDtoPost(long id, BigDecimal valor, Date fechaEmison, String observacion, Boolean contado, String tipoOperacion, String moneda, Long idPerson, List<MovimientoDeCaja> movimientosCaja, List<MovimientoDeCaja> cajas) {
+    public RegistroFinancieroDtoPost(long id, BigDecimal valor, Date fechaEmison, String observacion, Boolean contado, String tipoOperacion, String moneda, Long idPerson, List<MovimientosDeCajasDto> movimientoCajas) {
         this.id = id;
         this.valor = valor;
         this.fechaEmison = fechaEmison;
@@ -32,15 +32,15 @@ public class RegistroFinancieroDtoPost {
         this.contado = contado;
         this.tipoOperacion = tipoOperacion;
         this.moneda = moneda;
-        this.cajas = cajas;
+        this.movimientoCajas = movimientoCajas;
     }
 
-    public List<MovimientoDeCaja> getCajas() {
-        return cajas;
+    public List<MovimientosDeCajasDto> getMovimientoCajas() {
+        return movimientoCajas;
     }
 
-    public void setCajas(List<MovimientoDeCaja> cajas) {
-        this.cajas = cajas;
+    public void setMovimientoCajas(List<MovimientosDeCajasDto> movimientoCajas) {
+        this.movimientoCajas = movimientoCajas;
     }
 
     public Long getIdPerson() {

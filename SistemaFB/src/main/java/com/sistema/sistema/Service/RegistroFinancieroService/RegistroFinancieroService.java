@@ -1,8 +1,10 @@
 package com.sistema.sistema.Service.RegistroFinancieroService;
 
+import com.sistema.sistema.Domain.Cajas.Cajas;
 import com.sistema.sistema.Domain.Cajas.MovimientoDeCaja;
 import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Domain.ResgistroFinanciero.RegistroFinanciero;
+import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 import com.sistema.sistema.Dto.DtoRegistroFinanciero.RegistroFinancieroDtoPost;
 import com.sistema.sistema.Model.CajasRepository;
 import com.sistema.sistema.Model.MovimientoDeCajasRepository;
@@ -11,11 +13,13 @@ import com.sistema.sistema.Model.RegistroFinancieroRepository;
 import com.sistema.sistema.Service.Enum.Moneda;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class RegistroFinancieroService {
 
     private final RegistroFinancieroRepository registroFinancieroRepository;
@@ -46,15 +50,15 @@ public class RegistroFinancieroService {
 
         registroFinancieroRepository.save(registro);
 
-        for (MovimientoDeCaja c : dto.getCajas()) {
-            c.setRegistroFinanciero(registro);
+        for (MovimientosDeCajasDto c : dto.getMovimientoCajas()) {
+            c.setIdRegistroFinanciero(registro.getId());
         }
 
 
         List<Long> ids = new ArrayList<>();
 
-        for(MovimientoDeCaja c : dto.getCajas()){
-            ids.add(c.getId());
+        for(MovimientosDeCajasDto c : dto.getMovimientoCajas()){
+            ids.add(c.getIdCaja());
         }
 
         List<MovimientoDeCaja> existentes = cajasRepository.findByIdIn(ids);
@@ -68,6 +72,28 @@ public class RegistroFinancieroService {
                     ));
         }
 
+        List<MovimientosDeCajasDto> cajas = dto.getMovimientoCajas();
+
+        List<MovimientoDeCaja> lista = new ArrayList<>();
+
+        for (MovimientosDeCajasDto c : cajas) {
+
+            MovimientoDeCaja mov = new MovimientoDeCaja();
+
+            mov.setTipoMovimiento("INGRESO");
+            mov.setMonto(c.getMonto());
+            mov.setMoneda(Moneda.PYG);
+            mov.setDescripcion("Registro Financiero");
+            mov.setFecha(c.getFecha());
+            mov.setRegistroFinanciero(registro);
+            Cajas caja = cajasRepository.findById(c.getIdCaja())
+                    .orElseThrow(() -> new RuntimeException("Caja no encontrada"));
+
+            mov.setCaja(caja);
+            lista.add(mov);
+        }
+
+        movimientoDeCajasRepository.saveAll(lista);
 
 
         return  ResponseEntity
