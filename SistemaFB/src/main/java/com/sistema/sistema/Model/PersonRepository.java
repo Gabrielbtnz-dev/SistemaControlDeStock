@@ -10,9 +10,9 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByOrderByIdDesc();
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM person p
-    WHERE p.activo = true
+        SELECT COUNT(*)
+        FROM person p
+        WHERE p.activo = true
     """, nativeQuery = true)
     Long countPersonasActivas();
 

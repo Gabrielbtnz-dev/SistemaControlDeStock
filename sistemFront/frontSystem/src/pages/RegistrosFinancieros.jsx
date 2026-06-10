@@ -7,75 +7,77 @@ import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
 import { TokenService } from "../auth/TokenService";
 import axios from "axios";
 
-function MovimientosDeCajas() {
-    const [movimientosDeCajas, setMovimientoDeCajas] = useState([]);
+function RegistrosFinancieros() {
+    const [registrosFinancieros, setRegistrosFinancieros] = useState([]);
     const [filtroCod, setFiltroCod] = useState("");
-    const [filtroCaja, setFiltroCaja] = useState("");
+    const [filtroPersona, setFiltroPersona] = useState("");
     const [filtroDesde, setFiltroDesde] = useState("");
     const [filtroHasta, setFiltroHasta] = useState("");
     const token = TokenService.getToken();
 
-    const cargarMovimientosDeCajas = async () => {
-        const response = await fetch("http://localhost:8085/movimientosdecajas",{
-        method: "GET",
-        headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-        }
-    });
+    const cargarRegistrosFinancieros = async () => {
+        const response = await fetch("http://localhost:8085/registrofinanciero", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
         const data = await response.json();
-        setMovimientoDeCajas(data);
+        setRegistrosFinancieros(data);
     };
 
     useEffect(() => {
-        cargarMovimientosDeCajas();
+        cargarRegistrosFinancieros();
     }, []);
 
-    const cajas = [...new Set(movimientosDeCajas.map(m => m.nombreCaja).filter(Boolean))];
+    const personas = [...new Set(registrosFinancieros.map(m => m.nombrePersona).filter(Boolean))];
 
-    const datosFiltrados = movimientosDeCajas.filter((row) => {
-        const cod = row.idRegistroFinanciero
-            ? `Financiero N: ${row.idRegistroFinanciero}`
-            : row.idVenta
-                ? `Venta N: ${row.idVenta}`
-                : `Compra N: ${row.idCompra}`;
-        const fechaRow = row.fecha.split("T")[0];
-        console.log("fechaRow:", fechaRow, "| desde:", filtroDesde, "| hasta:", filtroHasta);
+    // Función helper para obtener fecha local en formato YYYY-MM-DD
+        const toLocalDateString = (isoString) => {
+            const date = new Date(isoString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        };
+    const datosFiltrados = registrosFinancieros.filter((row) => {
+    const cod = `Financiero N: ${row.id}`;
+    const fechaRow = toLocalDateString(row.fechaEmision);
 
-        const pasaCod   = filtroCod === ""    || cod.toLowerCase().includes(filtroCod.toLowerCase());
-        const pasaCaja  = filtroCaja === ""   || row.nombreCaja === filtroCaja;
-        const pasaDesde = filtroDesde === ""  || fechaRow >= filtroDesde;
-        const pasaHasta = filtroHasta === ""  || fechaRow <= filtroHasta;
+    const pasaCod     = filtroCod === ""     || cod.toLowerCase().includes(filtroCod.toLowerCase());
+    const pasaPersona = filtroPersona === "" || row.nombrePersona === filtroPersona;
+    const pasaDesde   = filtroDesde === ""   || fechaRow >= filtroDesde;
+    const pasaHasta   = filtroHasta === ""   || fechaRow <= filtroHasta;
 
-        return pasaCod && pasaCaja && pasaDesde && pasaHasta;
+    return pasaCod && pasaPersona && pasaDesde && pasaHasta;
     });
-
-    const hayFiltros = filtroCod || filtroCaja || filtroDesde || filtroHasta;
+    const hayFiltros = filtroCod || filtroPersona || filtroDesde || filtroHasta;
 
     const limpiarFiltros = () => {
         setFiltroCod("");
-        setFiltroCaja("");
+        setFiltroPersona("");
         setFiltroDesde("");
         setFiltroHasta("");
     };
 
     return (
-        <div className="w-full h-full flex flex-col min-h-0  gap-3">
+        <div className="w-full h-full flex flex-col min-h-0 gap-3">
 
             {/* Barra de filtros */}
             <div className="flex flex-wrap gap-3 items-end bg-white border border-gray-100 rounded-xl p-1 shadow-sm">
                 <FilterInput
-                    label="Cod. venta/compra"
-                    placeholder="Ej: Venta N: 12"
+                    label="Cod. registro"
+                    placeholder="Ej: Financiero N: 1"
                     value={filtroCod}
                     onChange={setFiltroCod}
                 />
                 <FilterDropdown
-                    label="Cuenta caja"
-                    placeholder="Todas las cajas"
-                    options={cajas}
-                    value={filtroCaja}
-                    onChange={setFiltroCaja}
+                    label="Persona"
+                    placeholder="Todas las personas"
+                    options={personas}
+                    value={filtroPersona}
+                    onChange={setFiltroPersona}
                 />
                 <FilterDateRange
                     label="Fecha"
@@ -106,41 +108,41 @@ function MovimientosDeCajas() {
                 pagination={true}
                 columns={[
                     {
-                        key: "Cod. venta/compra",
-                        label: "Cod. venta/compra",
-                        render: (row) =>
-                            row.idRegistroFinanciero
-                            ? `Financiero N: ${row.idRegistroFinanciero}`
-                            : row.idVenta
-                                ? `Venta N: ${row.idVenta}`
-                                : `Compra N: ${row.idCompra}`
+                        key: "Cod. registro",
+                        label: "Cod. registro",
+                        render: (row) => `Financiero N: ${row.id}`
                     },
-                    { key: "nombreCaja", label: "Cuenta caja" },
+                    { key: "nombrePersona", label: "Persona" },
                     {
-                        key: "monto",
+                        key: "valor",
                         label: "Valor",
                         render: (row) => (
                             <div className="flex items-center gap-2">
-                                {row.tipoMovimiento === "INGRESO" ? (
+                                {row.tipo === "INGRESO" ? (
                                     <BanknoteArrowDown size={14} className="text-green-500" />
                                 ) : (
                                     <BanknoteArrowUp size={14} className="text-red-500" />
                                 )}
                                 {new Intl.NumberFormat("es-PY", {
                                     style: "currency",
-                                    currency: "PYG",
+                                    currency: row.moneda || "PYG",
                                     minimumFractionDigits: 0
-                                }).format(row.monto)}
+                                }).format(row.valor)}
                             </div>
                         )
                     },
-                    { key: "tipoMovimiento", label: "Tipo" },
+                    { key: "tipo", label: "Tipo" },
                     { key: "moneda", label: "Moneda" },
-                    { key: "descripcion", label: "Descripción" },
                     {
-                        key: "fecha",
+                        key: "contado",
+                        label: "Contado",
+                        render: (row) => row.contado ? "Sí" : "No"
+                    },
+                    { key: "observacion", label: "Observación" },
+                    {
+                        key: "fechaEmision",
                         label: "Fecha",
-                        render: (row) => new Date(row.fecha).toLocaleDateString("es-PY")
+                        render: (row) => new Date(row.fechaEmision).toLocaleDateString("es-PY")
                     },
                 ]}
             />
@@ -148,4 +150,4 @@ function MovimientosDeCajas() {
     );
 }
 
-export default MovimientosDeCajas;
+export default RegistrosFinancieros;
