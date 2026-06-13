@@ -20,9 +20,11 @@ public interface RegistroFinancieroRepository extends JpaRepository<RegistroFina
         rf.observacion,
         rf.tipo_operacion,
         rf.valor,
-        p.nombre
+        p.nombre,
+        rf.activo
         FROM registro_financiero rf
-           JOIN person p ON p.id = rf.id_person;
+           JOIN person p ON p.id = rf.id_person
+        ORDER BY rf.id DESC;
     """, nativeQuery = true)
     List<RegistroFinancieroGet> getRegistroFinanciero();
 

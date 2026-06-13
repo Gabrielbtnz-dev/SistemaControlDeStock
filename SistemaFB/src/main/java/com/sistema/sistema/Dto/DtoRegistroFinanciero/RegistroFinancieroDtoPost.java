@@ -5,6 +5,7 @@ import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class RegistroFinancieroDtoPost {
 
     private long id;
     private BigDecimal valor;
-    private Date fechaEmison;
+    private LocalDate fechaEmison;
     private String observacion;
     private Boolean contado;
     private String tipoOperacion;
@@ -24,7 +25,7 @@ public class RegistroFinancieroDtoPost {
 
     }
 
-    public RegistroFinancieroDtoPost(long id, BigDecimal valor, Date fechaEmison, String observacion, Boolean contado, String tipoOperacion, String moneda, Long idPerson, List<MovimientosDeCajasDto> movimientoCajas) {
+    public RegistroFinancieroDtoPost(long id, BigDecimal valor, LocalDate fechaEmison, String observacion, Boolean contado, String tipoOperacion, String moneda, Long idPerson, List<MovimientosDeCajasDto> movimientoCajas) {
         this.id = id;
         this.valor = valor;
         this.fechaEmison = fechaEmison;
@@ -83,11 +84,11 @@ public class RegistroFinancieroDtoPost {
         this.observacion = observacion;
     }
 
-    public Date getFechaEmison() {
+    public LocalDate getFechaEmison() {
         return fechaEmison;
     }
 
-    public void setFechaEmison(Date fechaEmison) {
+    public void setFechaEmison(LocalDate fechaEmison) {
         this.fechaEmison = fechaEmison;
     }
 

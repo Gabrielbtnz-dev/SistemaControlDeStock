@@ -5,10 +5,7 @@ import com.sistema.sistema.Dto.DtoRegistroFinanciero.RegistroFinancieroGet;
 import com.sistema.sistema.Service.RegistroFinancieroService.RegistroFinancieroService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,5 +33,11 @@ public class RestControllerRegistroFinanciero {
     @GetMapping("/registrofinanciero")
     public List<RegistroFinancieroGet> getRegistroFinanciero(){
         return registroFinancieroService.getRegistroFinanciero();
+    }
+
+    @PreAuthorize("hasAuthority('Leer registro financiero')")
+    @DeleteMapping("/deleteregistrofinanciero/{id}")
+    public ResponseEntity<?> deleteRegistroFinanciero(@PathVariable Long id){
+        return registroFinancieroService.deleteRegistroFinanciero(id);
     }
 }

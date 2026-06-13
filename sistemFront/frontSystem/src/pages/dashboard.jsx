@@ -1,77 +1,58 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DashboardCard } from "../assets/components/DashboardCard";
-import { DollarSign, Users, AlertTriangle, PackageOpen } from 'lucide-react';
+import { DollarSign, Users, AlertTriangle, PackageOpen } from "lucide-react";
 import DashboardGrafico from "../assets/components/DashboardGrafico";
 import { TokenService } from "../auth/TokenService";
-import axios from "axios";
 
 function Dashboard() {
     const [estadisticaVenta, setEstadisticaVenta] = useState(null);
     const [estadisticaStock, setEstadisticaStock] = useState(null);
     const [estadisticaPerson, setEstadisticaPerson] = useState(0);
-    
-    
+
     const token = TokenService.getToken();
 
-    const cargarEstadisticas = async () => {
-        try {
-            const response = await fetch("http://localhost:8085/ventasestadistica",{
-                method: "GET",
-                headers: {
+    // 🔥 OPTIMIZADO: fetch reutilizable
+    const fetchData = useCallback(async (url) => {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
-                }
-            });
-            const data = await response.json();
-            setEstadisticaVenta(data);
-        } catch (error) {
-            console.error("Error cargando estadísticas de ventas:", error);
-        }
-    };
+            }
+        });
 
-    const cargarEstadisticasStock = async () => {
-        try {
-            const response = await fetch("http://localhost:8085/stockestadistica",{
-                method: "GET",
-                headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-                }
-            });
-            const data = await response.json();
-            setEstadisticaStock(data);
-        } catch (error) {
-            console.error("Error cargando estadísticas de stock:", error);
-        }
-    };
+        if (!res.ok) throw new Error("Error en " + url);
+        return res.json();
+    }, [token]);
 
-    const cargarEstadisticasPerson = async () => {
+    // 🔥 OPTIMIZADO: carga paralela (más rápido)
+    const cargarTodo = useCallback(async () => {
         try {
-            const response = await fetch("http://localhost:8085/personactivos",{
-                method: "GET",
-                headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-                }
-            });
-            const data = await response.json();
-            setEstadisticaPerson(data);
+            const [ventas, stock, personas] = await Promise.all([
+                fetchData("http://localhost:8085/ventasestadistica"),
+                fetchData("http://localhost:8085/stockestadistica"),
+                fetchData("http://localhost:8085/personactivos")
+            ]);
+
+            setEstadisticaVenta(ventas);
+            setEstadisticaStock(stock);
+            setEstadisticaPerson(personas);
+
         } catch (error) {
-            console.error("Error cargando personas activas:", error);
+            console.error("Error cargando dashboard:", error);
         }
-    };
+    }, [fetchData]);
 
     useEffect(() => {
-        cargarEstadisticas();
-        cargarEstadisticasStock();
-        cargarEstadisticasPerson();
-    }, []);
+        cargarTodo();
+    }, [cargarTodo]);
 
     return (
-        // Se removió 'overflow-hidden' para permitir el flujo natural en pantallas chicas
         <div className="bg-gray-50">
-            {/* Grilla de Tarjetas */}
+
+            {/* CARDS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
                 <DashboardCard
                     title="Ventas del mes"
                     value={`Gs. ${estadisticaVenta?.totalVentaMesActual?.toLocaleString('es-PY') || 0}`}
@@ -80,21 +61,21 @@ function Dashboard() {
                     icon={DollarSign}
                     footerLeft={`Mes pasado: Gs. ${estadisticaVenta?.totalVentaMesAnterior?.toLocaleString('es-PY') || 0}`}
                 />
-                
+
                 <DashboardCard
                     title="Valor total Stock"
                     value={`Gs. ${estadisticaStock?.totalStock?.toLocaleString('es-PY') || 0}`}
                     isPositive={true}
                     icon={PackageOpen}
                 />
-                
+
                 <DashboardCard
                     title="Clientes Activos"
                     value={estadisticaPerson?.toLocaleString('es-PY') || 0}
                     isPositive={true}
                     icon={Users}
                 />
-                
+
                 <DashboardCard
                     title="Cuentas a Vencer (30d)"
                     value="Gs. 8.400.000"
@@ -104,12 +85,14 @@ function Dashboard() {
                     footerLeft="FUNCIONALIDAD EN DESARROLLO"
                     footerRight="ERROR 404"
                 />
+
             </div>
 
-            {/* Contenedor del Gráfico */}
+            {/* GRAFICO */}
             <div className="mt-6">
                 <DashboardGrafico />
             </div>
+
         </div>
     );
 }

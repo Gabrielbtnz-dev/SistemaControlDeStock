@@ -49,6 +49,7 @@ public class RegistroFinancieroService {
         Person person = personRepository.findById(dto.getIdPerson())
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
         registro.setPerson(person);
+        registro.setActivo(true);
 
         registroFinancieroRepository.save(registro);
 
@@ -120,6 +121,7 @@ public class RegistroFinancieroService {
         Person person = personRepository.findById(dto.getIdPerson())
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
         registro.setPerson(person);
+        registro.setActivo(true);
 
         registroFinancieroRepository.save(registro);
 
@@ -180,5 +182,60 @@ public class RegistroFinancieroService {
 
     public List<RegistroFinancieroGet> getRegistroFinanciero(){
         return registroFinancieroRepository.getRegistroFinanciero();
+    }
+
+
+    public ResponseEntity<?> deleteRegistroFinanciero(Long id){
+        RegistroFinanciero registroFinanciero = registroFinancieroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Registro no encontrado"));
+        String tipoMovimiento;
+
+        if(!registroFinanciero.getActivo()){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "EL registro financiero ya esta desactivado"
+                    ));
+        }else {
+             registroFinanciero.setActivo(false);
+        }
+
+        registroFinancieroRepository.save(registroFinanciero);
+
+        if ("INGRESO".equals(registroFinanciero.getTipoOperacion())) {
+            tipoMovimiento = "EGRESO";
+        } else {
+            tipoMovimiento = "INGRESO";
+        }
+        List<MovimientoDeCaja> movimientodecaja =
+                movimientoDeCajasRepository.findByRegistroFinancieroId(id);
+
+        if (movimientodecaja.isEmpty()) {
+            throw new RuntimeException("No hay movimientos para este registro financiero");
+        }
+
+        List<MovimientoDeCaja> lista = new ArrayList<>();
+
+        for (MovimientoDeCaja c : movimientodecaja) {
+
+            MovimientoDeCaja mov = new MovimientoDeCaja();
+
+            mov.setTipoMovimiento(tipoMovimiento);
+            mov.setMonto(c.getMonto());
+            mov.setMoneda(Moneda.PYG);
+            mov.setDescripcion("Desactivacion de registro financiero numero: " + c.getRegistroFinanciero().getId());
+            mov.setFecha(c.getFecha());
+            mov.setRegistroFinanciero(registroFinanciero);
+            mov.setCaja(c.getCaja());
+            lista.add(mov);
+        }
+
+        movimientoDeCajasRepository.saveAll(lista);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of(
+                        "success", true,
+                        "message", "Se desactivo el registro financiero"
+                ));
     }
 }

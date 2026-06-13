@@ -6,100 +6,21 @@ import {
   ShoppingBag,
   ShoppingCart,
   Landmark,
-  BanknoteArrowDown,
-  BanknoteArrowUp,
   X,
   Archive,
   BarChart2,
   ChevronDown,
-  ShoppingBasket,
   FileChartColumn,
   BaggageClaim,
   Boxes,
   PackageOpen,
   CircleDollarSign,
   MoveRight,
-  MoveLeft
-  
+  MoveLeft,
+  BanknoteArrowUp,
+  BanknoteArrowDown,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-
-// ── Nav structure ─────────────────────────────────────────────
-const navConfig = [
-  {
-    to: "/dashboard",
-    icon: Home,
-    label: "Home",
-  },
-  {
-    to: "/pdv",
-    icon: ShoppingCart,
-    label: "Vender",
-  },
-    {
-    to: "/pdc",
-    icon: BaggageClaim,
-    label: "Comprar",
-  },
-  {
-    to: "/cuentasCajas",
-    icon: Landmark,
-    label: "Cuentas Cajas",
-  },
-  {
-    label: "Financiero",
-    icon: CircleDollarSign,
-    group: true,
-    children: [
-      { to: "/EgresoFinanciero", icon: ArrowIconRight, label: "Egreso financiero" },
-      { to: "/IngresoFinanciero", icon: ArrowIconLeft, label: "Ingreso financiero" },
-    ],
-
-    
-  },
-  {
-    label: "Catastro",
-    icon: Archive,
-    group: true,
-    children: [
-      { to: "/product", icon: ShoppingBag, label: "Productos" },
-      { to: "/entity", icon: Users, label: "Clientes" },
-    ],
-  },
-  {
-    label: "Reportes",
-    icon: BarChart2,
-    group: true,
-    children: [
-      {
-        to: "/movimientosdecaja",
-        label: "Movimientos de caja",
-        customIcon: true,
-      },
-      {
-        to: "/VentasResumido",
-        label: "Ventas resumido",
-        icon: FileChartColumn,
-      },
-      ,
-      {
-        to: "/ComprasResumido",
-        label: "Compras resumido",
-        icon: FileChartColumn,
-      },
-      {
-        to: "/MovimientosDeStock",
-        label: "Movimientos de stock",
-        icon: Boxes,
-      },
-      {
-        to: "/StockDisponibilidad",
-        label: "Stock",
-        icon: PackageOpen,
-      },
-    ],
-  }
-];
 
 // ── Cash icon ─────────────────────────────────────────────────
 function CashIcon() {
@@ -126,6 +47,45 @@ function ArrowIconRight() {
     </div>
   );
 }
+
+// ── Nav structure ─────────────────────────────────────────────
+const navConfig = [
+  { to: "/dashboard", icon: Home, label: "Inicio" },
+  { to: "/pdv", icon: ShoppingCart, label: "Vender" },
+  { to: "/pdc", icon: BaggageClaim, label: "Comprar" },
+  { to: "/cuentasCajas", icon: Landmark, label: "Cuentas Cajas" },
+  {
+    label: "Financiero",
+    icon: CircleDollarSign,
+    group: true,
+    children: [
+      { to: "/IngresoFinanciero", icon: ArrowIconLeft, label: "Ingreso financiero" },
+      { to: "/EgresoFinanciero", icon: ArrowIconRight, label: "Egreso financiero" },
+    ],
+  },
+  {
+    label: "Catastro",
+    icon: Archive,
+    group: true,
+    children: [
+      { to: "/product", icon: ShoppingBag, label: "Productos" },
+      { to: "/entity", icon: Users, label: "Clientes" },
+    ],
+  },
+  {
+    label: "Reportes",
+    icon: BarChart2,
+    group: true,
+    children: [
+      { to: "/movimientosdecaja", label: "Movimientos de caja", customIcon: true },
+      { to: "/VentasResumido", icon: FileChartColumn, label: "Ventas resumido" },
+      { to: "/ComprasResumido", icon: FileChartColumn, label: "Compras resumido" },
+      { to: "/RegistroFinanciero", icon: FileChartColumn, label: "Registros Financieros" },
+      { to: "/MovimientosDeStock", icon: Boxes, label: "Movimientos de stock" },
+      { to: "/StockDisponibilidad", icon: PackageOpen, label: "Stock" },
+    ],
+  },
+];
 
 // ── Single nav link ───────────────────────────────────────────
 function NavLink({ item, open, active, indent = false }) {
@@ -165,7 +125,6 @@ function NavLink({ item, open, active, indent = false }) {
         </span>
       )}
 
-      {/* Tooltip when collapsed */}
       {!open && (
         <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-700 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-150 shadow-xl z-50">
           {item.label}
@@ -338,13 +297,13 @@ function Menu() {
             <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
             {open && (
               <>
-              <span
-                className="text-xs font-medium"
-                style={{ animation: "fadeIn 0.2s ease-out both" }}
-              >
-                En línea
-              </span>
-              <span className="text-xs font-medium">versión 10.0.0</span>
+                <span
+                  className="text-xs font-medium"
+                  style={{ animation: "fadeIn 0.2s ease-out both" }}
+                >
+                  En línea
+                </span>
+                <span className="text-xs font-medium ml-auto">versión 10.0.0</span>
               </>
             )}
           </div>

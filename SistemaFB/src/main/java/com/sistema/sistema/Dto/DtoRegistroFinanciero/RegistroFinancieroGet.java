@@ -12,12 +12,13 @@ public class RegistroFinancieroGet {
     private String tipo;
     private BigDecimal valor;
     private String nombrePersona;
+    private Boolean activo;
 
     public RegistroFinancieroGet(){
 
     }
 
-    public RegistroFinancieroGet(Long id, Boolean contado, Date fechaEmision, String moneda, String observacion, String tipo, BigDecimal valor, String nombrePersona) {
+    public RegistroFinancieroGet(Long id, Boolean contado, Date fechaEmision, String moneda, String observacion, String tipo, BigDecimal valor, String nombrePersona, Boolean activo) {
         this.id = id;
         this.contado = contado;
         this.fechaEmision = fechaEmision;
@@ -26,6 +27,15 @@ public class RegistroFinancieroGet {
         this.tipo = tipo;
         this.valor = valor;
         this.nombrePersona = nombrePersona;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public BigDecimal getValor() {

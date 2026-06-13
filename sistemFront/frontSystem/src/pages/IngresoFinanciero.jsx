@@ -99,7 +99,7 @@ const guardarRegistroFinanciero = async () => {
     try {
         const body = {
             valor: Number(valorRegistroFinanciero),
-            fechaEmison: fecha,
+            fechaEmison: `${fecha}T12:00:00`,
             observacion: observacion,
             contado: true,
             tipoOperacion: "INGRESO",

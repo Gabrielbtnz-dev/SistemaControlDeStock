@@ -3,8 +3,9 @@ import DataTable from "../assets/components/DataTable";
 import { FilterInput } from "../assets/components/FilterInput";
 import { FilterDropdown } from "../assets/components/FilterDropdown";
 import { FilterDateRange } from "../assets/components/FilterDateRange";
-import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
+import { BanknoteArrowDown, BanknoteArrowUp, Trash } from 'lucide-react';
 import { TokenService } from "../auth/TokenService";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 function RegistrosFinancieros() {
@@ -25,6 +26,27 @@ function RegistrosFinancieros() {
         });
         const data = await response.json();
         setRegistrosFinancieros(data);
+    };
+
+     const removeRegistroFinanciero = async (id) => {
+        const response = await fetch(`http://localhost:8085/deleteregistrofinanciero/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        const result = await response.json();
+        
+              if(result.succes = true){
+                      Swal.fire({
+                      title: result.message,
+                      icon: "success",
+                      confirmButtonColor: "#28a745",
+                      confirmButtonText: "Aceptar"
+            });
+            cargarRegistrosFinancieros();
+            }
     };
 
     useEffect(() => {
@@ -105,6 +127,7 @@ function RegistrosFinancieros() {
             <DataTable
                 data={datosFiltrados}
                 itemsPerPage={20}
+                rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
                 pagination={true}
                 columns={[
                     {
@@ -135,14 +158,28 @@ function RegistrosFinancieros() {
                     { key: "moneda", label: "Moneda" },
                     {
                         key: "contado",
-                        label: "Contado",
-                        render: (row) => row.contado ? "Sí" : "No"
+                        label: "Condición",
+                        render: (row) => row.contado ? "Contado" : "Crédito"
                     },
                     { key: "observacion", label: "Observación" },
                     {
                         key: "fechaEmision",
                         label: "Fecha",
-                        render: (row) => new Date(row.fechaEmision).toLocaleDateString("es-PY")
+                        render: (row) => row.fechaEmision?.split("T")[0]
+                    },
+                    {
+                        render: (row) => (
+                        <div className="flex justify-end gap-3 items-center">
+                            
+                            {row.activo && (
+                            <Trash
+                                className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                                onClick={() => removeRegistroFinanciero(row.id)}
+                            />
+                            )}
+
+                        </div>
+                        ),
                     },
                 ]}
             />

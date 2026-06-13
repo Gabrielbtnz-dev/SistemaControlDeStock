@@ -6,6 +6,7 @@ import com.sistema.sistema.Service.Enum.Moneda;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -15,7 +16,7 @@ public class RegistroFinanciero {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private BigDecimal valor;
-    private Date fechaEmison;
+    private LocalDate fechaEmison;
     private String observacion;
     private Boolean contado;
     private String tipoOperacion;
@@ -26,18 +27,27 @@ public class RegistroFinanciero {
     private Person person;
     @OneToMany(mappedBy = "registroFinanciero")
     private List<MovimientoDeCaja> movimientosCaja;
+    private Boolean activo;
 
     public RegistroFinanciero(){
 
     }
 
-    public RegistroFinanciero(BigDecimal valor, Date fechaEmison, String observacion, Boolean contado, String tipoOperacion, Moneda moneda) {
+    public RegistroFinanciero(BigDecimal valor, LocalDate fechaEmison, String observacion, Boolean contado, String tipoOperacion, Moneda moneda) {
         this.valor = valor;
         this.fechaEmison = fechaEmison;
         this.observacion = observacion;
         this.contado = contado;
         this.tipoOperacion = tipoOperacion;
         this.moneda = moneda;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Person getPerson() {
@@ -64,11 +74,11 @@ public class RegistroFinanciero {
         this.valor = valor;
     }
 
-    public Date getFechaEmison() {
+    public LocalDate getFechaEmison() {
         return fechaEmison;
     }
 
-    public void setFechaEmison(Date fechaEmison) {
+    public void setFechaEmison(LocalDate fechaEmison) {
         this.fechaEmison = fechaEmison;
     }
 

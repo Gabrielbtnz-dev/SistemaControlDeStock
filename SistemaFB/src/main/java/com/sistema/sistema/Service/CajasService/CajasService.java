@@ -24,7 +24,7 @@ public class CajasService {
     }
 
     public List<CajasDto> getMethodPaymed(){
-        return paymedRepo.findAllByOrderByIdDesc().stream().map(
+        return paymedRepo.findByActivoTrueOrderByIdDesc().stream().map(
                 m-> new CajasDto(
                         m.getId(),
                         m.getName(),

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CajasRepository extends JpaRepository<Cajas, Long> {
-    List<Cajas> findAllByOrderByIdDesc();
+    List<Cajas> findByActivoTrueOrderByIdDesc();
 
     List<Cajas> findByIdIn(List<Long> ids);
 }
