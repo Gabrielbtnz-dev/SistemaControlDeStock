@@ -35,7 +35,7 @@ public class RestControllerRegistroFinanciero {
         return registroFinancieroService.getRegistroFinanciero();
     }
 
-    @PreAuthorize("hasAuthority('Leer registro financiero')")
+    @PreAuthorize("hasAuthority('Eliminar registro financiero')")
     @DeleteMapping("/deleteregistrofinanciero/{id}")
     public ResponseEntity<?> deleteRegistroFinanciero(@PathVariable Long id){
         return registroFinancieroService.deleteRegistroFinanciero(id);
