@@ -9,10 +9,12 @@ import axios from "axios";
 
 function ComprasResumido() {
 
+    const token = TokenService.getToken();
+
     const [compra, setCompra] = useState([]);
 
     const cargarCompra = async () => {
-        const token = TokenService.getToken();
+        
         const response = await fetch("http://localhost:8085/comprasresumidas",{
         method: "GET",
         headers: {
@@ -33,7 +35,6 @@ function ComprasResumido() {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
     });
 
       const result = await response.json();
