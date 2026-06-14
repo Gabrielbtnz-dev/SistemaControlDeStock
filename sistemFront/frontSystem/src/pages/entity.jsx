@@ -4,11 +4,11 @@ import Modal from "../assets/components/Modal";
 import Input from "../assets/components/Input";
 import Toggle from "../assets/components/Toggle";
 import AnimatedCheck from "../assets/components/AnimatedCheck";
+import { FilterInput } from "../assets/components/FilterInput";
 import { UserRoundPlus } from "lucide-react";
 import { Pencil } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import DataTable from "../assets/components/DataTable";
-import InputFilterText from "../assets/components/InputFilterText"
 import { TokenService } from "../auth/TokenService";
 import axios from "axios";
 function Entity(){
@@ -26,6 +26,7 @@ function Entity(){
     const [mensajeRespuesta, setMensajeRespuesta] = useState("");
      const [butonEdit, setButonEdit] = useState("");
     const[personFilterName,setPersonFilterName]=useState("");
+    const[personFilterDocumento,setPersonFilterDocumento]=useState("");
 
     
     const token = TokenService.getToken();
@@ -177,8 +178,9 @@ const editEntidad=(p)=>{
   }
 
   const personFilterNombre = persona.filter((p)=>
-    p.nombre.toLowerCase().includes(personFilterName.toLowerCase())
-  )
+    p.nombre.toLowerCase().includes(personFilterName.toLowerCase()) &&
+    (p.documento ?? "").toLowerCase().includes(personFilterDocumento.toLowerCase())
+)
 
   return (
   <div className="w-full h-full flex flex-col min-h-0">
@@ -210,19 +212,29 @@ const editEntidad=(p)=>{
       </div>
       </Modal>
       }
-    <div className="flex justify-between items-center p-3">
-      <div>
-        <InputFilterText
-          label="Buscar por nombre"
-          value={personFilterName}
-          onChange={setPersonFilterName}
-          placeholder="Buscar por nombre..."/>
-      </div>
-      <Button color="green" onClick={abrirPopUp}>
-          <UserRoundPlus size={16} className="inline-block" /> 
-          <span> Agregar nueva entidad</span>
-      </Button>
+
+    {/* Barra de filtros */}
+    <div className="flex flex-wrap gap-3 items-end justify-between bg-white border border-gray-100 rounded-xl p-1 shadow-sm mb-3">
+    <div className="flex flex-wrap gap-3 items-end">
+        <FilterInput
+            label="Nombre"
+            placeholder="Buscar por nombre..."
+            value={personFilterName}
+            onChange={setPersonFilterName}
+        />
+        <FilterInput
+            label="Documento"
+            placeholder="Buscar por documento..."
+            value={personFilterDocumento}
+            onChange={setPersonFilterDocumento}
+        />
     </div>
+    <Button color="green" onClick={abrirPopUp}>
+        <UserRoundPlus size={16} className="inline-block" /> 
+        <span> Agregar nueva entidad</span>
+    </Button>
+</div>
+
       <DataTable
         data={personFilterNombre}
         rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}

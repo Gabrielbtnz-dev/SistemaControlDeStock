@@ -5,6 +5,7 @@ import com.sistema.sistema.Domain.Person.Person;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,8 @@ public class Compra {
     @OneToMany(mappedBy = "compra")
     private List<MovimientoDeCaja> movimientosCaja;
     private Boolean activo;
+    @Column(name = "created_at", updatable = false, insertable = false)
+    private LocalDateTime createdAt;
 
 
     public Compra(){
@@ -42,6 +45,14 @@ public class Compra {
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
         this.activo = activo;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public long getId() {

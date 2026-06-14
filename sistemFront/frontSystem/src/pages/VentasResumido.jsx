@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import DataTable from "../assets/components/DataTable";
-import { BanknoteArrowDown,BanknoteArrowUp } from 'lucide-react';
+import { FilterInput } from "../assets/components/FilterInput";
+import { FilterDropdown } from "../assets/components/FilterDropdown";
+import { FilterDateRange } from "../assets/components/FilterDateRange";
+import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
 import { Trash } from "lucide-react";
 import Swal from "sweetalert2";
 import { TokenService } from "../auth/TokenService";
@@ -9,6 +12,11 @@ import axios from "axios";
 function VentasResumido() {
 
     const [sales, setsales] = useState([]);
+    const [filtroCod, setFiltroCod] = useState("");
+    const [filtroEntidad, setFiltroEntidad] = useState("");
+    const [filtroEstado, setFiltroEstado] = useState("");
+    const [filtroDesde, setFiltroDesde] = useState("");
+    const [filtroHasta, setFiltroHasta] = useState("");
 
     const token = TokenService.getToken();
     
@@ -55,10 +63,80 @@ function VentasResumido() {
         cargarVenta();
     }, []);
 
+    const entidades = [...new Set(sales.map(s => s.namePerson).filter(Boolean))];
+
+    const datosFiltrados = sales.filter((row) => {
+        const cod = `Venta N: ${row.idVenta}`;
+        const fechaRow = row.createdAT ? row.createdAT.split("T")[0] : "";
+
+        const pasaCod     = filtroCod === ""     || cod.toLowerCase().includes(filtroCod.toLowerCase());
+        const pasaEntidad = filtroEntidad === "" || row.namePerson === filtroEntidad;
+        const pasaEstado  = filtroEstado === ""  || (filtroEstado === "activo" ? row.activo : !row.activo);
+        const pasaDesde   = filtroDesde === ""   || fechaRow >= filtroDesde;
+        const pasaHasta   = filtroHasta === ""   || fechaRow <= filtroHasta;
+
+        return pasaCod && pasaEntidad && pasaEstado && pasaDesde && pasaHasta;
+    });
+
+    const hayFiltros = filtroCod || filtroEntidad || filtroEstado || filtroDesde || filtroHasta;
+
+    const limpiarFiltros = () => {
+        setFiltroCod("");
+        setFiltroEntidad("");
+        setFiltroEstado("");
+        setFiltroDesde("");
+        setFiltroHasta("");
+    };
+
     return (
-        <div className="w-full h-full flex flex-col min-h-0 p-1">
+        <div className="w-full h-full flex flex-col min-h-0 p-1 gap-3">
+
+            {/* Barra de filtros */}
+            <div className="flex flex-wrap gap-3 items-end bg-white border border-gray-100 rounded-xl p-1 shadow-sm">
+                <FilterInput
+                    label="Cod. venta"
+                    placeholder="Ej: Venta N: 12"
+                    value={filtroCod}
+                    onChange={setFiltroCod}
+                />
+                <FilterDropdown
+                    label="Entidad"
+                    placeholder="Todas las entidades"
+                    options={entidades}
+                    value={filtroEntidad}
+                    onChange={setFiltroEntidad}
+                />
+                <FilterDropdown
+                    label="Estado"
+                    placeholder="Todos"
+                    options={["activo", "inactivo"]}
+                    value={filtroEstado}
+                    onChange={setFiltroEstado}
+                />
+                <FilterDateRange
+                    label="Fecha"
+                    desde={filtroDesde}
+                    hasta={filtroHasta}
+                    onDesdeChange={setFiltroDesde}
+                    onHastaChange={setFiltroHasta}
+                />
+
+                {hayFiltros && (
+                    <button
+                        onClick={limpiarFiltros}
+                        className="self-end text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:bg-blue-50 rounded-lg px-3 py-2 transition"
+                    >
+                        Limpiar filtros
+                    </button>
+                )}
+
+                <span className="self-end pb-2 ml-auto text-xs text-gray-400">
+                    {datosFiltrados.length} resultado{datosFiltrados.length !== 1 ? "s" : ""}
+                </span>
+            </div>
+
             <DataTable
-                data={sales}
+                data={datosFiltrados}
                 rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}
                 itemsPerPage={20}
                 pagination={true}
@@ -103,6 +181,11 @@ function VentasResumido() {
                         </div>
                     },
                     { key: "observaciones", label: "Observacion" },
+                    {
+                        key: "createdAT",
+                        label: "Fecha",
+                        render: (row) => new Date(row.createdAT).toLocaleDateString("es-PY")
+                    },
                     {
                         key: "acciones",
                         render: (p) => (

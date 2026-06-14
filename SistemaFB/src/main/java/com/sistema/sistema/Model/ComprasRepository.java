@@ -21,7 +21,8 @@ public interface ComprasRepository extends JpaRepository<Compra, Long> {
         c.observaciones,
         p.nombre,
         c.id,
-        c.activo
+        c.activo,
+        c.createdAt
     )
         FROM Compra c
         JOIN c.person p

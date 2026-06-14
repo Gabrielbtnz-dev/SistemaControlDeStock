@@ -6,6 +6,7 @@ import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,8 @@ public class Sales {
     @OneToMany(mappedBy = "venta")
     private List<MovimientoDeCaja> movimientosCaja;
     private Boolean activo;
+    @Column(name = "created_at", updatable = false, insertable = false)
+    private LocalDateTime createdAt;
 
     public Sales(){
 
@@ -41,6 +44,22 @@ public class Sales {
         this.valorRegularizado = valorRegularizado;
         this.observaciones = observaciones;
         this.activo = activo;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<MovimientoDeCaja> getMovimientosCaja() {
+        return movimientosCaja;
+    }
+
+    public void setMovimientosCaja(List<MovimientoDeCaja> movimientosCaja) {
+        this.movimientosCaja = movimientosCaja;
     }
 
     public Boolean getActivo() {

@@ -9,10 +9,11 @@ import { Search, X } from "lucide-react";
  * - placeholder: string  → texto de ayuda
  * - value: string        → valor controlado
  * - onChange: fn         → (value: string) => void
+ * - className: string    → clases adicionales para el contenedor (ej. ancho)
  */
-export function FilterInput({ label, placeholder = "Buscar...", value, onChange }) {
+export function FilterInput({ label, placeholder = "Buscar...", value, onChange, className = "" }) {
     return (
-        <div className="flex flex-col gap-1 min-w-[180px]">
+        <div className={`flex flex-col gap-1 min-w-[180px] ${className}`}>
             {label && (
                 <label className="text-xs font-medium text-gray-500">{label}</label>
             )}

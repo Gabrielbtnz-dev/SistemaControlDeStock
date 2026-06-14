@@ -5,7 +5,8 @@ import Modal from "../assets/components/Modal"
 import Input from "../assets/components/Input"
 import {Package, Trash, Pencil, EllipsisVertical} from"lucide-react"
 import Toggle from "../assets/components/Toggle"
-import InputFilterText from "../assets/components/InputFilterText";
+import { FilterInput } from "../assets/components/FilterInput";
+import { FilterDropdown } from "../assets/components/FilterDropdown";
 import DropDown from "../assets/components/DropDown";
 import {Plus, Save,ArrowRightLeft  } from"lucide-react"
 import AnimatedCheck from "../assets/components/AnimatedCheck";
@@ -17,6 +18,8 @@ function Product(){
   const[product,setProduct]=useState([]);
   const[openPopup,setOpenPopup]=useState(false);
   const [filterName, setFilterName] = useState("");
+  const [filterMoneda, setFilterMoneda] = useState("");
+  const [filterControlaStock, setFilterControlaStock] = useState("");
   const[moneda,setMoneda]=useState("");
   const[nombre,setNombre]=useState("");
   const[precio,setPrecio]=useState("");
@@ -60,9 +63,22 @@ function Product(){
 
   },[])
 
-  const productosFiltrados = product.filter((p) =>
-    p.name.toLowerCase().includes(filterName.toLowerCase())
-  );
+  const monedas = [...new Set(product.map(p => p.moneda).filter(Boolean))];
+
+  const productosFiltrados = product.filter((p) => {
+    const pasaNombre = p.name.toLowerCase().includes(filterName.toLowerCase());
+    const pasaMoneda = filterMoneda === "" || p.moneda === filterMoneda;
+    const pasaControlaStock = filterControlaStock === "" || (filterControlaStock === "Si" ? p.controlaStock : !p.controlaStock);
+    return pasaNombre && pasaMoneda && pasaControlaStock;
+  });
+
+  const hayFiltros = filterName || filterMoneda || filterControlaStock;
+
+  const limpiarFiltros = () => {
+    setFilterName("");
+    setFilterMoneda("");
+    setFilterControlaStock("");
+  };
 
   const addProduct = async () => {
 
@@ -452,13 +468,41 @@ function Product(){
   </div>
 </Modal>
   }
-    <div className="flex justify-between items-center p-3">
-      <div className="flex">
-        <InputFilterText
-          label="Buscar por nombre"
+
+    {/* Barra de filtros */}
+    <div className="flex flex-wrap gap-3 items-end justify-between bg-white border border-gray-100 rounded-xl p-1 shadow-sm mb-3">
+      <div className="flex flex-wrap gap-3 items-end">
+        <FilterInput
+          label="Nombre"
+          placeholder="Buscar por nombre..."
           value={filterName}
           onChange={setFilterName}
-          placeholder="Buscar por nombre..."/>
+        />
+        <FilterDropdown
+          label="Moneda"
+          placeholder="Todas"
+          options={monedas}
+          value={filterMoneda}
+          onChange={setFilterMoneda}
+          width="min-w-[120px] w-32"
+        />
+        <FilterDropdown
+          label="Controla stock"
+          placeholder="Todos"
+          options={["Si", "No"]}
+          value={filterControlaStock}
+          onChange={setFilterControlaStock}
+          width="min-w-[120px] w-32"
+        />
+
+        {hayFiltros && (
+          <button
+            onClick={limpiarFiltros}
+            className="self-end text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:bg-blue-50 rounded-lg px-3 py-2 transition"
+          >
+            Limpiar filtros
+          </button>
+        )}
       </div>
 
       <Button color="green" onClick={abrirPopUp}>

@@ -21,7 +21,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         v.observaciones,
         p.nombre,
         v.id,
-        v.activo
+        v.activo,
+        v.createdAt
     )
         FROM Sales v
         JOIN v.person p

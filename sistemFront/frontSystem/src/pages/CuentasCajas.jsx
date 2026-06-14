@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import InputFilterText from "../assets/components/InputFilterText";
 import DataTable from "../assets/components/DataTable";
 import Button from "../assets/components/button";
+import { FilterInput } from "../assets/components/FilterInput";
+import { FilterDropdown } from "../assets/components/FilterDropdown";
 import { Landmark,Trash,Pencil } from 'lucide-react';
 import Modal from "../assets/components/Modal";
 import Input from "../assets/components/Input";
@@ -15,6 +16,7 @@ import axios from "axios";
 function CuentasCajas(){
     const[cuentasCajas,setCuentasCajas]=useState([])
     const[cuentasCajasFilterName,setCuentasCajasFilterName]=useState("");
+    const[filterMoneda,setFilterMoneda]=useState("");
     const[openNuevaCuentaCaja,setOpenNuevaCuentaCaja]=useState(false);
     const[nombre,setNombre]=useState();
     const[moneda,setMoneda]=useState();
@@ -39,9 +41,20 @@ function CuentasCajas(){
             cargarCuentasCajas();
         }, []);
 
-    const cuentasCajasFilterNombre = cuentasCajas.filter((p)=>
-        p.name.toLowerCase().includes(cuentasCajasFilterName.toLowerCase())
-    )
+    const monedas = [...new Set(cuentasCajas.map(c => c.moneda).filter(Boolean))];
+
+    const cuentasCajasFilterNombre = cuentasCajas.filter((p)=> {
+        const pasaNombre = p.name.toLowerCase().includes(cuentasCajasFilterName.toLowerCase());
+        const pasaMoneda = filterMoneda === "" || p.moneda === filterMoneda;
+        return pasaNombre && pasaMoneda;
+    })
+
+    const hayFiltros = cuentasCajasFilterName || filterMoneda;
+
+    const limpiarFiltros = () => {
+        setCuentasCajasFilterName("");
+        setFilterMoneda("");
+    };
 
     const addCuentasCajas= async () => {
     const token = TokenService.getToken();
@@ -151,13 +164,33 @@ function CuentasCajas(){
             </Modal>
 
             }
-            <div className="flex justify-between items-center p-3">
-                <div>
-                    <InputFilterText
-                    label="Buscar por nombre"
-                    value={cuentasCajasFilterName}
-                    onChange={setCuentasCajasFilterName}
-                    placeholder="Nombre de cuenta..."/>
+
+            {/* Barra de filtros */}
+            <div className="flex flex-wrap gap-3 items-end justify-between bg-white border border-gray-100 rounded-xl p-1 shadow-sm mb-3">
+                <div className="flex flex-wrap gap-3 items-end">
+                    <FilterInput
+                        label="Nombre"
+                        placeholder="Nombre de cuenta..."
+                        value={cuentasCajasFilterName}
+                        onChange={setCuentasCajasFilterName}
+                    />
+                    <FilterDropdown
+                        label="Moneda"
+                        placeholder="Todas"
+                        options={monedas}
+                        value={filterMoneda}
+                        onChange={setFilterMoneda}
+                        width="min-w-[120px] w-32"
+                    />
+
+                    {hayFiltros && (
+                        <button
+                            onClick={limpiarFiltros}
+                            className="self-end text-xs text-blue-600 hover:text-blue-800 border border-blue-200 hover:bg-blue-50 rounded-lg px-3 py-2 transition"
+                        >
+                            Limpiar filtros
+                        </button>
+                    )}
                 </div>
 
                 <Button color="green" onClick={()=>setOpenNuevaCuentaCaja(true)}>
@@ -165,6 +198,7 @@ function CuentasCajas(){
                     <span>Nueva cuenta caja</span>
                 </Button>
             </div>
+
             <DataTable
                 data={cuentasCajasFilterNombre}
                 rowClassName={(p) => (!p.activo ? "bg-red-100" : "")}

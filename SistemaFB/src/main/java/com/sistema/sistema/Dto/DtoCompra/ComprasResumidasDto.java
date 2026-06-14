@@ -1,6 +1,7 @@
 package com.sistema.sistema.Dto.DtoCompra;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class ComprasResumidasDto {
 
@@ -12,13 +13,14 @@ public class ComprasResumidasDto {
     private String namePerson;
     private Long idCompra;
     private Boolean activo;
+    private LocalDateTime createdAt;
 
     public ComprasResumidasDto(){
 
     }
 
 
-    public ComprasResumidasDto(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson, Long idCompra, Boolean activo) {
+    public ComprasResumidasDto(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson, Long idCompra, Boolean activo, LocalDateTime createdAt) {
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorRegularizado = valorRegularizado;
@@ -27,9 +29,16 @@ public class ComprasResumidasDto {
         this.namePerson = namePerson;
         this.idCompra = idCompra;
         this.activo = activo;
+        this.createdAt = createdAt;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Boolean getActivo() {
         return activo;

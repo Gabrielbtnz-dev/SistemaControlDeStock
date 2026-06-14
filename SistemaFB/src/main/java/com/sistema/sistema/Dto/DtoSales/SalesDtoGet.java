@@ -1,6 +1,8 @@
 package com.sistema.sistema.Dto.DtoSales;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class SalesDtoGet {
     private Long idPerson;
@@ -11,12 +13,13 @@ public class SalesDtoGet {
     private String namePerson;
     private Long idVenta;
     private Boolean activo;
+    private LocalDateTime createdAT;
 
     public SalesDtoGet(){
 
     }
 
-    public SalesDtoGet(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson,Long idVenta, Boolean activo){
+    public SalesDtoGet(Long idPerson, BigDecimal valorTotal, BigDecimal valorRegularizado, BigDecimal valorPendiente, String observaciones, String namePerson, Long idVenta, Boolean activo, LocalDateTime createdAT){
         this.idPerson = idPerson;
         this.valorTotal = valorTotal;
         this.valorPendiente = valorPendiente;
@@ -26,6 +29,15 @@ public class SalesDtoGet {
         this.idVenta = idVenta;
         this.activo = activo;
 
+        this.createdAT = createdAT;
+    }
+
+    public LocalDateTime getCreatedAT() {
+        return createdAT;
+    }
+
+    public void setCreatedAT(LocalDateTime createdAT) {
+        this.createdAT = createdAT;
     }
 
     public Boolean getActivo() {
