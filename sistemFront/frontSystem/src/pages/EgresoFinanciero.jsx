@@ -10,7 +10,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 function EgresoFinanciero(){
-const [fecha, setFecha] = useState("");
+const [fecha, setFecha] = useState(new Date().toISOString().split("T")[0]);
 const [valorRegistroFinanciero,setValorRegistroFinanciero]=useState(0);
 const [entidadSelecionada,setEntidadSelecionada]=useState("");
 const [cuentaCajaseleccionada,setCuentaCajaseleccionada]=useState("");
@@ -96,7 +96,6 @@ const guardarRegistroFinanciero = async () => {
         return;
     }
 
-    try {
         const body = {
             valor: Number(valorRegistroFinanciero),
             fechaEmison: `${fecha}T12:00:00`,
@@ -124,15 +123,17 @@ const guardarRegistroFinanciero = async () => {
             body: JSON.stringify(body)
         });
 
-        if (!response.ok) {
-            Swal.fire({
-                title: "No se pudo enviar el registro financiero",
+        const dataResponse = await response.json();
+        
+        if(!dataResponse.success){
+                Swal.fire({
+                title: dataResponse.message,
                 icon: "error",
                 confirmButtonColor: "red",
-                confirmButtonText: "Entendido"
-            });
-            return;
-        }
+                confirmButtonText: "Aceptar"
+                })
+                 return
+        };
 
         const data = await response.json();
         console.log("Registro guardado:", data);
@@ -150,16 +151,6 @@ const guardarRegistroFinanciero = async () => {
         setFecha("");
         setEntidadSelecionada("");
         setCuentaCajaseleccionada("");
-
-    } catch (err) {
-        console.error("Error al guardar registro financiero:", err);
-        Swal.fire({
-            title: "Ocurrió un error inesperado",
-            icon: "error",
-            confirmButtonColor: "red",
-            confirmButtonText: "Entendido"
-        });
-    }
 };
 
 return (

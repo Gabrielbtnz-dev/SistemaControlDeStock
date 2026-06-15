@@ -10,7 +10,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 function IngresoFinanciero(){
-const [fecha, setFecha] = useState("");
+const [fecha, setFecha] = useState(new Date().toISOString().split("T")[0]);
 const [valorRegistroFinanciero,setValorRegistroFinanciero]=useState(0);
 const [entidadSelecionada,setEntidadSelecionada]=useState("");
 const [cuentaCajaseleccionada,setCuentaCajaseleccionada]=useState("");

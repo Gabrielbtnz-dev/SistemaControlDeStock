@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class RegistroFinancieroService {
@@ -110,36 +111,15 @@ public class RegistroFinancieroService {
 
     public ResponseEntity<?> addRegistroFinancieroEgreso(RegistroFinancieroDtoPost dto){
 
-        RegistroFinanciero registro = new RegistroFinanciero();
-
-        registro.setContado(true);
-        registro.setFechaEmison(dto.getFechaEmison());
-        registro.setMoneda(Moneda.PYG);
-        registro.setObservacion("Registro Financiero");
-        registro.setTipoOperacion("EGRESO");
-        registro.setValor(dto.getValor());
-        Person person = personRepository.findById(dto.getIdPerson())
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        registro.setPerson(person);
-        registro.setActivo(true);
-
-        registroFinancieroRepository.save(registro);
-
-        for (MovimientosDeCajasDto c : dto.getMovimientoCajas()) {
-            c.setIdRegistroFinanciero(registro.getId());
-        }
-
-
-        List<Long> ids = new ArrayList<>();
-
-        for(MovimientosDeCajasDto c : dto.getMovimientoCajas()){
-            ids.add(c.getIdCaja());
-        }
+        // 1. Validar que las cajas existen
+        List<Long> ids = dto.getMovimientoCajas().stream()
+                .map(MovimientosDeCajasDto::getIdCaja)
+                .toList();
 
         List<Cajas> existentes = cajasRepository.findByIdIn(ids);
 
-        if(existentes.size() != ids.size()){
-            return  ResponseEntity
+        if (existentes.size() != ids.size()) {
+            return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(Map.of(
                             "success", false,
@@ -147,37 +127,63 @@ public class RegistroFinancieroService {
                     ));
         }
 
-        List<MovimientosDeCajasDto> cajas = dto.getMovimientoCajas();
+        // 2. Validar saldo suficiente en cada caja ANTES de guardar nada
+        Map<Long, Cajas> cajasMap = existentes.stream()
+                .collect(Collectors.toMap(Cajas::getId, c -> c));
 
+        for (MovimientosDeCajasDto c : dto.getMovimientoCajas()) {
+            Cajas caja = cajasMap.get(c.getIdCaja());
+
+            if (caja.getSaldo().compareTo(c.getMonto()) < 0) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of(
+                                "success", false,
+                                "message", "Saldo insuficiente en " + caja.getName()
+                        ));
+            }
+        }
+
+        // 3. Recién aquí guardamos el registro
+        RegistroFinanciero registro = new RegistroFinanciero();
+        registro.setContado(true);
+        registro.setFechaEmison(dto.getFechaEmison());
+        registro.setMoneda(Moneda.PYG);
+        registro.setObservacion("Registro Financiero");
+        registro.setTipoOperacion("EGRESO");
+        registro.setValor(dto.getValor());
+
+        Person person = personRepository.findById(dto.getIdPerson())
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        registro.setPerson(person);
+        registro.setActivo(true);
+
+        registroFinancieroRepository.save(registro);
+
+        // 4. Guardar movimientos
         List<MovimientoDeCaja> lista = new ArrayList<>();
 
-        for (MovimientosDeCajasDto c : cajas) {
+        for (MovimientosDeCajasDto c : dto.getMovimientoCajas()) {
 
             MovimientoDeCaja mov = new MovimientoDeCaja();
-
             mov.setTipoMovimiento("EGRESO");
             mov.setMonto(c.getMonto());
             mov.setMoneda(Moneda.PYG);
             mov.setDescripcion("Registro Financiero");
             mov.setFecha(c.getFecha());
             mov.setRegistroFinanciero(registro);
-            Cajas caja = cajasRepository.findById(c.getIdCaja())
-                    .orElseThrow(() -> new RuntimeException("Caja no encontrada"));
-
-            mov.setCaja(caja);
+            mov.setCaja(cajasMap.get(c.getIdCaja()));
             lista.add(mov);
         }
 
         movimientoDeCajasRepository.saveAll(lista);
 
-
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Map.of(
                         "success", true,
                         "message", "Registro financiero guardado correctamente"
                 ));
-
     }
 
     public List<RegistroFinancieroGet> getRegistroFinanciero(){
