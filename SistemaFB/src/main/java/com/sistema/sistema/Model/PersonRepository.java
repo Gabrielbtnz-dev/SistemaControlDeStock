@@ -9,6 +9,8 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByOrderByIdDesc();
 
+    List<Person> findByActivoTrueOrderByIdDesc();
+
     @Query(value = """
         SELECT COUNT(*)
         FROM person p

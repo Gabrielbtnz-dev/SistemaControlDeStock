@@ -48,7 +48,7 @@ const token = TokenService.getToken();
   };
 
   const cargarEntidad = async () => {
-        const response = await fetch("http://localhost:8085/personas",{
+        const response = await fetch("http://localhost:8085/personasactivas",{
                 method: "GET",
                 headers: {
                 Authorization: `Bearer ${token}`,
@@ -320,9 +320,25 @@ const cargarMethodPaymed = async () => {
 
     const data = await response.json();
 
+     if(!data.success){
+                   Swal.fire({
+                       title: data.message,
+                       icon: "error",
+                       confirmButtonColor: "red",
+                       confirmButtonText: "Aceptar"
+                       })
+         return
+         };
     console.log(data);
     window.location.reload();
     
+};
+
+    const removerCobro = (index) => {
+    const cobro = cobros[index];
+
+    setCobros(prev => prev.filter((_, i) => i !== index));
+    setValorEnCobros(prev => prev - cobro.valor);
 };
 
 return(
@@ -510,16 +526,20 @@ return(
                 </span>
             </div>
             <span>Metodos de pagos</span>
-            {cobros.map((cobro, index) => (
-            <div key={index} className="flex">
-                <span className="min-w-[120px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                {cobro.tipo}
-                </span>
-                <span className="min-w-[120px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
-                {cobro.valor}
-                </span>
-            </div>
-            ))}
+                {cobros.map((cobro, index) => (
+                <div key={index} className="flex gap-1 items-center mt-1">
+                    <span className="min-w-[90px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    {cobro.tipo}
+                    </span>
+                    <span className="min-w-[90px] px-1 py-1 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800">
+                    {cobro.valor}
+                    </span>
+                    <Trash
+                        className="cursor-pointer hover:text-red-500 transition-colors duration-200"
+                        onClick={() => removerCobro(index)}
+                    />
+                </div>
+                ))}
         </div>
             
     </div>

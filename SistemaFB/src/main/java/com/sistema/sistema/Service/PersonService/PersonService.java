@@ -26,6 +26,10 @@ public class PersonService {
         return personReposi.countPersonasActivas();
     }
 
+    public List<Person> getPersonActivos(){
+        return personReposi.findByActivoTrueOrderByIdDesc();
+    }
+
     public List<PersonDtoGet> getPerson(){
         return personReposi.findAllByOrderByIdDesc().stream().map(
                 p-> new PersonDtoGet(

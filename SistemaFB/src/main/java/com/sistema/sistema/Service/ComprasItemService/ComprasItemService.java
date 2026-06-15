@@ -56,6 +56,26 @@ public class ComprasItemService {
 
     @Transactional
     public ResponseEntity<?> addCompra(CompraDtoPost dto){
+
+        if (dto.getCaja() != null) {
+            for (MovimientosDeCajasDto item : dto.getCaja()) {
+
+                Cajas caja = cajaReposi.findById(item.getIdCaja())
+                        .orElseThrow(() -> new RuntimeException("Caja no encontrada"));
+
+                // Si el movimiento es un EGRESO (salida de dinero de la caja)
+                // validamos que tenga saldo suficiente
+                if (caja.getSaldo().compareTo(item.getMonto()) < 0) {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of(
+                                    "success", false,
+                                    "message", "Saldo insuficiente en la caja: " + caja.getName()
+                            ));
+                }
+            }
+        }
+
         Compra compra = new Compra();
         compra.setValorTotal(dto.getValorTotal());
         compra.setValorPendiente(BigDecimal.ZERO);

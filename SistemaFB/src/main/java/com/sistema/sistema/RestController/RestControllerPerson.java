@@ -1,5 +1,6 @@
 package com.sistema.sistema.RestController;
 
+import com.sistema.sistema.Domain.Person.Person;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoGet;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoPost;
 import com.sistema.sistema.Dto.DtoPerson.PersonDtoUpdate;
@@ -30,6 +31,12 @@ public class RestControllerPerson {
     @GetMapping("/personas")
     public List<PersonDtoGet> getPerson(){
         return personService.getPerson();
+    }
+
+    @PreAuthorize("hasAuthority('Ver todos los clientes')")
+    @GetMapping("/personasactivas")
+    public List<Person> getPersonActivos(){
+        return personService.getPersonActivos();
     }
 
     @PreAuthorize("hasAuthority('Agregar nuevo cliente')")
