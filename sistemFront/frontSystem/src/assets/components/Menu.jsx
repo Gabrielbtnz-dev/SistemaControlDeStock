@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
-// ── Cash icon ─────────────────────────────────────────────────
 function CashIcon() {
   return (
     <div className="flex flex-col items-center justify-center w-5 h-5">
@@ -77,18 +76,61 @@ const navConfig = [
     icon: BarChart2,
     group: true,
     children: [
-      { to: "/movimientosdecaja", label: "Movimientos de caja", customIcon: true },
-      { to: "/VentasResumido", icon: FileChartColumn, label: "Ventas resumido" },
-      { to: "/ComprasResumido", icon: FileChartColumn, label: "Compras resumido" },
-      { to: "/RegistroFinanciero", icon: FileChartColumn, label: "Registros Financieros" },
-      { to: "/MovimientosDeStock", icon: Boxes, label: "Movimientos de stock" },
-      { to: "/StockDisponibilidad", icon: PackageOpen, label: "Stock" },
+      {
+        label: "Cuentas Cajas",
+        icon: Landmark,
+        group: true,
+        children: [
+        { to: "/movimientosdecaja", label: "Movimientos de caja", customIcon: true },
+        ],
+      },
+      {
+        label: "Ventas",
+        icon: ShoppingCart,
+        group: true,
+        children: [
+          { to: "/VentasResumido", icon: FileChartColumn, label: "Ventas resumido" },
+        ],
+      },
+      {
+        label: "Compras",
+        icon: BaggageClaim,
+        group: true,
+        children: [
+          { to: "/ComprasResumido", icon: FileChartColumn, label: "Compras resumido" },
+        ],
+      },
+      {
+        label: "Finanzas",
+        icon: CircleDollarSign,
+        group: true,
+        children: [
+          { to: "/RegistroFinanciero", icon: FileChartColumn, label: "Registros Financieros" },
+        ],
+      },
+      {
+        label: "Stock",
+        icon: Boxes,
+        group: true,
+        children: [
+          { to: "/MovimientosDeStock", icon: Boxes, label: "Movimientos de stock" },
+          { to: "/StockDisponibilidad", icon: PackageOpen, label: "Stock" },
+        ],
+      },
     ],
   },
 ];
 
+// ── helpers ───────────────────────────────────────────────────
+function hasActiveRoute(item, pathname) {
+  if (item.to) return pathname.startsWith(item.to);
+  if (item.children) return item.children.some((c) => hasActiveRoute(c, pathname));
+  return false;
+}
+
 // ── Single nav link ───────────────────────────────────────────
-function NavLink({ item, open, active, indent = false }) {
+function NavLink({ item, open, active, depth = 0 }) {
+  const indent = depth > 0;
   return (
     <Link
       to={item.to}
@@ -96,7 +138,7 @@ function NavLink({ item, open, active, indent = false }) {
       className={`
         group relative flex items-center gap-3 rounded-xl
         transition-all duration-200 ease-out
-        ${indent ? "px-3 py-2 ml-2" : "px-3 py-2.5"}
+        ${indent ? "px-3 py-2" : "px-3 py-2.5"}
         ${
           active
             ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40"
@@ -112,7 +154,7 @@ function NavLink({ item, open, active, indent = false }) {
         {item.customIcon ? (
           <CashIcon />
         ) : (
-          <item.icon size={indent ? 16 : 18} strokeWidth={active ? 2.5 : 1.8} />
+          <item.icon size={indent ? 15 : 18} strokeWidth={active ? 2.5 : 1.8} />
         )}
       </span>
 
@@ -125,7 +167,7 @@ function NavLink({ item, open, active, indent = false }) {
         </span>
       )}
 
-      {!open && (
+      {!open && depth === 0 && (
         <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-700 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-150 shadow-xl z-50">
           {item.label}
         </span>
@@ -134,75 +176,78 @@ function NavLink({ item, open, active, indent = false }) {
   );
 }
 
-// ── Group (dropdown) ──────────────────────────────────────────
-function NavGroup({ item, open, location }) {
-  const hasActiveChild = item.children.some((c) =>
-    location.pathname.startsWith(c.to)
-  );
-  const [expanded, setExpanded] = useState(hasActiveChild);
-
-  const handleToggle = () => {
-    if (open) setExpanded((v) => !v);
-  };
+// ── Group (recursivo) ─────────────────────────────────────────
+function NavGroup({ item, open, location, depth = 0 }) {
+  const isActive = hasActiveRoute(item, location.pathname);
+  const [expanded, setExpanded] = useState(isActive);
+  const indent = depth > 0;
 
   return (
     <div>
-      {/* Group header */}
       <button
-        onClick={handleToggle}
+        onClick={() => open && setExpanded((v) => !v)}
         title={!open ? item.label : undefined}
         className={`
-          group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+          group relative w-full flex items-center gap-3 rounded-xl
           transition-all duration-200 ease-out
+          ${indent ? "px-3 py-2" : "px-3 py-2.5"}
           ${
-            hasActiveChild && !expanded
+            isActive && !expanded
               ? "text-indigo-400 bg-indigo-950/60"
               : "text-slate-400 hover:bg-slate-800 hover:text-white"
           }
         `}
       >
         <span className="flex-shrink-0 flex items-center justify-center w-5 h-5">
-          <item.icon size={18} strokeWidth={1.8} />
+          <item.icon size={indent ? 15 : 18} strokeWidth={1.8} />
         </span>
 
         {open && (
           <>
             <span
-              className="flex-1 text-sm font-medium whitespace-nowrap text-left"
+              className={`flex-1 font-medium whitespace-nowrap text-left ${indent ? "text-xs" : "text-sm"}`}
               style={{ animation: "slideIn 0.18s ease-out both" }}
             >
               {item.label}
             </span>
             <ChevronDown
-              size={14}
+              size={13}
               className={`flex-shrink-0 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
             />
           </>
         )}
 
-        {/* Tooltip when collapsed */}
-        {!open && (
+        {!open && depth === 0 && (
           <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-700 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-150 shadow-xl z-50">
             {item.label}
           </span>
         )}
       </button>
 
-      {/* Children */}
       {open && expanded && (
         <div
-          className="mt-0.5 flex flex-col gap-0.5 border-l border-slate-700/60 ml-5 pl-1"
+          className={`mt-0.5 flex flex-col gap-0.5 border-l border-slate-700/60 pl-1 ${indent ? "ml-3" : "ml-5"}`}
           style={{ animation: "expandDown 0.2s ease-out both" }}
         >
-          {item.children.map((child) => (
-            <NavLink
-              key={child.to}
-              item={child}
-              open={open}
-              active={location.pathname.startsWith(child.to)}
-              indent
-            />
-          ))}
+          {item.children.map((child) =>
+            child.group ? (
+              <NavGroup
+                key={child.label}
+                item={child}
+                open={open}
+                location={location}
+                depth={depth + 1}
+              />
+            ) : (
+              <NavLink
+                key={child.to}
+                item={child}
+                open={open}
+                active={location.pathname.startsWith(child.to)}
+                depth={depth + 1}
+              />
+            )
+          )}
         </div>
       )}
     </div>
@@ -239,7 +284,6 @@ function Menu() {
           ${open ? "w-57" : "w-16"}
         `}
       >
-        {/* Top bar */}
         <div
           className={`flex items-center h-16 px-3 border-b border-slate-800 ${
             open ? "justify-between" : "justify-center"
@@ -262,7 +306,6 @@ function Menu() {
           </button>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 flex flex-col gap-1 p-2 overflow-y-auto overflow-x-hidden">
           {navConfig.map((item) =>
             item.group ? (
@@ -271,6 +314,7 @@ function Menu() {
                 item={item}
                 open={open}
                 location={location}
+                depth={0}
               />
             ) : (
               <NavLink
@@ -282,12 +326,12 @@ function Menu() {
                     ? location.pathname === "/"
                     : location.pathname.startsWith(item.to)
                 }
+                depth={0}
               />
             )
           )}
         </nav>
 
-        {/* Footer */}
         <div className="p-2 border-t border-slate-800">
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800/60 text-slate-500 ${
