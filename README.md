@@ -53,7 +53,7 @@ El sistema permite gestionar entradas y salidas de productos, mantener actualiza
 ### Clonar el repositorio
 
 ```bash
-git clone URL_DEL_REPOSITORIO
+git clone (https://github.com/Gabrielbtnz-dev/SistemaControlDeStock.git)
 ```
 
 ### Ejecutar Backend
