@@ -63,7 +63,7 @@ public class SalesItemsService {
         SalesDocumentoDto salesDocumentoDto = salesReposi.findVentaCabecera(id);
 
         if (salesDocumentoDto == null) {
-          return   ResponseEntity
+          return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(Map.of(
                             "success", false,

@@ -9,9 +9,7 @@ import com.sistema.sistema.Domain.Product.Product;
 import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
-import com.sistema.sistema.Dto.DtoCompra.CompraDtoPost;
-import com.sistema.sistema.Dto.DtoCompra.ComprasResumidasDto;
-import com.sistema.sistema.Dto.DtoCompra.ItemsCompraPost;
+import com.sistema.sistema.Dto.DtoCompra.*;
 import com.sistema.sistema.Model.*;
 import com.sistema.sistema.Service.Enum.Moneda;
 import org.springframework.http.HttpStatus;
@@ -52,6 +50,26 @@ public class ComprasItemService {
 
     public List<ComprasResumidasDto> getComprasResumidas(){
         return compraReposi.getComprasResumidas();
+    }
+
+    public ResponseEntity<?> getCompraDetallada(Long id){
+
+        ComprasDetalladasDto comprasDetalladasDto = compraReposi.getComprasDetallas(id);
+
+        if (comprasDetalladasDto == null){
+           return ResponseEntity
+                   .status(HttpStatus.NOT_FOUND)
+                   .body(Map.of(
+                           "success", false,
+                           "message", "Venta no encontrada"
+                   ));
+        }
+
+        List<ItemsCompraDetalladasDto> itemsCompraDetalladasDto = itemsReposi.getItemsCompraDetalla(id);
+
+        comprasDetalladasDto.setItems(itemsCompraDetalladasDto);
+
+        return ResponseEntity.ok(comprasDetalladasDto);
     }
 
     @Transactional

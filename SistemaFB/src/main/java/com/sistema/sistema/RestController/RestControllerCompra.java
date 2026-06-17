@@ -23,6 +23,12 @@ public class RestControllerCompra {
         return compraService.getComprasResumidas();
     }
 
+    @PreAuthorize("hasAuthority('Reportes de compras')")
+    @GetMapping("/compradetalles/{id}")
+    public ResponseEntity<?> getCompraDetalladas(@PathVariable Long id){
+        return compraService.getCompraDetallada(id);
+    }
+
     @PreAuthorize("hasAuthority('Crear compras')")
     @PostMapping("/addcompra")
     public ResponseEntity<?> addCompra(@RequestBody CompraDtoPost dto){
