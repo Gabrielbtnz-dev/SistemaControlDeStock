@@ -37,7 +37,7 @@ public class ComprasDetalladasDto {
         this.documento = documento;
         this.digitoVerificador = digitoVerificador;
     }
-
+/*sistema pasa a ser comercial*/
     public String getDocumento() {
         return documento;
     }
