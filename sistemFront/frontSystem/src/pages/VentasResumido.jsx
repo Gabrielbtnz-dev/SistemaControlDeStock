@@ -4,10 +4,11 @@ import { FilterInput } from "../assets/components/FilterInput";
 import { FilterDropdown } from "../assets/components/FilterDropdown";
 import { FilterDateRange } from "../assets/components/FilterDateRange";
 import { BanknoteArrowDown, BanknoteArrowUp } from 'lucide-react';
-import { Trash } from "lucide-react";
+import { Trash, FileText } from "lucide-react";
 import Swal from "sweetalert2";
 import { TokenService } from "../auth/TokenService";
 import axios from "axios";
+import FacturaModal from "../assets/components/FacturaModal";
 
 function VentasResumido() {
 
@@ -17,6 +18,11 @@ function VentasResumido() {
     const [filtroEstado, setFiltroEstado] = useState("");
     const [filtroDesde, setFiltroDesde] = useState("");
     const [filtroHasta, setFiltroHasta] = useState("");
+
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [detalleVenta, setDetalleVenta] = useState(null);
+    const [cargandoDetalle, setCargandoDetalle] = useState(false);
+    const [errorDetalle, setErrorDetalle] = useState(null);
 
     const token = TokenService.getToken();
     
@@ -58,6 +64,39 @@ function VentasResumido() {
       cargarVenta();
 
     }
+
+    const verDetalleVenta = async (id) => {
+        setModalAbierto(true);
+        setErrorDetalle(null);
+        setDetalleVenta(null);
+
+        try {
+            const response = await fetch(`http://localhost:8085/detallesventa/${id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}`);
+            }
+
+            const data = await response.json();
+            setDetalleVenta(data);
+        } catch (err) {
+            setErrorDetalle("Intenta nuevamente en unos segundos.");
+        } finally {
+            setCargandoDetalle(false);
+        }
+    };
+
+    const cerrarModal = () => {
+        setModalAbierto(false);
+        setDetalleVenta(null);
+        setErrorDetalle(null);
+    };
 
     useEffect(() => {
         cargarVenta();
@@ -190,7 +229,13 @@ function VentasResumido() {
                         key: "acciones",
                         render: (p) => (
                         <div className="flex justify-end gap-3 items-center">
-                            
+                            {p.activo && (
+                            <FileText
+                                className="cursor-pointer text-stone-500 hover:text-blue-600 transition-colors duration-200"
+                                onClick={() => verDetalleVenta(p.idVenta)}
+                            />
+                            )}
+
                             {p.activo && (
                             <Trash
                                 className="cursor-pointer hover:text-red-500 transition-colors duration-200"
@@ -202,6 +247,14 @@ function VentasResumido() {
             ),
           },
                 ]}
+            />
+
+            <FacturaModal
+                open={modalAbierto}
+                onClose={cerrarModal}
+                factura={detalleVenta}
+                cargando={cargandoDetalle}
+                error={errorDetalle}
             />
         </div>
     );

@@ -1,5 +1,6 @@
 package com.sistema.sistema.RestController;
 
+import com.sistema.sistema.Dto.DtoSales.SalesDocumentoDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
 import com.sistema.sistema.Dto.DtoSales.SalesTotalDelMesyMesAnterior;
@@ -25,6 +26,12 @@ public class RestControllerSales {
     @GetMapping("/ventasporagno")
     public List<Map<String, Object>> getVentasPorAgno(){
         return salesItemsService.getGraficoVentasPorAgno();
+    }
+
+    @PreAuthorize("hasAuthority('Dashboard ventas')")
+    @GetMapping("/detallesventa/{id}")
+    public ResponseEntity<?> getDetallesDocumento(@PathVariable Long id){
+        return salesItemsService.getDetallesDocumento(id);
     }
 
     @PreAuthorize("hasAuthority('Ver todas las ventas')")

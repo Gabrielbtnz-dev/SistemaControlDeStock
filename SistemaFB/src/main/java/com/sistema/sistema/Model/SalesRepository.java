@@ -1,16 +1,41 @@
 package com.sistema.sistema.Model;
 
 import com.sistema.sistema.Domain.Sales.Sales;
+import com.sistema.sistema.Dto.DtoSales.SalesDocumentoDto;
 import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
 import com.sistema.sistema.Dto.DtoSales.SalesTotalDelMesyMesAnterior;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
 
 public interface SalesRepository extends JpaRepository<Sales, Long> {
     List<Sales> findAllByOrderByIdDesc();
+
+    @Query("""
+        SELECT new com.sistema.sistema.Dto.DtoSales.SalesDocumentoDto(
+            s.id,
+            s.valorTotal,
+            s.valorRegularizado,
+            s.valorPendiente,
+            s.observaciones,
+            s.activo,
+            s.createdAt,
+            p.id,
+            p.nombre,
+            p.documento,
+            p.funcionario,
+            p.cliente,
+            p.contribuyente,
+            p.digitoVerificador
+        )
+        FROM Sales s
+        JOIN s.person p
+        WHERE s.id = :id
+        """)
+    SalesDocumentoDto findVentaCabecera(@Param("id") Long id);
 
     @Query("""
     SELECT new com.sistema.sistema.Dto.DtoSales.SalesDtoGet(

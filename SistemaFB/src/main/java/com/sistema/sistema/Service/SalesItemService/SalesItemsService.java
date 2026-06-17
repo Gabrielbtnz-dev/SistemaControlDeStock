@@ -9,10 +9,7 @@ import com.sistema.sistema.Domain.Sales.Sales;
 import com.sistema.sistema.Domain.Stock.MovimientoDeStock;
 import com.sistema.sistema.Domain.Stock.Stock;
 import com.sistema.sistema.Dto.DtoCajas.MovimientosDeCajasDto;
-import com.sistema.sistema.Dto.DtoSales.ItemsSalesDto;
-import com.sistema.sistema.Dto.DtoSales.SalesDto;
-import com.sistema.sistema.Dto.DtoSales.SalesDtoGet;
-import com.sistema.sistema.Dto.DtoSales.SalesTotalDelMesyMesAnterior;
+import com.sistema.sistema.Dto.DtoSales.*;
 import com.sistema.sistema.Dto.DtoStock.MovimientoDeStockDto;
 import com.sistema.sistema.Model.*;
 import org.springframework.http.HttpStatus;
@@ -58,6 +55,27 @@ public class SalesItemsService {
 
     public SalesTotalDelMesyMesAnterior getTotalVentasMesMesAnterior(){
         return salesReposi.getTotalVentasMes();
+    }
+
+    /*devuelve documento interno de venta*/
+    public ResponseEntity<?> getDetallesDocumento(Long id) {
+
+        SalesDocumentoDto salesDocumentoDto = salesReposi.findVentaCabecera(id);
+
+        if (salesDocumentoDto == null) {
+          return   ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Venta no encontrada"
+                    ));
+        }
+
+        List<ItemsSalesDto> items = itemReposi.findItemsByVentaId(id);
+
+        salesDocumentoDto.setItems(items);
+
+        return ResponseEntity.ok(salesDocumentoDto);
     }
 
    public ResponseEntity<?> addSales( SalesDto dto){

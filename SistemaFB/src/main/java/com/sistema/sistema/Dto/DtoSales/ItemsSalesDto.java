@@ -11,18 +11,28 @@ public class ItemsSalesDto {
     private BigDecimal cantidad;
     private Long idProducto;
     private Boolean activo;
+    private String nombre;
 
     public ItemsSalesDto(){
 
     }
 
-    public ItemsSalesDto(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Long idProducto, Boolean activo){
+    public ItemsSalesDto(BigDecimal precio, BigDecimal valor, BigDecimal cantidad, Long idProducto, Boolean activo, String nombre){
         this.cantidad = cantidad;
         this.valor = valor;
         this.precio = precio;
         this.idProducto = idProducto;
         this.activo = activo;
 
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Boolean getActivo() {
